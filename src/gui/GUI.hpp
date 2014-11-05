@@ -17,6 +17,8 @@
 #ifndef GUI_HPP_
 #define GUI_HPP_
 
+#include "Board.hpp"
+
 #include <gtkmm/window.h>
 
 namespace reversi {
@@ -24,8 +26,13 @@ namespace reversi {
 class GUI : public Gtk::Window
 {
 public:
+
 	GUI();
 	virtual ~GUI() = default;
+
+protected:
+
+	Board board;
 };
 
 } //namespace reversi

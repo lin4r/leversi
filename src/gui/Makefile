@@ -3,8 +3,8 @@ CFLAGS=-Wall -O0 -std=c++11 `pkg-config --cflags gtkmm-3.0`
 LDFLAGS=`pkg-config --libs gtkmm-3.0`
 
 TARGET=reversi
-OBJ=main.o GUI.o
-DEPS=GUI.hpp
+OBJ=main.o GUI.o Board.o
+DEPS=GUI.hpp Board.hpp
 
 .PHONY: all clean
 

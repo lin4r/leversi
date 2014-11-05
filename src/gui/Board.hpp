@@ -10,22 +10,32 @@
  *******************************************************/
 
 /*
- * Implements GUI.hpp
+ * Reversi board widget.
  *
  * Linus Narva.
  */
-#include "GUI.hpp"
+#ifndef BOARD_HPP_
+#define BOARD_HPP_
+
+#include <gtkmm/drawingarea.h>
+#include <gdkmm/pixbuf.h>
 
 namespace reversi {
 
-GUI::GUI()
+class Board : public Gtk::DrawingArea
 {
-	set_title("Reversi Game by Linus (C) 2014");
-	set_border_width(10);
-	set_default_size(100,100);
+public:
 
-	add(board);
-	board.show();
-}
+	Board();
+	virtual ~Board() = default;
+
+protected:
+
+	virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
+
+	Glib::RefPtr<Gdk::Pixbuf> backgroundImage;
+};
 
 } //namespace reversi
+
+#endif //BOARD_HPP_
