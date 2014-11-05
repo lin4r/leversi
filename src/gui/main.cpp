@@ -19,7 +19,6 @@
 
 #include <gtkmm/application.h>
 
-//using Glib::RefPtr;
 using Gtk::Application;
 using reversi::GUI;
 
