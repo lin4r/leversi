@@ -68,9 +68,9 @@ protected:
 
 private:
 
-	bool on_motion(GdkEventMotion* event);
+//	bool on_motion(GdkEventMotion* event);
 	bool on_button_press(GdkEventButton* event);
-	bool on_button_release(GdkEventButton* event);
+//	bool on_button_release(GdkEventButton* event);
 
 	std::pair<double,double> tileDrawCoordinates(int gridX, int gridY)
 		const noexcept;

@@ -42,14 +42,14 @@ Board::Board() : grid(8, vector<Tile>(8, Tile::Empty))
 	add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK
 		| Gdk::BUTTON_RELEASE_MASK);
 
-	signal_motion_notify_event().connect(sigc::mem_fun(*this
-		, &Board::on_motion));
+//	signal_motion_notify_event().connect(sigc::mem_fun(*this
+//		, &Board::on_motion));
 
 	signal_button_press_event().connect(sigc::mem_fun(*this
 		, &Board::on_button_press));
 
-	signal_button_release_event().connect(sigc::mem_fun(*this
-		, &Board::on_button_release));
+//	signal_button_release_event().connect(sigc::mem_fun(*this
+//		, &Board::on_button_release));
 }
 
 void Board::setGraphics(BorderSize bgImageBorderSize, BoardGraphics graphics)
@@ -153,25 +153,32 @@ pair<double,double> Board::tileDrawCoordinates(
 	return pair<double,double>(drawX, drawY);
 }
 
-bool Board::on_motion(GdkEventMotion* event)
-{
-	cout << "Mouse moved!" << endl; //XXX DEBUG
-
-	return true;
-}
+//bool Board::on_motion(GdkEventMotion* event)
+//{
+//	cout << "Mouse moved!" << endl; //XXX DEBUG
+//
+//	return true;
+//}
 
 bool Board::on_button_press(GdkEventButton* event)
 {
-	cout << "Button pressed!" << endl; //XXX DEBUG
+	constexpr int LEFT_MOUSE_BUTTON{1};
+
+	/* Only react to left mouse button double clicks. */
+	if (event->button == LEFT_MOUSE_BUTTON
+			&& event->type == GDK_2BUTTON_PRESS)
+	{
+		cout << "Double click pressed!" << endl; //XXX DEBUG
+	}
 
 	return true;
 }
 
-bool Board::on_button_release(GdkEventButton* event)
-{
-	cout << "Button relesased!" << endl; //XXX DEBUG
-
-	return true;
-}
+//bool Board::on_button_release(GdkEventButton* event)
+//{
+//	cout << "Button relesased!" << endl; //XXX DEBUG
+//
+//	return true;
+//}
 
 } //namespace reversi
