@@ -75,6 +75,8 @@ private:
 	std::pair<double,double> tileDrawCoordinates(int gridX, int gridY)
 		const noexcept;
 
+	std::pair<int,int> tileAt(double pixelX, double pixelY) const noexcept;
+
 	BorderSize imageBorderSize;
 
 	BoardGraphics graphics;

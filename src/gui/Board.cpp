@@ -153,6 +153,44 @@ pair<double,double> Board::tileDrawCoordinates(
 	return pair<double,double>(drawX, drawY);
 }
 
+pair<int,int> Board::tileAt(double pixelX, double pixelY) const noexcept
+{
+	/* Widget size. */
+	auto allocation = get_allocation();
+	const auto widgetWidth = allocation.get_width();
+	const auto widgetHeight = allocation.get_height();
+
+	/* Background size. */
+	const auto bgWidth = graphics.backgroundImage->get_width();
+	const auto bgHeight = graphics.backgroundImage->get_height();
+
+	/* Shift between the widget coordinate system and board. */
+	const auto boardOrigoX = (widgetWidth - bgWidth)/2.0
+		+ imageBorderSize.west;
+	const auto boardOrigoY = (widgetHeight - bgHeight)/2.0
+		+ imageBorderSize.north;
+
+	/* The size of the board */
+	const auto boardWidth = bgWidth - imageBorderSize.west
+		- imageBorderSize.east;
+	const auto boardHeight = bgHeight - imageBorderSize.north
+		- imageBorderSize.south;
+
+	/* The size of a tile on the board. */
+	const auto tileWidth = boardWidth/8.0;
+	const auto tileHeight = boardHeight/8.0;
+
+	/* Translate to board coordinates. */
+	const auto pixelOnBoardX = pixelX - boardOrigoX;
+	const auto pixelOnBoardY = pixelY - boardOrigoY;
+
+	/* Get tile indizes by integral division. */
+	const auto gridX = static_cast<int>(pixelOnBoardX/tileWidth);
+	const auto gridY = static_cast<int>(pixelOnBoardY/tileHeight);
+
+	return pair<int,int>(gridX,gridY);
+}
+
 //bool Board::on_motion(GdkEventMotion* event)
 //{
 //	cout << "Mouse moved!" << endl; //XXX DEBUG
@@ -168,7 +206,9 @@ bool Board::on_button_press(GdkEventButton* event)
 	if (event->button == LEFT_MOUSE_BUTTON
 			&& event->type == GDK_2BUTTON_PRESS)
 	{
-		cout << "Double click pressed!" << endl; //XXX DEBUG
+		auto tile = tileAt(event->x, event->y);
+
+		cout << "Double click at (x,y)=(" << tile.first << "," << tile.second << ")." << endl; //XXX DEBUG
 	}
 
 	return true;
