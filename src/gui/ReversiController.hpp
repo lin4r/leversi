@@ -10,27 +10,22 @@
  *******************************************************/
 
 /*
- * MVC View interface for reversi.
+ * MVC Controller interface for reversi.
  *
  * Linus Narva.
  */
-#ifndef REVERSI_VIEW_HPP_
-#define REVERSI_VIEW_HPP_
+#ifndef REVERSI_CONTROLLER_HPP_
+#define REVERSI_CONTROLLER_HPP_
 
 namespace reversi {
 
-enum class Tile
-{
-	Empty, Black, White
-};
-
-class ReversiView
+class ReversiController
 {
 public:
 
-	virtual void placePiece(Tile colour, int gridX, int gridY) = 0;
+	virtual void pressedTile(int indexX, int indexY) = 0;
 };
 
 } //namespace reversi
 
-#endif //REVERSI_VIEW_HPP_
+#endif //REVERSI_CONTROLLER_HPP_
