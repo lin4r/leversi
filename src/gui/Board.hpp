@@ -30,6 +30,14 @@ enum class Tile
 	Empty, Black, White
 };
 
+struct BorderSize
+{
+	int north;
+	int east;
+	int south;
+	int west;
+};
+
 class Board : public Gtk::DrawingArea
 {
 public:
@@ -45,11 +53,10 @@ protected:
 
 private:
 
-	std::pair<double,double> tileCoordinates(int gridX, int gridY)
+	std::pair<double,double> tileDrawCoordinates(int gridX, int gridY)
 		const noexcept;
 
-	int imageBorderSizeX;
-	int imageBorderSizeY;
+	BorderSize imageBorderSize;
 
 	Glib::RefPtr<Gdk::Pixbuf> backgroundImage;
 	Glib::RefPtr<Gdk::Pixbuf> blackPieceImage;

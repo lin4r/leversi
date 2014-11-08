@@ -35,9 +35,10 @@ using std::endl;
 
 namespace reversi {
 
-Board::Board() : imageBorderSizeX{1}, imageBorderSizeY{1}
-		, grid(8, vector<Tile>(8, Tile::Empty))
+Board::Board() : grid(8, vector<Tile>(8, Tile::Empty))
 {
+	imageBorderSize = {1,1,1,1};
+
 	try {
 		backgroundImage = Pixbuf::create_from_file(
 			"res/GameBoard_Reversi_8x8.gif");
@@ -81,7 +82,7 @@ bool Board::on_draw(const Cairo::RefPtr<Context>& cr)
 
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
-			const auto coordinates = tileCoordinates(i,j);
+			const auto coordinates = tileDrawCoordinates(i,j);
 
 			const auto drawPiece = [&](Glib::RefPtr<Gdk::Pixbuf> pieceImg
 				, pair<double,double> coordinates)
@@ -107,18 +108,39 @@ void Board::placePiece(Tile colour, int gridX, int gridY)
 	grid.at(gridX).at(gridY) = colour;
 }
 
-pair<double,double> Board::tileCoordinates(int gridX, int gridY) const noexcept
+pair<double,double> Board::tileDrawCoordinates(
+		int gridX, int gridY) const noexcept
 {
+	/* Widget size. */
+	auto allocation = get_allocation();
+	const auto widgetWidth = allocation.get_width();
+	const auto widgetHeight = allocation.get_height();
+
+	/* Background size. */
 	const auto bgWidth = backgroundImage->get_width();
 	const auto bgHeight = backgroundImage->get_height();
 
-	const auto tileWidth = (bgWidth-imageBorderSizeX*2)/8;
-	const auto tileHeight = (bgHeight-imageBorderSizeY*2)/8;
+	/* Shift between the widget coordinate system and board. */
+	const auto boardOrigoX = (widgetWidth - bgWidth)/2.0
+		+ imageBorderSize.west;
+	const auto boardOrigoY = (widgetHeight - bgHeight)/2.0
+		+ imageBorderSize.north;
 
-	const auto centreX = imageBorderSizeX + tileWidth*(gridX);
-	const auto centreY = imageBorderSizeY + tileHeight*(gridY);
+	/* The size of the board */
+	const auto boardWidth = bgWidth - imageBorderSize.west
+		- imageBorderSize.east;
+	const auto boardHeight = bgHeight - imageBorderSize.north
+		- imageBorderSize.south;
 
-	return pair<double,double>(centreX, centreY);
+	/* The size of a tile on the board. */
+	const auto tileWidth = boardWidth/8.0;
+	const auto tileHeight = boardHeight/8.0;
+
+	/* Draw coordinates for the piece. */
+	const auto drawX = tileWidth*gridX + boardOrigoX;
+	const auto drawY = tileHeight*gridY + boardOrigoY;
+
+	return pair<double,double>(drawX, drawY);
 }
 
 } //namespace reversi

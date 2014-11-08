@@ -28,6 +28,11 @@ GUI::GUI()
 	board.show();
 
 	//XXX DEBUG code.
+	board.placePiece(Tile::White, 0,0);
+	board.placePiece(Tile::Black, 0,7);
+	board.placePiece(Tile::Black, 7,0);
+	board.placePiece(Tile::White, 7,7);
+
 	board.placePiece(Tile::Black, 3,3);
 	board.placePiece(Tile::White, 4,3);
 	board.placePiece(Tile::Black, 4,4);
