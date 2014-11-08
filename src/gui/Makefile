@@ -4,7 +4,7 @@ LDFLAGS=`pkg-config --libs gtkmm-3.0`
 
 TARGET=reversi
 OBJ=main.o GUI.o Board.o
-DEPS=GUI.hpp Board.hpp
+DEPS=GUI.hpp Board.hpp ReversiView.hpp
 
 .PHONY: all clean
 

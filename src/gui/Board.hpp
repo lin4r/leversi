@@ -17,6 +17,8 @@
 #ifndef BOARD_HPP_
 #define BOARD_HPP_
 
+#include "ReversiView.hpp"
+
 #include <gtkmm/drawingarea.h>
 #include <gdkmm/pixbuf.h>
 
@@ -24,11 +26,6 @@
 #include <utility>
 
 namespace reversi {
-
-enum class Tile
-{
-	Empty, Black, White
-};
 
 struct BorderSize
 {
@@ -49,7 +46,7 @@ struct BoardGraphics
 	virtual bool isInitialized() const noexcept;
 };
 
-class Board : public Gtk::DrawingArea
+class Board : public Gtk::DrawingArea, public ReversiView
 {
 public:
 
@@ -57,7 +54,7 @@ public:
 	Board(int sizeX, int sizeY);
 	virtual ~Board() = default;
 
-	virtual void placePiece(Tile colour, int gridX, int gridY);
+	virtual void placePiece(Tile colour, int gridX, int gridY) override;
 
 	virtual void setGraphics(BorderSize bgImageBorderSize
 		, BoardGraphics graphics) noexcept;
