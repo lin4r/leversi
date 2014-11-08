@@ -21,6 +21,23 @@
 /* By setting these constants, graphic objects can be changed at compile time
  *, without the need of editing the code.
  */
+#ifndef DEFAULT_BACKGROUND_IMAGE_BORDER_NORTH
+#define DEFAULT_BACKGROUND_IMAGE_BORDER_NORTH 1
+#endif //DEFAULT_BACKGROUND_IMAGE_BORDER_NORTH
+
+#ifndef DEFAULT_BACKGROUND_IMAGE_BORDER_EAST
+#define DEFAULT_BACKGROUND_IMAGE_BORDER_EAST 1
+#endif //DEFAULT_BACKGROUND_IMAGE_BORDER_EAST
+
+
+#ifndef DEFAULT_BACKGROUND_IMAGE_BORDER_SOUTH
+#define DEFAULT_BACKGROUND_IMAGE_BORDER_SOUTH 1
+#endif //DEFAULT_BACKGROUND_IMAGE_BORDER_SOUTH
+
+#ifndef DEFAULT_BACKGROUND_IMAGE_BORDER_WEST
+#define DEFAULT_BACKGROUND_IMAGE_BORDER_WEST 1
+#endif //DEFAULT_BACKGROUND_IMAGE_BORDER_WEST
+
 #ifndef DEFAULT_BACKGROUND_IMAGE_PATH
 #define DEFAULT_BACKGROUND_IMAGE_PATH "res/board.gif"
 #endif //DEFAULT_BACKGROUND_IMAGE_PATH
@@ -61,6 +78,13 @@ GUI::GUI()
 
 void GUI::initBoard()
 {
+	BorderSize bgImageBorderSize = {
+		DEFAULT_BACKGROUND_IMAGE_BORDER_NORTH
+		, DEFAULT_BACKGROUND_IMAGE_BORDER_WEST
+		, DEFAULT_BACKGROUND_IMAGE_BORDER_SOUTH
+		, DEFAULT_BACKGROUND_IMAGE_BORDER_EAST
+	};
+
 	BoardGraphics graphics;
 
 	graphics.backgroundImage = Pixbuf::create_from_file(
@@ -70,7 +94,7 @@ void GUI::initBoard()
 	graphics.whitePieceSprite = Pixbuf::create_from_file(
 		DEFAULT_WHITE_PIECE_SPRITE_PATH);
 
-	board.setGraphics(graphics);
+	board.setGraphics(bgImageBorderSize, graphics);
 	add(board);
 	board.show();
 }

@@ -22,6 +22,9 @@
 #include <utility>
 #include <vector>
 
+#include <iostream> //XXX DEBUG
+using namespace std; //XXX DEBUG
+
 using Cairo::Context;
 using Gdk::Pixbuf;
 using std::pair;
@@ -35,10 +38,24 @@ bool BoardGraphics::isInitialized() const noexcept
 }
 
 Board::Board() : grid(8, vector<Tile>(8, Tile::Empty))
-{}
-
-void Board::setGraphics(BoardGraphics graphics) noexcept
 {
+//	add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK
+//		| Gdk::BUTTON_RELEASE_MASK);
+//
+//	signal_motion_notify_event().connect(sigc::mem_fun(*this
+//		, &Board::on_motion));
+//
+//	signal_button_press_event().connect(sigc::mem_fun(*this
+//		, &Board::on_button_press));
+//
+//	signal_button_release_event().connect(sigc::mem_fun(*this
+//		, &Board::on_button_release));
+}
+
+void Board::setGraphics(BorderSize bgImageBorderSize, BoardGraphics graphics)
+		noexcept
+{
+	this->imageBorderSize = bgImageBorderSize;
 	this->graphics = graphics;
 
 	/* Resize the parent container to make place. */
@@ -134,6 +151,27 @@ pair<double,double> Board::tileDrawCoordinates(
 	const auto drawY = tileHeight*gridY + boardOrigoY;
 
 	return pair<double,double>(drawX, drawY);
+}
+
+bool Board::on_motion(GdkEventMotion* event)
+{
+	cout << "Mouse moved!" << endl; //XXX DEBUG
+
+	return true;
+}
+
+bool Board::on_button_press(GdkEventButton* event)
+{
+	cout << "Button pressed!" << endl; //XXX DEBUG
+
+	return true;
+}
+
+bool Board::on_button_release(GdkEventButton* event)
+{
+	cout << "Button relesased!" << endl; //XXX DEBUG
+
+	return true;
 }
 
 } //namespace reversi

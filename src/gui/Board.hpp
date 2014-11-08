@@ -36,8 +36,6 @@ struct BorderSize
 	int east;
 	int south;
 	int west;
-
-	virtual ~BorderSize() = default;
 };
 
 struct BoardGraphics
@@ -60,13 +58,19 @@ public:
 
 	virtual void placePiece(Tile colour, int gridX, int gridY);
 
-	virtual void setGraphics(BoardGraphics graphics) noexcept;
+	virtual void setGraphics(BorderSize bgImageBorderSize
+		, BoardGraphics graphics) noexcept;
+
 
 protected:
 
 	virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
 
 private:
+
+	bool on_motion(GdkEventMotion* event);
+	bool on_button_press(GdkEventButton* event);
+	bool on_button_release(GdkEventButton* event);
 
 	std::pair<double,double> tileDrawCoordinates(int gridX, int gridY)
 		const noexcept;
