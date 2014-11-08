@@ -22,15 +22,15 @@
  *, without the need of editing the code.
  */
 #ifndef DEFAULT_BACKGROUND_IMAGE_PATH
-#define DEFAULT_BACKGROUND_IMAGE_PATH "res/GameBoard_Reversi_8x8.gif"
+#define DEFAULT_BACKGROUND_IMAGE_PATH "res/board.gif"
 #endif //DEFAULT_BACKGROUND_IMAGE_PATH
 
 #ifndef DEFAULT_BLACK_PIECE_SPRITE_PATH
-#define DEFAULT_BLACK_PIECE_SPRITE_PATH "res/pieceBlack.gif"
+#define DEFAULT_BLACK_PIECE_SPRITE_PATH "res/blackPiece.gif"
 #endif //DEFAULT_BLACK_PIECE_SPRITE_PATH
 
 #ifndef DEFAULT_WHITE_PIECE_SPRITE_PATH
-#define DEFAULT_WHITE_PIECE_SPRITE_PATH "res/pieceWhite.gif"
+#define DEFAULT_WHITE_PIECE_SPRITE_PATH "res/whitePiece.gif"
 #endif //DEFAULT_WHITE_PIECE_SPRITE_PATH
 
 using Gdk::Pixbuf;
