@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -O0 -std=c++11 `pkg-config --cflags gtkmm-3.0`
+CFLAGS=-Wall -g -std=c++11 `pkg-config --cflags gtkmm-3.0`
 LDFLAGS=`pkg-config --libs gtkmm-3.0`
 
 TARGET=reversi

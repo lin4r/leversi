@@ -18,16 +18,30 @@
 #include "GUI.hpp"
 
 #include <gtkmm/application.h>
+#include <glibmm/fileutils.h>
+
+#include <iostream>
 
 using Gtk::Application;
+using Glib::FileError;
+using Gdk::PixbufError;
 using reversi::GUI;
+using std::cerr;
+using std::endl;
 
 int main(int argc, char *argv[])
 {
 	auto application = Application::create(argc, argv
 		, "se.umu.cs.c10lna.reversi");
 
-	GUI gui;
+	try {
+		GUI gui;
+		return application->run(gui);
+	} catch (const FileError e) {
+		cerr << "FileError: " << e.what() << endl;
+	} catch (const PixbufError e) {
+		cerr << "PixbufError: " << e.what() << endl;
+	}
 
-	return application->run(gui);
+	return -1;
 }

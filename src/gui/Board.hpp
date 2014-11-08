@@ -36,6 +36,19 @@ struct BorderSize
 	int east;
 	int south;
 	int west;
+
+	virtual ~BorderSize() = default;
+};
+
+struct BoardGraphics
+{
+	Glib::RefPtr<Gdk::Pixbuf> backgroundImage{nullptr};
+	Glib::RefPtr<Gdk::Pixbuf> blackPieceSprite{nullptr};
+	Glib::RefPtr<Gdk::Pixbuf> whitePieceSprite{nullptr};
+
+	virtual ~BoardGraphics() = default;
+
+	virtual bool isInitialized() const noexcept;
 };
 
 class Board : public Gtk::DrawingArea
@@ -46,6 +59,8 @@ public:
 	virtual ~Board() = default;
 
 	virtual void placePiece(Tile colour, int gridX, int gridY);
+
+	virtual void setGraphics(BoardGraphics graphics) noexcept;
 
 protected:
 
@@ -58,9 +73,7 @@ private:
 
 	BorderSize imageBorderSize;
 
-	Glib::RefPtr<Gdk::Pixbuf> backgroundImage;
-	Glib::RefPtr<Gdk::Pixbuf> blackPieceImage;
-	Glib::RefPtr<Gdk::Pixbuf> whitePieceImage;
+	BoardGraphics graphics;
 
 	std::vector<std::vector<Tile>> grid;
 };

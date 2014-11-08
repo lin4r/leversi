@@ -33,6 +33,10 @@ public:
 protected:
 
 	Board board;
+
+private:
+
+	void initBoard();
 };
 
 } //namespace reversi

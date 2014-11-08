@@ -18,48 +18,37 @@
 
 #include <cairomm/context.h>
 #include <gdkmm/general.h> // set_source_pixbuf()
-#include <glibmm/fileutils.h>
 
 #include <utility>
 #include <vector>
-#include <iostream>
 
 using Cairo::Context;
 using Gdk::Pixbuf;
-using Glib::FileError;
-using Gdk::PixbufError;
 using std::pair;
 using std::vector;
-using std::cerr;
-using std::endl;
 
 namespace reversi {
 
-Board::Board() : grid(8, vector<Tile>(8, Tile::Empty))
+bool BoardGraphics::isInitialized() const noexcept
 {
-	imageBorderSize = {1,1,1,1};
+	return backgroundImage && blackPieceSprite && whitePieceSprite;
+}
 
-	try {
-		backgroundImage = Pixbuf::create_from_file(
-			"res/GameBoard_Reversi_8x8.gif");
-		blackPieceImage = Pixbuf::create_from_file("res/pieceBlack.gif");
-		whitePieceImage = Pixbuf::create_from_file("res/pieceWhite.gif");
-	} catch (const FileError e) {
-		cerr << "FileError: " << e.what() << endl;
-	} catch (const PixbufError e) {
-		cerr << "PixbufError: " << e.what() << endl;
-	}
+Board::Board() : grid(8, vector<Tile>(8, Tile::Empty))
+{}
 
-	if (backgroundImage) {
-		/* Resize the parent container to make place. */
-		set_size_request(backgroundImage->get_width()
-			, backgroundImage->get_height());
-	}
+void Board::setGraphics(BoardGraphics graphics) noexcept
+{
+	this->graphics = graphics;
+
+	/* Resize the parent container to make place. */
+	set_size_request(graphics.backgroundImage->get_width()
+		, graphics.backgroundImage->get_height());
 }
 
 bool Board::on_draw(const Cairo::RefPtr<Context>& cr)
 {
-	if (! backgroundImage) {
+	if (! graphics.isInitialized()) {
 		return false;
 	}
 
@@ -67,15 +56,15 @@ bool Board::on_draw(const Cairo::RefPtr<Context>& cr)
 	const auto width = allocation.get_width();
 	const auto height = allocation.get_height();
 
-	const auto bgWidth = backgroundImage->get_width();
-	const auto bgHeight = backgroundImage->get_height();
+	const auto bgWidth = graphics.backgroundImage->get_width();
+	const auto bgHeight = graphics.backgroundImage->get_height();
 
 	/* Draw in the middle of the draw area if it is bigger than the image. */
 	const auto centredBackgroundX = (width - bgWidth)/2;
 	const auto centredBackgroundY = (height - bgHeight)/2;
 
 	/* Draw the image in the middle of the drawing area. */
-	Gdk::Cairo::set_source_pixbuf(cr, backgroundImage
+	Gdk::Cairo::set_source_pixbuf(cr, graphics.backgroundImage
 		, centredBackgroundX, centredBackgroundY);
 
 	cr->paint();
@@ -93,8 +82,12 @@ bool Board::on_draw(const Cairo::RefPtr<Context>& cr)
 			};
 
 			switch (grid.at(i).at(j)) {
-			case Tile::Black: drawPiece(blackPieceImage, coordinates); break;
-			case Tile::White: drawPiece(whitePieceImage, coordinates); break;
+			case Tile::Black:
+				drawPiece(graphics.blackPieceSprite, coordinates);
+				break;
+			case Tile::White:
+				drawPiece(graphics.whitePieceSprite, coordinates);
+				break;
 			default: ;
 			}
 		}
@@ -117,8 +110,8 @@ pair<double,double> Board::tileDrawCoordinates(
 	const auto widgetHeight = allocation.get_height();
 
 	/* Background size. */
-	const auto bgWidth = backgroundImage->get_width();
-	const auto bgHeight = backgroundImage->get_height();
+	const auto bgWidth = graphics.backgroundImage->get_width();
+	const auto bgHeight = graphics.backgroundImage->get_height();
 
 	/* Shift between the widget coordinate system and board. */
 	const auto boardOrigoX = (widgetWidth - bgWidth)/2.0
