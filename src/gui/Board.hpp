@@ -54,6 +54,7 @@ class Board : public Gtk::DrawingArea
 public:
 
 	Board();
+	Board(int sizeX, int sizeY);
 	virtual ~Board() = default;
 
 	virtual void placePiece(Tile colour, int gridX, int gridY);
@@ -76,6 +77,9 @@ private:
 		const noexcept;
 
 	std::pair<int,int> tileAt(double pixelX, double pixelY) const noexcept;
+
+	int gridSizeX;
+	int gridSizeY;
 
 	BorderSize imageBorderSize;
 

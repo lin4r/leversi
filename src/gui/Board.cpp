@@ -29,6 +29,7 @@ using Cairo::Context;
 using Gdk::Pixbuf;
 using std::pair;
 using std::vector;
+using std::size_t;
 
 namespace reversi {
 
@@ -37,7 +38,9 @@ bool BoardGraphics::isInitialized() const noexcept
 	return backgroundImage && blackPieceSprite && whitePieceSprite;
 }
 
-Board::Board() : grid(8, vector<Tile>(8, Tile::Empty))
+Board::Board() : Board(8,8) {};
+Board::Board(int sizeX, int sizeY) : gridSizeX{sizeX}, gridSizeY{sizeY}
+		, grid(sizeX, vector<Tile>(sizeY, Tile::Empty))
 {
 	add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK
 		| Gdk::BUTTON_RELEASE_MASK);
@@ -86,8 +89,8 @@ bool Board::on_draw(const Cairo::RefPtr<Context>& cr)
 
 	cr->paint();
 
-	for (int i = 0; i < 8; i++) {
-		for (int j = 0; j < 8; j++) {
+	for (int i{0}; i < gridSizeX; i++) {
+		for (int j{0}; j < gridSizeY; j++) {
 			const auto coordinates = tileDrawCoordinates(i,j);
 
 			const auto drawPiece = [&](Glib::RefPtr<Gdk::Pixbuf> pieceImg
@@ -143,8 +146,8 @@ pair<double,double> Board::tileDrawCoordinates(
 		- imageBorderSize.south;
 
 	/* The size of a tile on the board. */
-	const auto tileWidth = boardWidth/8.0;
-	const auto tileHeight = boardHeight/8.0;
+	const auto tileWidth = boardWidth/static_cast<double>(gridSizeX);
+	const auto tileHeight = boardHeight/static_cast<double>(gridSizeY);
 
 	/* Draw coordinates for the piece. */
 	const auto drawX = tileWidth*gridX + boardOrigoX;
@@ -177,8 +180,8 @@ pair<int,int> Board::tileAt(double pixelX, double pixelY) const noexcept
 		- imageBorderSize.south;
 
 	/* The size of a tile on the board. */
-	const auto tileWidth = boardWidth/8.0;
-	const auto tileHeight = boardHeight/8.0;
+	const auto tileWidth = boardWidth/static_cast<double>(gridSizeX);
+	const auto tileHeight = boardHeight/static_cast<double>(gridSizeY);
 
 	/* Translate to board coordinates. */
 	const auto pixelOnBoardX = pixelX - boardOrigoX;
