@@ -39,17 +39,17 @@ bool BoardGraphics::isInitialized() const noexcept
 
 Board::Board() : grid(8, vector<Tile>(8, Tile::Empty))
 {
-//	add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK
-//		| Gdk::BUTTON_RELEASE_MASK);
-//
-//	signal_motion_notify_event().connect(sigc::mem_fun(*this
-//		, &Board::on_motion));
-//
-//	signal_button_press_event().connect(sigc::mem_fun(*this
-//		, &Board::on_button_press));
-//
-//	signal_button_release_event().connect(sigc::mem_fun(*this
-//		, &Board::on_button_release));
+	add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK
+		| Gdk::BUTTON_RELEASE_MASK);
+
+	signal_motion_notify_event().connect(sigc::mem_fun(*this
+		, &Board::on_motion));
+
+	signal_button_press_event().connect(sigc::mem_fun(*this
+		, &Board::on_button_press));
+
+	signal_button_release_event().connect(sigc::mem_fun(*this
+		, &Board::on_button_release));
 }
 
 void Board::setGraphics(BorderSize bgImageBorderSize, BoardGraphics graphics)
