@@ -69,9 +69,13 @@ bool Board::on_draw(const Cairo::RefPtr<Context>& cr)
 	const auto bgWidth = backgroundImage->get_width();
 	const auto bgHeight = backgroundImage->get_height();
 
+	/* Draw in the middle of the draw area if it is bigger than the image. */
+	const auto centredBackgroundX = (width - bgWidth)/2;
+	const auto centredBackgroundY = (height - bgHeight)/2;
+
 	/* Draw the image in the middle of the drawing area. */
 	Gdk::Cairo::set_source_pixbuf(cr, backgroundImage
-		, (width - bgWidth)/2, (height - bgHeight)/2);
+		, centredBackgroundX, centredBackgroundY);
 
 	cr->paint();
 
