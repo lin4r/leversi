@@ -6,9 +6,17 @@ TARGET=reversi
 OBJ=actionstring_syntax_exception.o illegal_move_exception.o ReversiAction.o
 DEPS=actionstring_syntax_exception.hpp getter_setter.hpp illegal_move_exception.hpp ReversiAction.hpp ReversiAlgorithm.hpp ReversiPosition.hpp
 
-.PHONY: all clean
+TEST=test
 
-all: $(TARGET)
+.PHONY: all clean runtest
+
+all: $(TARGET) runtest
+
+runtest: $(TEST)
+	./$(TEST)
+
+$(TEST): ReversiActionTest.o $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 $(TARGET): $(OBJ)
 #	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)

@@ -48,7 +48,7 @@ public:
 	GETTERSETTER(int, value)
 	GETTERSETTER(bool, pass)
 
-	virtual std::string moveString() const noexcept;
+	virtual std::string actionString() const noexcept;
 
 };
 
