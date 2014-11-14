@@ -10,23 +10,23 @@
  *******************************************************/
 
 /*
- * ??
+ * A position in a discrete coordinate system.
  *
  * Linus Narva.
  */
-#ifndef REVERSI_POSITION_HPP
-#define REVERSI_POSITION_HPP
+#ifndef POSITION_HPP_
+#define POSITION_HPP_
 
 #include <string>
 
 namespace reversi {
 
-class ReversiPosition
+struct Position
 {
-	ReversiPosition() = default;
-	ReversiPosition() = default;
+	int row;
+	int column;
 };
 
 } //namespace reversi
 
-#endif //REVERSI_POSITION_HPP
+#endif //POSITION_HPP_
