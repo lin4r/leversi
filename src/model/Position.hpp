@@ -28,21 +28,25 @@ public:
 	int row;
 	int column;
 
-	Position(int row, int column) : row{row}, column{column} {}
+	Position(int row, int column);
 
 	virtual ~Position() = default;
+
+	virtual Position north() const noexcept;
+	virtual Position east() const noexcept;
+	virtual Position south() const noexcept;
+	virtual Position west() const noexcept;
+
+	virtual Position northEast() const noexcept;
+	virtual Position southEast() const noexcept;
+	virtual Position southWest() const noexcept;
+	virtual Position northWest() const noexcept;
 };
 
 } //namespace reversi
 
-inline bool operator==(const reversi::Position& p1, const reversi::Position& p2)
-{
-	return (p1.row == p2.row) && (p1.column == p2.column);
-}
+bool operator==(const reversi::Position& p1, const reversi::Position& p2);
 
-inline std::ostream& operator<<(std::ostream& os, const reversi::Position& p)
-{
-	return os << "reversi::Position(" << p.row << "," << p.column << ")";
-}
+std::ostream& operator<<(std::ostream& os, const reversi::Position& p);
 
 #endif //POSITION_HPP_
