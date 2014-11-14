@@ -10,7 +10,7 @@
  *******************************************************/
 
 /*
- * A position in a discrete coordinate system.
+ * A position on a grid.
  *
  * Linus Narva.
  */
