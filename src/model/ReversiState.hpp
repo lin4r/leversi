@@ -19,6 +19,7 @@
 
 #include "Tile.hpp"
 #include "Player.hpp"
+#include "getter_setter.hpp"
 
 #include <vector>
 
@@ -32,6 +33,10 @@ public:
 	ReversiState(int boardRows, int boardColumns, Player starter) noexcept;
 
 	virtual ~ReversiState() = default;
+
+	GETTER(Player, turn)
+	GETTER(int, boardRows)
+	GETTER(int, boardColumns)
 
 private:
 
