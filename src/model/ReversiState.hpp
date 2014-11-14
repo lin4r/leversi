@@ -21,6 +21,7 @@
 #include "Player.hpp"
 #include "getter_setter.hpp"
 #include "ReversiAction.hpp"
+#include "Position.hpp"
 
 #include <vector>
 

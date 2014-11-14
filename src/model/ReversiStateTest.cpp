@@ -44,8 +44,10 @@ TEST_CASE("Default values", "[ReversiState, defaultValues]")
 TEST_CASE("Test modifications of the state", "[ReversiState,], actions")
 {
 	ReversiState state;
-	ReversiAction action1(0,0);
-	ReversiAction action2(1,1);
+
+	Position pos1(0,0), pos2(1,1);
+	ReversiAction action1(pos1);
+	ReversiAction action2(pos2);
 
 	SECTION("Performing an action changes turn.")
 	{
@@ -60,9 +62,7 @@ TEST_CASE("Test modifications of the state", "[ReversiState,], actions")
 
 	SECTION("Performing actions places tiles")
 	{
-		int posX{0}, posY{0};
-		ReversiAction(posX, posY);
-
-		//TODO
+		/* The tile is empty before placement. */
+//		REQUIRE(state.inspectTile(pos))
 	}
 }

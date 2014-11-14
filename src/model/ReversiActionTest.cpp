@@ -23,8 +23,8 @@ using namespace reversi;
 
 TEST_CASE("Test action string conversion.", "[ReversiAction, actionString]")
 {
-	ReversiAction pass(1,2,true);
-	ReversiAction put(3,4);
+	ReversiAction pass(Position(1,2),true);
+	ReversiAction put(Position(3,4));
 
 	SECTION ("Verify pass format")
 	{
@@ -67,9 +67,9 @@ TEST_CASE("Test action string parseing", "[ReversiAction, actionString]")
 	SECTION("Can parse a non-pass")
 	{
 		ReversiAction nonPass1("(3,4)");
+		Position excpected = {3,4};
 
-		REQUIRE(3 == nonPass1.get_row());
-		REQUIRE(4 == nonPass1.get_column());
+		REQUIRE(excpected == nonPass1.get_position());
 
 		/* TODO Robuster matching allowing this and whitespaces in the
 		 * parantheses will be implemented once gcc supports regex (4.9)

@@ -26,13 +26,13 @@ using std::ostream;
 namespace reversi {
 
 
-ReversiAction::ReversiAction(int row, int col) noexcept
-		: row{row}, column{col}, pass{false}
+ReversiAction::ReversiAction(Position position) noexcept
+		: position(position), pass{false}
 {
 }
 
-ReversiAction::ReversiAction(int row, int col, bool pass) noexcept
-		: row{row}, column{col}, pass{pass}
+ReversiAction::ReversiAction(Position position, bool pass) noexcept
+		: position(position), pass{pass}
 {
 }
 
@@ -64,8 +64,8 @@ ReversiAction::ReversiAction(string action)
 		pass = true;
 	} else if ((action.size() > 4) && isdigit(action.at(1))
 			&& isdigit(action.at(3))) {
-		row = stoi(action.substr(1,1));
-		column = stoi(action.substr(3,1));
+		position.row = stoi(action.substr(1,1));
+		position.column = stoi(action.substr(3,1));
 	} else {
 		throw actionstring_syntax_exception(action);
 	}
@@ -80,7 +80,8 @@ string ReversiAction::actionString() const noexcept
 	if (pass) {
 		actionStr = "pass";
 	} else {
-		actionStr = "(" + to_string(row) + "," + to_string(column) + ")";
+		actionStr = "(" + to_string(position.row) + ","
+			+ to_string(position.column) + ")";
 	}
 
 	return actionStr;

@@ -20,6 +20,7 @@
 
 #include "getter_setter.hpp"
 #include "actionstring_syntax_exception.hpp"
+#include "Position.hpp"
 
 #include <string>
 #include <iostream>
@@ -29,21 +30,19 @@ namespace reversi {
 class ReversiAction
 {	
 private:
-	int row{-1};
-	int column{-1};
+	Position position = {-1,-1};
 	int value{0};
 	bool pass{false};
 
 public:
 
-	ReversiAction(int row, int col) noexcept;
-	ReversiAction(int row, int col, bool pass) noexcept;
+	ReversiAction(Position position) noexcept;
+	ReversiAction(Position position, bool pass) noexcept;
 	ReversiAction(std::string action);
 
 	virtual ~ReversiAction() = default;
 
-	GETTERSETTER(int, row)
-	GETTERSETTER(int, column)
+	GETTERSETTER(Position, position);
 	GETTERSETTER(int, value)
 	GETTERSETTER(bool, pass)
 
