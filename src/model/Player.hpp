@@ -21,7 +21,7 @@ namespace reversi {
 
 enum class Player
 {
-	Empty, Black, White
+	Black, White
 };
 
 } //namespace reversi

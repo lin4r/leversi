@@ -34,6 +34,20 @@ ReversiState::ReversiState(int boardRows, int boardColumns, Player starter)
 {
 }
 
+void ReversiState::performAction(ReversiAction action)
+{
+	switch (turn) {
+	case Player::White: turn = Player::Black; break;
+	case Player::Black:
+	default: turn = Player::White;
+	}
+}
+
+Player ReversiState::whosTurn() const noexcept
+{
+	return turn;
+}
+
 } //namespace reversi
 
 //std::ostream& operator<<(std::ostream& os, reversi::ReversiState action);

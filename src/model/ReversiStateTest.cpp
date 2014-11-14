@@ -27,7 +27,7 @@ TEST_CASE("Default values", "[ReversiState, defaultValues]")
 
 	SECTION("White player starts.")
 	{
-		REQUIRE(Player::White == state.get_turn());
+		REQUIRE(Player::White == state.whosTurn());
 	}
 
 	SECTION("Board has eight rows")
@@ -38,5 +38,31 @@ TEST_CASE("Default values", "[ReversiState, defaultValues]")
 	SECTION("Board has eight columns")
 	{
 		REQUIRE(8 == state.get_boardColumns());
+	}
+}
+
+TEST_CASE("Test modifications of the state", "[ReversiState,], actions")
+{
+	ReversiState state;
+	ReversiAction action1(0,0);
+	ReversiAction action2(1,1);
+
+	SECTION("Performing an action changes turn.")
+	{
+		state.performAction(action1);
+
+		REQUIRE(Player::Black == state.whosTurn());
+
+		state.performAction(action2);
+
+		REQUIRE(Player::White == state.whosTurn());
+	}
+
+	SECTION("Performing actions places tiles")
+	{
+		int posX{0}, posY{0};
+		ReversiAction(posX, posY);
+
+		//TODO
 	}
 }
