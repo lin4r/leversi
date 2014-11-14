@@ -10,24 +10,20 @@
  *******************************************************/
 
 /*
- * MVC View interface for reversi.
+ * Enum class specifying a tile on the reversi board.
  *
  * Linus Narva.
  */
-#ifndef REVERSI_VIEW_HPP_
-#define REVERSI_VIEW_HPP_
-
-#include "Tile.hpp"
+#ifndef TILE_HPP_
+#define TILE_HPP_
 
 namespace reversi {
 
-class ReversiView
+enum class Tile
 {
-public:
-
-	virtual void placePiece(Tile colour, int gridX, int gridY) = 0;
+	Empty, Black, White
 };
 
 } //namespace reversi
 
-#endif //REVERSI_VIEW_HPP_
+#endif //TILE_HPP_
