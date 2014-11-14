@@ -25,9 +25,9 @@ TEST_CASE("Default values", "[ReversiState, defaultValues]")
 {
 	ReversiState state;
 
-	SECTION("White player starts.")
+	SECTION("Black player starts.")
 	{
-		REQUIRE(Player::White == state.whosTurn());
+		REQUIRE(Player::Black == state.whosTurn());
 	}
 
 	SECTION("Board has eight rows")
@@ -91,17 +91,19 @@ TEST_CASE("Test modifications of the state", "[ReversiState,], actions")
 		ReversiAction outsidePass(Position(-1,-1), true);
 
 		REQUIRE_NOTHROW(state.performAction(outsidePass));
+
+		//TODO illegal inside grid.
 	}
 
 	SECTION("Performing an action changes turn.")
 	{
 		state.performAction(action1);
 
-		REQUIRE(Player::Black == state.whosTurn());
+		REQUIRE(Player::White == state.whosTurn());
 
 		state.performAction(action2);
 
-		REQUIRE(Player::White == state.whosTurn());
+		REQUIRE(Player::Black == state.whosTurn());
 	}
 
 	SECTION("Performing actions places tiles")
@@ -111,14 +113,14 @@ TEST_CASE("Test modifications of the state", "[ReversiState,], actions")
 
 		state.performAction(action1);
 
-		REQUIRE(Tile::White == state.inspectTile(pos1));
+		REQUIRE(Tile::Black == state.inspectTile(pos1));
 
 		REQUIRE(Tile::Empty == state.inspectTile(pos2));
 
 		state.performAction(action2);
 
 		/*Next placement is black.*/
-		REQUIRE(Tile::Black == state.inspectTile(pos2));
+		REQUIRE(Tile::White == state.inspectTile(pos2));
 
 		REQUIRE(Tile::Empty == state.inspectTile(pos3));
 
@@ -132,6 +134,6 @@ TEST_CASE("Test modifications of the state", "[ReversiState,], actions")
 		state.performAction(nonPass);
 
 		/* The turn still changed. */
-		REQUIRE(Tile::Black == state.inspectTile(nonPass.get_position()));
+		REQUIRE(Tile::White == state.inspectTile(nonPass.get_position()));
 	}
 }

@@ -22,7 +22,7 @@ using std::vector;
 
 namespace reversi {
 
-ReversiState::ReversiState() noexcept : ReversiState(8,8,Player::White)
+ReversiState::ReversiState() noexcept : ReversiState(8,8,Player::Black)
 {
 }
 
