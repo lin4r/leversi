@@ -6,16 +6,18 @@ TARGET=reversi
 OBJ=actionstring_syntax_exception.o illegal_move_exception.o ReversiState.o ReversiAction.o
 DEPS=actionstring_syntax_exception.hpp getter_setter.hpp illegal_move_exception.hpp ReversiAction.hpp ReversiAlgorithm.hpp ReversiPosition.hpp Tile.hpp Player.hpp
 
-TEST=test
-
 .PHONY: all clean runtest
 
 all: $(TARGET) runtest
 
-runtest: $(TEST)
-	./$(TEST)
+runtest: ReversiActionTest ReversiStateTest
+	./ReversiActionTest
+	./ReversiStateTest
 
-$(TEST): ReversiActionTest.o $(OBJ)
+ReversiActionTest: ReversiActionTest.o $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+ReversiStateTest: ReversiStateTest.o $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 $(TARGET): $(OBJ)
