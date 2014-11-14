@@ -18,6 +18,7 @@
 #define REVERSI_STATE_HPP_
 
 #include "Tile.hpp"
+#include "Player.hpp"
 
 #include <vector>
 
@@ -28,15 +29,18 @@ class ReversiState
 public:
 
 	ReversiState() noexcept;
-	ReversiState(int rows, int columns) noexcept;
+	ReversiState(int boardRows, int boardColumns, Player starter) noexcept;
 
 	virtual ~ReversiState() = default;
 
 private:
 
-	const int rows;
-	const int columns;
+	Player turn;
 
+	const int boardRows;
+	const int boardColumns;
+
+	/* XXX Improvement: const const matrix. */
 	std::vector<std::vector<Tile>> grid;
 };
 

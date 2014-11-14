@@ -22,13 +22,15 @@ using std::vector;
 
 namespace reversi {
 
-ReversiState::ReversiState() noexcept : ReversiState(8,8)
+ReversiState::ReversiState() noexcept : ReversiState(8,8,Player::White)
 {
 }
 
-ReversiState::ReversiState(int rows, int columns) noexcept
-		: rows{rows}, columns{columns}
-		, grid{vector<vector<Tile>>(rows,vector<Tile>(columns,Tile::Empty))}
+ReversiState::ReversiState(int boardRows, int boardColumns, Player starter)
+		noexcept
+		: turn{starter}, boardRows{boardRows}, boardColumns{boardColumns}
+		, grid{vector<vector<Tile>>(boardRows,vector<Tile>(boardColumns
+			,Tile::Empty))}
 {
 }
 
