@@ -73,6 +73,7 @@ TEST_CASE("Verify cardinal directions", "[Position]")
 
 		REQUIRE(expected == pos.southWest());
 	}
+
 	SECTION("Verify north-west")
 	{
 		Position expected(-1,-1);
