@@ -37,6 +37,10 @@ public:
 
 	virtual ~ReversiState() = default;
 
+	/* FIXME It turns out that this is the Othello starting state and that
+	 * Othello techbically differs from reversi in this rule only. 
+	 * SO I NEED TO RENAME EVRYTHING :(
+	 */
 	static ReversiState initialState() noexcept;
 
 	GETTER(int, boardRows)
