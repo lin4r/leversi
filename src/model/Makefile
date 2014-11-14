@@ -3,8 +3,8 @@ CFLAGS=-Wall -g -std=c++11
 LDFLAGS=
 
 TARGET=reversi
-OBJ=actionstring_syntax_exception.o illegal_move_exception.o ReversiAction.o
-DEPS=actionstring_syntax_exception.hpp getter_setter.hpp illegal_move_exception.hpp ReversiAction.hpp ReversiAlgorithm.hpp ReversiPosition.hpp
+OBJ=actionstring_syntax_exception.o illegal_move_exception.o ReversiState.o ReversiAction.o
+DEPS=actionstring_syntax_exception.hpp getter_setter.hpp illegal_move_exception.hpp ReversiAction.hpp ReversiAlgorithm.hpp ReversiPosition.hpp Tile.hpp
 
 TEST=test
 
