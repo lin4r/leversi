@@ -28,8 +28,8 @@ ReversiState::ReversiState() noexcept : ReversiState(8,8)
 
 ReversiState::ReversiState(int rows, int columns) noexcept
 		: rows{rows}, columns{columns}
+		, grid{vector<vector<Tile>>(rows,vector<Tile>(columns,Tile::Empty))}
 {
-	grid = vector<vector<Tile>>(rows,vector<Tile>(columns,Tile::Empty));
 }
 
 } //namespace reversi

@@ -20,11 +20,13 @@ using std::string;
 
 namespace reversi {
 
-actionstring_syntax_exception::actionstring_syntax_exception() : action{""}
+actionstring_syntax_exception::actionstring_syntax_exception() noexcept
+		: action{""}
 {
 }
 
 actionstring_syntax_exception::actionstring_syntax_exception(string action)
+		noexcept
 		: action{action}
 {
 }

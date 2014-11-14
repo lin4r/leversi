@@ -26,12 +26,12 @@ using std::ostream;
 namespace reversi {
 
 
-ReversiAction::ReversiAction(int row, int col)
+ReversiAction::ReversiAction(int row, int col) noexcept
 		: row{row}, column{col}, pass{false}
 {
 }
 
-ReversiAction::ReversiAction(int row, int col, bool pass)
+ReversiAction::ReversiAction(int row, int col, bool pass) noexcept
 		: row{row}, column{col}, pass{pass}
 {
 }

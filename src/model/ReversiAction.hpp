@@ -36,9 +36,8 @@ private:
 
 public:
 
-	/* XXX Noexcept constructors ? */
-	ReversiAction(int row, int col);
-	ReversiAction(int row, int col, bool pass);
+	ReversiAction(int row, int col) noexcept;
+	ReversiAction(int row, int col, bool pass) noexcept;
 	ReversiAction(std::string action);
 
 	virtual ~ReversiAction() = default;

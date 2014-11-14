@@ -27,7 +27,7 @@ class illegal_move_exception : public std::exception
 {
 public:
 
-	illegal_move_exception(ReversiAction action);
+	illegal_move_exception(ReversiAction action) noexcept;
 	virtual ~illegal_move_exception() = default;
 
 	virtual ReversiAction getAction() const noexcept;

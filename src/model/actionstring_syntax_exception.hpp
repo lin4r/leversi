@@ -28,8 +28,8 @@ class actionstring_syntax_exception : public std::exception
 {
 public:
 
-	actionstring_syntax_exception();
-	actionstring_syntax_exception(std::string action);
+	actionstring_syntax_exception() noexcept;
+	actionstring_syntax_exception(std::string action) noexcept;
 	virtual ~actionstring_syntax_exception() = default;
 
 	GETTER(std::string, action)

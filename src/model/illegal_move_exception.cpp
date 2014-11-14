@@ -20,7 +20,7 @@
 
 namespace reversi {
 
-illegal_move_exception::illegal_move_exception(ReversiAction action)
+illegal_move_exception::illegal_move_exception(ReversiAction action) noexcept
 		: action{action}
 {
 }

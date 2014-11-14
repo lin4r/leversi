@@ -34,8 +34,8 @@ public:
 
 private:
 
-	int rows;
-	int columns;
+	const int rows;
+	const int columns;
 
 	std::vector<std::vector<Tile>> grid;
 };
