@@ -49,12 +49,14 @@ TEST_CASE("Test action string parseing", "[ReversiAction, actionString]")
 
 	SECTION("Throws if we add tail")
 	{
-		REQUIRE_THROWS(ReversiAction("pardsasdf"));
+		REQUIRE_THROWS_AS(ReversiAction("pardsasdf")
+			, actionstring_syntax_exception);
 	}
 
 	SECTION("Throws if we add head")
 	{
-		REQUIRE_THROWS(ReversiAction("asdfpass"));
+		REQUIRE_THROWS_AS(ReversiAction("asdfpass")
+			, actionstring_syntax_exception);
 	}
 
 	SECTION("Can parse pass")

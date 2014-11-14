@@ -17,6 +17,8 @@
 #ifndef TILE_HPP_
 #define TILE_HPP_
 
+#include <iostream>
+
 namespace reversi {
 
 enum class Tile
@@ -25,5 +27,18 @@ enum class Tile
 };
 
 } //namespace reversi
+
+inline std::ostream& operator<<(std::ostream& os, reversi::Tile tile)
+{
+	std::string stringRepresentation;
+
+	switch (tile) {
+	case reversi::Tile::Black: stringRepresentation = "Tile::Black";
+	case reversi::Tile::White: stringRepresentation = "Tile::White";
+	default: stringRepresentation = "Tile::Empty";
+	}
+
+	return os << stringRepresentation;
+}
 
 #endif //TILE_HPP_

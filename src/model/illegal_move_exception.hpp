@@ -14,6 +14,7 @@
  *
  * Linus Narva.
  */
+//XXX Rename to illegal_action_exception
 #ifndef ILLEGAL_MOVE_EXCEPTION_HPP_
 #define ILLEGAL_MOVE_EXCEPTION_HPP_
 

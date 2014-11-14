@@ -22,6 +22,7 @@
 #include "getter_setter.hpp"
 #include "ReversiAction.hpp"
 #include "Position.hpp"
+#include "illegal_move_exception.hpp"
 
 #include <vector>
 
@@ -36,16 +37,22 @@ public:
 
 	virtual ~ReversiState() = default;
 
+	static ReversiState initialState() noexcept;
+
 	GETTER(int, boardRows)
 	GETTER(int, boardColumns)
 
 	virtual Player whosTurn() const noexcept;
-
+	virtual Tile inspectTile(Position position) const;
 	virtual void performAction(ReversiAction action);
 
 	//TODO Reverse action.
 
 private:
+
+	void setTile(Position position, Tile value);
+
+	bool isInsideGrid(Position position);
 
 	Player turn;
 
@@ -57,7 +64,5 @@ private:
 };
 
 } //namespace reversi
-
-//std::ostream& operator<<(std::ostream& os, reversi::ReversiState action);
 
 #endif //REVERSI_STATE_HPP_
