@@ -20,13 +20,13 @@
 
 namespace othello {
 
-illegal_action_exception::illegal_action_exception(ReversiAction action)
+illegal_action_exception::illegal_action_exception(OthelloAction action)
 		noexcept
 		: action{action}
 {
 }
 
-ReversiAction illegal_action_exception::getAction() const noexcept
+OthelloAction illegal_action_exception::getAction() const noexcept
 {
 	return action;
 }

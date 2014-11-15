@@ -18,7 +18,7 @@
 #ifndef ILLEGAL_ACTION_EXCEPTION_HPP_
 #define ILLEGAL_ACTION_EXCEPTION_HPP_
 
-#include "ReversiAction.hpp"
+#include "OthelloAction.hpp"
 
 #include <exception>
 
@@ -28,16 +28,16 @@ class illegal_action_exception : public std::exception
 {
 public:
 
-	illegal_action_exception(ReversiAction action) noexcept;
+	illegal_action_exception(OthelloAction action) noexcept;
 	virtual ~illegal_action_exception() = default;
 
-	virtual ReversiAction getAction() const noexcept;
+	virtual OthelloAction getAction() const noexcept;
 
 	virtual const char* what() const noexcept override;
 
 private:
 
-	ReversiAction action;
+	OthelloAction action;
 };
 
 } //namespace othello

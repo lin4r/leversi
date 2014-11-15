@@ -15,8 +15,8 @@
  *
  * Linus Narva.
  */
-#ifndef REVERSI_ACTION_HPP_
-#define REVERSI_ACTION_HPP_
+#ifndef OTHELLO_ACTION_HPP_
+#define OTHELLO_ACTION_HPP_
 
 #include "getter_setter.hpp"
 #include "actionstring_syntax_exception.hpp"
@@ -27,7 +27,7 @@
 
 namespace othello {
 
-class ReversiAction
+class OthelloAction
 {	
 private:
 	Position position = {-1,-1};
@@ -36,11 +36,11 @@ private:
 
 public:
 
-	ReversiAction(Position position) noexcept;
-	ReversiAction(Position position, bool pass) noexcept;
-	ReversiAction(std::string action);
+	OthelloAction(Position position) noexcept;
+	OthelloAction(Position position, bool pass) noexcept;
+	OthelloAction(std::string action);
 
-	virtual ~ReversiAction() = default;
+	virtual ~OthelloAction() = default;
 
 	GETTERSETTER(Position, position);
 	GETTERSETTER(int, value)
@@ -52,6 +52,6 @@ public:
 
 } //namespace othello
 
-std::ostream& operator<<(std::ostream& os, othello::ReversiAction action);
+std::ostream& operator<<(std::ostream& os, othello::OthelloAction action);
 
-#endif //REVERSI_ACTION_HPP_
+#endif //OTHELLO_ACTION_HPP_

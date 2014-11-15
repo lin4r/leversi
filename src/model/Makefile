@@ -2,8 +2,8 @@ CC=g++
 CFLAGS=-Wall -g -std=c++11
 LDFLAGS=
 
-OBJ=actionstring_syntax_exception.o illegal_action_exception.o Position.o ReversiAction.o OthelloState.o 
-DEPS=actionstring_syntax_exception.hpp getter_setter.hpp illegal_action_exception.hpp Player.hpp Position.hpp ReversiAction.hpp ReversiAlgorithm.hpp OthelloState.hpp Tile.hpp
+OBJ=actionstring_syntax_exception.o illegal_action_exception.o Position.o OthelloAction.o OthelloState.o 
+DEPS=actionstring_syntax_exception.hpp getter_setter.hpp illegal_action_exception.hpp Player.hpp Position.hpp OthelloAction.hpp OthelloState.hpp Tile.hpp
 
 .PHONY: all build clean runtest purge
 
@@ -11,15 +11,15 @@ all: build runtest
 
 build: $(OBJ)
 
-runtest: PositionTest ReversiActionTest OthelloStateTest
+runtest: PositionTest OthelloActionTest OthelloStateTest
 	./PositionTest
-	./ReversiActionTest
+	./OthelloActionTest
 	./OthelloStateTest
 
 PositionTest: PositionTest.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-ReversiActionTest: ReversiActionTest.o $(OBJ)
+OthelloActionTest: OthelloActionTest.o $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 OthelloStateTest: OthelloStateTest.o $(OBJ)

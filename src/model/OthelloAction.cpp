@@ -10,12 +10,12 @@
  *******************************************************/
 
 /*
- * Implements ReversiAction.hpp
+ * Implements OthelloAction.hpp
  *
  * Linus Narva.
  */
 
-#include "ReversiAction.hpp"
+#include "OthelloAction.hpp"
 
 //#include <regex>
 #include <cctype> //FIXME Not needed with regex.
@@ -26,12 +26,12 @@ using std::ostream;
 namespace othello {
 
 
-ReversiAction::ReversiAction(Position position) noexcept
+OthelloAction::OthelloAction(Position position) noexcept
 		: position(position), pass{false}
 {
 }
 
-ReversiAction::ReversiAction(Position position, bool pass) noexcept
+OthelloAction::OthelloAction(Position position, bool pass) noexcept
 		: position(position), pass{pass}
 {
 }
@@ -39,7 +39,7 @@ ReversiAction::ReversiAction(Position position, bool pass) noexcept
 /* FIXME Use regular expressions. However it turns out these don't exist until
  *gcc 4.9 :(
  */
-ReversiAction::ReversiAction(string action)
+OthelloAction::OthelloAction(string action)
 {
 //	using std::regex;
 //	using std::regex_match;
@@ -71,7 +71,7 @@ ReversiAction::ReversiAction(string action)
 	}
 }
 
-string ReversiAction::actionString() const noexcept
+string OthelloAction::actionString() const noexcept
 {
 	using std::to_string;
 
@@ -89,7 +89,7 @@ string ReversiAction::actionString() const noexcept
 
 } //namespace othello
 
-std::ostream& operator<<(std::ostream& os, othello::ReversiAction action)
+std::ostream& operator<<(std::ostream& os, othello::OthelloAction action)
 {
-	return os << "ReversiAction[" << action.actionString() << "]";
+	return os << "OthelloAction[" << action.actionString() << "]";
 }

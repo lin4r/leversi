@@ -123,7 +123,7 @@ TEST_CASE("Test that flip searching.", "[OthelloState, ]")
 
 	SECTION("Causes no flips if pass")
 	{
-		ReversiAction pass(legal, true);
+		OthelloAction pass(legal, true);
 		auto flips = state.searchFlips(pass);
 		REQUIRE(flips.empty());
 	}
@@ -136,19 +136,19 @@ TEST_CASE("Test that flip searching.", "[OthelloState, ]")
 		state.setTile(Position(0,0), Tile::White);
 		state.setTile(Position(1,1), Tile::Black);
 
-		auto flips = state.searchFlips(ReversiAction(outside));
+		auto flips = state.searchFlips(OthelloAction(outside));
 		REQUIRE(flips.empty());
 	}
 
 	SECTION("Cant place on an non-empty tile.")
 	{
-		auto flips = state.searchFlips(ReversiAction(occupied));
+		auto flips = state.searchFlips(OthelloAction(occupied));
 		REQUIRE(flips.empty());
 	}
 
 	SECTION("Cant place if all adjacent bricks have the same colour.")
 	{
-		auto flips = state.searchFlips(ReversiAction(illegal));
+		auto flips = state.searchFlips(OthelloAction(illegal));
 		REQUIRE(flips.empty());
 	}
 
@@ -158,49 +158,49 @@ TEST_CASE("Test that flip searching.", "[OthelloState, ]")
 
 		Position placement(0,0);
 		Position expectedFlip(1,1);
-		auto flips = state.searchFlips(ReversiAction(placement));
+		auto flips = state.searchFlips(OthelloAction(placement));
 		REQUIRE(1 == flips.size());
 		REQUIRE(expectedFlip == flips.at(0));
 
 		placement = Position(0,2);
 		expectedFlip = Position(1,2);
-		flips = state.searchFlips(ReversiAction(placement));
+		flips = state.searchFlips(OthelloAction(placement));
 		REQUIRE(1 == flips.size());
 		REQUIRE(expectedFlip == flips.at(0));
 
 		placement = Position(0,4);
 		expectedFlip = Position(1,3);
-		flips = state.searchFlips(ReversiAction(placement));
+		flips = state.searchFlips(OthelloAction(placement));
 		REQUIRE(1 == flips.size());
 		REQUIRE(expectedFlip == flips.at(0));
 
 		placement = Position(2,4);
 		expectedFlip = Position(2,3);
-		flips = state.searchFlips(ReversiAction(placement));
+		flips = state.searchFlips(OthelloAction(placement));
 		REQUIRE(1 == flips.size());
 		REQUIRE(expectedFlip == flips.at(0));
 
 		placement = Position(4,4);
 		expectedFlip = Position(3,3);
-		flips = state.searchFlips(ReversiAction(placement));
+		flips = state.searchFlips(OthelloAction(placement));
 		REQUIRE(1 == flips.size());
 		REQUIRE(expectedFlip == flips.at(0));
 
 		placement = Position(4,2);
 		expectedFlip = Position(3,2);
-		flips = state.searchFlips(ReversiAction(placement));
+		flips = state.searchFlips(OthelloAction(placement));
 		REQUIRE(1 == flips.size());
 		REQUIRE(expectedFlip == flips.at(0));
 
 		placement = Position(4,0);
 		expectedFlip = Position(3,1);
-		flips = state.searchFlips(ReversiAction(placement));
+		flips = state.searchFlips(OthelloAction(placement));
 		REQUIRE(1 == flips.size());
 		REQUIRE(expectedFlip == flips.at(0));
 
 		placement = Position(2,0);
 		expectedFlip = Position(2,1);
-		flips = state.searchFlips(ReversiAction(placement));
+		flips = state.searchFlips(OthelloAction(placement));
 		REQUIRE(1 == flips.size());
 		REQUIRE(expectedFlip == flips.at(0));
 	}
@@ -210,7 +210,7 @@ TEST_CASE("Test that flip searching.", "[OthelloState, ]")
 		auto state = getHoleState();
 
 		Position placement(2,2);
-		auto flips = state.searchFlips(ReversiAction(placement));
+		auto flips = state.searchFlips(OthelloAction(placement));
 		REQUIRE(5 == flips.size());
 	}
 
@@ -219,7 +219,7 @@ TEST_CASE("Test that flip searching.", "[OthelloState, ]")
 		auto state = longrowState();
 
 		Position placement(0,0);
-		auto flips = state.searchFlips(ReversiAction(placement));
+		auto flips = state.searchFlips(OthelloAction(placement));
 		REQUIRE(3 == flips.size());
 	}
 }
@@ -231,7 +231,7 @@ TEST_CASE("Test modifications of the state", "[OthelloState, actions]")
 
 	//3 consecutive legal moves.
 	Position pos1(3,2), pos2(2,2), pos3(1,1);
-	ReversiAction action1(pos1), action2(pos2), pass(pos3,true);
+	OthelloAction action1(pos1), action2(pos2), pass(pos3,true);
 
 	SECTION("Verify that the initial state is according to game rules.")
 	{
@@ -245,28 +245,28 @@ TEST_CASE("Test modifications of the state", "[OthelloState, actions]")
 
 	SECTION("Throws illegal move exception if outside the grid.")
 	{
-		ReversiAction illegal1(Position(-1,-1));
+		OthelloAction illegal1(Position(-1,-1));
 		REQUIRE_THROWS_AS(state.performAction(illegal1)
 			, illegal_action_exception);
 
-		ReversiAction illegal2(Position(8,8));
+		OthelloAction illegal2(Position(8,8));
 		REQUIRE_THROWS_AS(state.performAction(illegal2)
 			, illegal_action_exception);
 
 
-		ReversiAction illegal3(Position(0,-1));
+		OthelloAction illegal3(Position(0,-1));
 		REQUIRE_THROWS_AS(state.performAction(illegal3)
 			, illegal_action_exception);
 
-		ReversiAction illegal4(Position(-1,0));
+		OthelloAction illegal4(Position(-1,0));
 		REQUIRE_THROWS_AS(state.performAction(illegal4)
 			, illegal_action_exception);
 
-		ReversiAction illegal5(Position(0,8));
+		OthelloAction illegal5(Position(0,8));
 		REQUIRE_THROWS_AS(state.performAction(illegal5)
 			, illegal_action_exception);
 
-		ReversiAction illegal6(Position(8,0));
+		OthelloAction illegal6(Position(8,0));
 		REQUIRE_THROWS_AS(state.performAction(illegal6)
 			, illegal_action_exception);
 	}
@@ -279,7 +279,7 @@ TEST_CASE("Test modifications of the state", "[OthelloState, actions]")
 
 	SECTION("Dont throw if pass, even if outside grid or the position is illegal")
 	{
-		ReversiAction outsidePass(Position(-1,-1), true);
+		OthelloAction outsidePass(Position(-1,-1), true);
 
 		REQUIRE_NOTHROW(empty.performAction(outsidePass));
 	}
@@ -333,7 +333,7 @@ TEST_CASE("Test modifications of the state", "[OthelloState, actions]")
 		REQUIRE(! state.gameOver());
 
 		//Start of with a legal placement.
-		state.performAction(ReversiAction(Position(0,0)));
+		state.performAction(OthelloAction(Position(0,0)));
 		REQUIRE(! state.gameOver());
 
 		//White can/must pass but it is not over yet.

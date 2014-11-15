@@ -57,7 +57,7 @@ Tile OthelloState::playerColour(Player player) const noexcept
 	}
 }
 
-vector<Position> OthelloState::searchFlips(ReversiAction action) const
+vector<Position> OthelloState::searchFlips(OthelloAction action) const
 {
 	using std::mem_fn;
 
@@ -125,7 +125,7 @@ vector<Position> OthelloState::searchFlips(ReversiAction action) const
 	return flips;
 }
 
-void OthelloState::performAction(ReversiAction action)
+void OthelloState::performAction(OthelloAction action)
 {
 	Tile pieceColour;
 
@@ -210,7 +210,7 @@ bool OthelloState::existsNonpassAction() const noexcept
 	for (auto row = 0; (! foundLegalMove) && (row < boardRows); row++ ) {
 		for (auto col = 0; (! foundLegalMove) && (col < boardColumns); col++) {
 
-			auto flips = searchFlips(ReversiAction(Position(row,col)));
+			auto flips = searchFlips(OthelloAction(Position(row,col)));
 			foundLegalMove = foundLegalMove || (flips.size() != 0);
 		}
 	}
