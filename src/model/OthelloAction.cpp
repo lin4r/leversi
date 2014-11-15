@@ -16,10 +16,15 @@
  */
 
 #include "OthelloAction.hpp"
+#include "illegal_action_exception.hpp"
+#include "actionstring_syntax_exception.hpp"
 
 //#include <regex>
 #include <cctype> //FIXME Not needed with regex.
+#include <functional>
+#include <vector>
 
+using std::vector;
 using std::string;
 using std::ostream;
 
@@ -34,6 +39,11 @@ OthelloAction::OthelloAction(Position position) noexcept
 OthelloAction::OthelloAction(Position position, bool pass) noexcept
 		: position(position), pass{pass}
 {
+}
+
+bool OthelloAction::isPass() const noexcept
+{
+	return pass;
 }
 
 /* FIXME Use regular expressions. However it turns out these don't exist until
@@ -85,6 +95,126 @@ string OthelloAction::actionString() const noexcept
 	}
 
 	return actionStr;
+}
+
+vector<Position> OthelloAction::searchFlips(const OthelloState& state) const
+{
+	using std::mem_fn;
+
+	const auto brickColour = playerBrickColour(state.whosTurn());
+	vector<Position> flips;
+
+	/* Obviusly there are no flips if the action is a pass, outside the grid
+	 * or the tile is non-empty.
+	 */
+	if (pass
+			|| (! state.isInsideGrid(position))
+			|| state.inspectTile(position) != Tile::Empty)
+	{
+		return flips;
+	}
+
+	static const auto directions =
+		{ mem_fn(&Position::north), mem_fn(&Position::northEast)
+		, mem_fn(&Position::east),  mem_fn(&Position::southEast)
+		, mem_fn(&Position::south), mem_fn(&Position::southWest)
+		, mem_fn(&Position::west),  mem_fn(&Position::northWest) };
+
+	/* Search in all directions from the position */
+	for (auto& step : directions) {
+
+		/* Stores possible turnings in the direction. They are discarded if no
+		 * brick of the same colour ocurrs. */
+		vector<Position> possibleFlips;
+
+		/* Will be set true if a brick of the same colour was found along the
+		 * direction.
+		 */
+		bool foundSameColour{false};
+
+		/* Search for turnings in the direction, inside the grid and an Empty
+		 * Tile has not ocurred. */
+		for (auto p = step(position)
+				; state.isInsideGrid(p) && (state.inspectTile(p) != Tile::Empty)
+					&& (! foundSameColour)
+				; p = step(p))
+		{
+			auto tile = state.inspectTile(p); //XXX Refactor ocurrs twice!
+
+			/* If a terminating brick of the same colour was found along the
+			 * direction, then the search is done. Otherwise the tile had the
+			 * oposite colour and can be flipped.
+			 */
+			if (brickColour == tile) {
+				foundSameColour = true;
+			} else {
+				possibleFlips.push_back(p);
+			}
+		}
+
+		/* If the direction of search was terminated by a brick of the same
+		 * colour, then commit the flipped positions (possibly zero).
+		 */
+		if (foundSameColour) {
+			flips.insert(flips.end(), possibleFlips.begin()
+				, possibleFlips.end());
+		}
+	}
+
+	return flips;
+}
+
+void OthelloAction::execute(OthelloState& state)
+{
+	auto pieceColour = playerBrickColour(state.whosTurn());
+
+	/* Pass iss only allowed if it is the only option.
+	 */
+	if (pass) {
+
+		if (existsLegalPlacement(state)) {
+			throw illegal_action_exception(*this);
+		}
+
+	} else {
+
+		auto flips = searchFlips(state);
+
+		/* At least one brick must flip for the move to be legal. */
+		if (flips.size() == 0) {
+			throw illegal_action_exception(*this);
+		}
+
+		/* Lastly commit the effects of the move. */
+		state.setTile(get_position(), pieceColour);
+
+		for (auto flipPosition : flips) {
+			state.flipBrick(flipPosition);
+		}
+	}
+
+	state.updateGameStatus(pass);
+	state.changeTurn();
+}
+
+bool OthelloAction::existsLegalPlacement(const OthelloState& state)
+		const noexcept
+{
+	bool foundLegalPlacement{false};
+
+	for (auto row = 0; (! foundLegalPlacement)
+			&& (row < state.get_boardRows()); row++ )
+	{
+		for (auto col = 0; (! foundLegalPlacement)
+				&& (col < state.get_boardColumns()); col++)
+		{
+			OthelloAction placement(Position(row,col));
+			auto flips = placement.searchFlips(state);
+			foundLegalPlacement = foundLegalPlacement || (flips.size() != 0);
+		}
+	}
+
+	return foundLegalPlacement;
 }
 
 } //namespace othello

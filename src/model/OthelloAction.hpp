@@ -19,9 +19,10 @@
 #define OTHELLO_ACTION_HPP_
 
 #include "getter_setter.hpp"
-#include "actionstring_syntax_exception.hpp"
 #include "Position.hpp"
+#include "OthelloState.hpp"
 
+#include <vector>
 #include <string>
 #include <iostream>
 
@@ -42,10 +43,18 @@ public:
 	virtual ~OthelloAction() = default;
 
 	GETTER(Position, position);
-	GETTER(bool, pass)
+
+	virtual bool isPass() const noexcept;
 
 	virtual std::string actionString() const noexcept;
 
+	virtual void execute(OthelloState& state);
+	virtual bool existsLegalPlacement(const OthelloState& state) const noexcept;
+
+	/* Lists which bricks are turned by the action.
+	 * Ret: A vector of positions where the bricks where turned
+	 */ 
+	virtual std::vector<Position> searchFlips(const OthelloState& state) const;
 };
 
 } //namespace othello

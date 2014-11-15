@@ -17,7 +17,6 @@
 #include "OthelloState.hpp"
 
 #include <vector>
-#include <functional>
 
 using std::vector;
 
@@ -29,8 +28,7 @@ OthelloState::OthelloState() noexcept : OthelloState(8,8,Player::Black)
 
 OthelloState::OthelloState(int boardRows, int boardColumns, Player starter)
 		noexcept
-		: previousAction(Position(-1,-1), false), playersTurn{starter}
-		, boardRows{boardRows}, boardColumns{boardColumns}
+		: playersTurn{starter}, boardRows{boardRows}, boardColumns{boardColumns}
 		, grid{vector<vector<Tile>>(boardRows,vector<Tile>(boardColumns
 			,Tile::Empty))}
 {
@@ -46,114 +44,6 @@ OthelloState OthelloState::initialState() noexcept
 	initial.setTile(Position(4,3), Tile::Black);
 
 	return initial;
-}
-
-vector<Position> OthelloState::searchFlips(OthelloAction action) const
-{
-	using std::mem_fn;
-
-	const auto positionToPlace = action.get_position();
-	const auto brickColour = playerBrickColour(playersTurn);
-	vector<Position> flips;
-
-	/* Obviusly there are no flips if the action is a pass, outside the grid
-	 * or the tile is non-empty.
-	 */
-	if (action.get_pass()
-			|| (! isInsideGrid(positionToPlace))
-			|| inspectTile(positionToPlace) != Tile::Empty)
-	{
-		return flips;
-	}
-
-	static const auto directions =
-		{ mem_fn(&Position::north), mem_fn(&Position::northEast)
-		, mem_fn(&Position::east),  mem_fn(&Position::southEast)
-		, mem_fn(&Position::south), mem_fn(&Position::southWest)
-		, mem_fn(&Position::west),  mem_fn(&Position::northWest) };
-
-	/* Search in all directions from the position */
-	for (auto& step : directions) {
-
-		/* Stores possible turnings in the direction. They are discarded if no
-		 * brick of the same colour ocurrs. */
-		vector<Position> possibleFlips;
-
-		/* Will be set true if a brick of the same colour was found along the
-		 * direction.
-		 */
-		bool foundSameColour{false};
-
-		/* Search for turnings in the direction, inside the grid and an Empty
-		 * Tile has not ocurred. */
-		for (auto p = step(positionToPlace)
-				; isInsideGrid(p) && (inspectTile(p) != Tile::Empty)
-					&& (! foundSameColour)
-				; p = step(p))
-		{
-			auto tile = inspectTile(p);
-
-			/* If a terminating brick of the same colour was found along the
-			 * direction, then the search is done. Otherwise the tile had the
-			 * oposite colour and can be flipped.
-			 */
-			if (brickColour == tile) {
-				foundSameColour = true;
-			} else {
-				possibleFlips.push_back(p);
-			}
-		}
-
-		/* If the direction of search was terminated by a brick of the same
-		 * colour, then commit the flipped positions (possibly zero).
-		 */
-		if (foundSameColour) {
-			flips.insert(flips.end(), possibleFlips.begin()
-				, possibleFlips.end());
-		}
-	}
-
-	return flips;
-}
-
-void OthelloState::execute(OthelloAction action)
-{
-	auto pieceColour = playerBrickColour(playersTurn);
-
-	/* Pass iss only allowed if it is the only option.
-	 */
-	if (action.get_pass()) {
-
-		if (existsLegalPlacement()) {
-			throw illegal_action_exception(action);
-		}
-
-		/* If the previous player passed and pass is legal, then the game is
-		 * over.
-		 */
-		gameIsOver = previousAction.get_pass();
-
-	} else {
-
-		auto flips = searchFlips(action);
-
-		/* Just take advantage of the simple rule that a non-pass action must
-		 * cause flips.
-		 */
-		if (flips.size() == 0) {
-			throw illegal_action_exception(action);
-		}
-
-		/* Lastly commit the effects of the move. */
-		setTile(action.get_position(), pieceColour);
-
-		for (auto flipPosition : flips) {
-			flipBrick(flipPosition);
-		}
-	}
-
-	previousAction = action;
-	changeTurn();
 }
 
 bool OthelloState::isInsideGrid(Position position) const noexcept
@@ -186,19 +76,13 @@ void OthelloState::flipBrick(Position position)
 	}
 }
 
-bool OthelloState::existsLegalPlacement() const noexcept
+void OthelloState::updateGameStatus(bool actionWasPass) noexcept
 {
-	bool foundLegalMove{false}; //XXX Bad Name
-
-	for (auto row = 0; (! foundLegalMove) && (row < boardRows); row++ ) {
-		for (auto col = 0; (! foundLegalMove) && (col < boardColumns); col++) {
-
-			auto flips = searchFlips(OthelloAction(Position(row,col)));
-			foundLegalMove = foundLegalMove || (flips.size() != 0);
-		}
-	}
-
-	return foundLegalMove;
+	/* If the previous player passed and pass is legal, then the game is
+	 * over.
+	 */
+	gameIsOver = (previousActionWasPass && actionWasPass) || gameIsOver;
+	previousActionWasPass = actionWasPass;
 }
 
 bool OthelloState::gameOver() const noexcept

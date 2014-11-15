@@ -20,9 +20,7 @@
 #include "Tile.hpp"
 #include "Player.hpp"
 #include "getter_setter.hpp"
-#include "OthelloAction.hpp"
 #include "Position.hpp"
-#include "illegal_action_exception.hpp"
 
 #include <vector>
 
@@ -44,23 +42,17 @@ public:
 
 	virtual Player whosTurn() const noexcept;
 	virtual Tile inspectTile(Position position) const;
-	virtual void execute(OthelloAction action);
-	virtual bool existsLegalPlacement() const noexcept;
 	virtual void setTile(Position position, Tile value);
+	virtual void changeTurn() noexcept;
+	virtual void flipBrick(Position position);
+	virtual bool isInsideGrid(Position position) const noexcept;
+	virtual void updateGameStatus(bool actionWasPass) noexcept;
 	virtual bool gameOver() const noexcept;
-
-	/* Lists which bricks are turned by the action.
-	 * Ret: A vector of positions where the bricks where turned
-	 */
-	virtual std::vector<Position> searchFlips(OthelloAction action) const;
 
 private:
 
-	void changeTurn() noexcept;
-	void flipBrick(Position position);
-	bool isInsideGrid(Position position) const noexcept;
 	bool gameIsOver{false};
-	OthelloAction previousAction;
+	bool previousActionWasPass{false};
 
 	Player playersTurn;
 
