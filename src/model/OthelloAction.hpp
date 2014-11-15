@@ -31,7 +31,6 @@ class OthelloAction
 {	
 private:
 	Position position = {-1,-1};
-	int value{0};
 	bool pass{false};
 
 public:
@@ -42,9 +41,8 @@ public:
 
 	virtual ~OthelloAction() = default;
 
-	GETTERSETTER(Position, position);
-	GETTERSETTER(int, value)
-	GETTERSETTER(bool, pass)
+	GETTER(Position, position);
+	GETTER(bool, pass)
 
 	virtual std::string actionString() const noexcept;
 
