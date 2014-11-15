@@ -22,7 +22,7 @@
 #include "getter_setter.hpp"
 #include "ReversiAction.hpp"
 #include "Position.hpp"
-#include "illegal_move_exception.hpp"
+#include "illegal_action_exception.hpp"
 
 #include <vector>
 

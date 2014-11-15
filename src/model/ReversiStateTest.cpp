@@ -247,34 +247,34 @@ TEST_CASE("Test modifications of the state", "[ReversiState, actions]")
 	{
 		ReversiAction illegal1(Position(-1,-1));
 		REQUIRE_THROWS_AS(state.performAction(illegal1)
-			, illegal_move_exception);
+			, illegal_action_exception);
 
 		ReversiAction illegal2(Position(8,8));
 		REQUIRE_THROWS_AS(state.performAction(illegal2)
-			, illegal_move_exception);
+			, illegal_action_exception);
 
 
 		ReversiAction illegal3(Position(0,-1));
 		REQUIRE_THROWS_AS(state.performAction(illegal3)
-			, illegal_move_exception);
+			, illegal_action_exception);
 
 		ReversiAction illegal4(Position(-1,0));
 		REQUIRE_THROWS_AS(state.performAction(illegal4)
-			, illegal_move_exception);
+			, illegal_action_exception);
 
 		ReversiAction illegal5(Position(0,8));
 		REQUIRE_THROWS_AS(state.performAction(illegal5)
-			, illegal_move_exception);
+			, illegal_action_exception);
 
 		ReversiAction illegal6(Position(8,0));
 		REQUIRE_THROWS_AS(state.performAction(illegal6)
-			, illegal_move_exception);
+			, illegal_action_exception);
 	}
 
 	SECTION("Can't pass if a placement is possible.")
 	{
 		REQUIRE_THROWS_AS(state.performAction(pass)
-			, illegal_move_exception);
+			, illegal_action_exception);
 	}
 
 	SECTION("Dont throw if pass, even if outside grid or the position is illegal")

@@ -10,27 +10,28 @@
  *******************************************************/
 
 /*
- * Implements illegal_move_exception.hpp
+ * Implements illegal_action_exception.hpp
  *
  * Linus Narva.
  */
-#include "illegal_move_exception.hpp"
+#include "illegal_action_exception.hpp"
 
 #include <sstream>
 
 namespace othello {
 
-illegal_move_exception::illegal_move_exception(ReversiAction action) noexcept
+illegal_action_exception::illegal_action_exception(ReversiAction action)
+		noexcept
 		: action{action}
 {
 }
 
-ReversiAction illegal_move_exception::getAction() const noexcept
+ReversiAction illegal_action_exception::getAction() const noexcept
 {
 	return action;
 }
 
-const char* illegal_move_exception::what() const noexcept
+const char* illegal_action_exception::what() const noexcept
 {
 	using std::stringstream;
 

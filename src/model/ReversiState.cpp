@@ -143,7 +143,7 @@ void ReversiState::performAction(ReversiAction action)
 	if (action.get_pass()) {
 
 		if (existsNonpassAction()) {
-			throw illegal_move_exception(action);
+			throw illegal_action_exception(action);
 		}
 
 		/* If the previous player passed and pass is legal, then the game is
@@ -158,7 +158,7 @@ void ReversiState::performAction(ReversiAction action)
 		 * cause flips.
 		 */
 		if (flips.size() == 0) {
-			throw illegal_move_exception(action);
+			throw illegal_action_exception(action);
 		}
 
 		/* Lastly commit the effects of the move. */

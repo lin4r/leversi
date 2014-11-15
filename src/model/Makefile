@@ -2,8 +2,8 @@ CC=g++
 CFLAGS=-Wall -g -std=c++11
 LDFLAGS=
 
-OBJ=actionstring_syntax_exception.o illegal_move_exception.o Position.o ReversiState.o ReversiAction.o
-DEPS=actionstring_syntax_exception.hpp getter_setter.hpp illegal_move_exception.hpp ReversiAction.hpp ReversiAlgorithm.hpp Position.hpp Tile.hpp Player.hpp ReversiState.hpp
+OBJ=actionstring_syntax_exception.o illegal_action_exception.o Position.o ReversiAction.o ReversiState.o 
+DEPS=actionstring_syntax_exception.hpp getter_setter.hpp illegal_action_exception.hpp Player.hpp Position.hpp ReversiAction.hpp ReversiAlgorithm.hpp ReversiState.hpp Tile.hpp
 
 .PHONY: all build clean runtest purge
 

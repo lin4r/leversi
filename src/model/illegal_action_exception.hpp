@@ -15,8 +15,8 @@
  * Linus Narva.
  */
 //XXX Rename to illegal_action_exception
-#ifndef ILLEGAL_MOVE_EXCEPTION_HPP_
-#define ILLEGAL_MOVE_EXCEPTION_HPP_
+#ifndef ILLEGAL_ACTION_EXCEPTION_HPP_
+#define ILLEGAL_ACTION_EXCEPTION_HPP_
 
 #include "ReversiAction.hpp"
 
@@ -24,12 +24,12 @@
 
 namespace othello {
 
-class illegal_move_exception : public std::exception
+class illegal_action_exception : public std::exception
 {
 public:
 
-	illegal_move_exception(ReversiAction action) noexcept;
-	virtual ~illegal_move_exception() = default;
+	illegal_action_exception(ReversiAction action) noexcept;
+	virtual ~illegal_action_exception() = default;
 
 	virtual ReversiAction getAction() const noexcept;
 
@@ -42,4 +42,4 @@ private:
 
 } //namespace othello
 
-#endif //ILLEGAL_MOVE_EXCEPTION_HPP_
+#endif //ILLEGAL_ACTION_EXCEPTION_HPP_
