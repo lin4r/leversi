@@ -2,13 +2,14 @@ CC=g++
 CFLAGS=-Wall -g -std=c++11
 LDFLAGS=
 
-TARGET=reversi
 OBJ=actionstring_syntax_exception.o illegal_move_exception.o Position.o ReversiState.o ReversiAction.o
 DEPS=actionstring_syntax_exception.hpp getter_setter.hpp illegal_move_exception.hpp ReversiAction.hpp ReversiAlgorithm.hpp Position.hpp Tile.hpp Player.hpp
 
-.PHONY: all clean runtest
+.PHONY: all build clean runtest
 
-all: $(TARGET) runtest
+all: build runtest
+
+build: $(OBJ)
 
 runtest: PositionTest ReversiActionTest ReversiStateTest
 	./PositionTest

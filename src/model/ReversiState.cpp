@@ -56,7 +56,7 @@ Tile ReversiState::playerColour(Player player) const noexcept
 	}
 }
 
-vector<Position> ReversiState::searchFlips(ReversiAction action)
+vector<Position> ReversiState::searchFlips(ReversiAction action) const
 {
 	using std::mem_fn;
 
@@ -140,21 +140,36 @@ void ReversiState::performAction(ReversiAction action)
 		nextTurn = Player::White;
 	}
 
-	/* TODO Exception handling here. */
+	/* Pass iss only allowed if it is the only option.
+	 */
+	if (action.get_pass()) {
 
-	if ((! action.get_pass()) && (! isInsideGrid(action.get_position()))) {
-		throw illegal_move_exception(action);
-	}
+		if (existsNonpassAction()) {
+			throw illegal_move_exception(action);
+		}
+	} else {
 
-	/* Commit updates lastly to preserve strong exception guarantee. */
-	if (! action.get_pass()) {
+		auto flips = searchFlips(action);
+
+		/* Just take advantage of the simple rule that a non-pass action must
+		 * cause flips.
+		 */
+		if (flips.size() == 0) {
+			throw illegal_move_exception(action);
+		}
+
+		/* Lastly commit the effects of the move. */
 		setTile(action.get_position(), pieceColour);
+
+		for (auto flipPosition : flips) {
+			turnBrick(flipPosition);
+		}
 	}
 
 	turn = nextTurn;
 }
 
-bool ReversiState::isInsideGrid(Position position)
+bool ReversiState::isInsideGrid(Position position) const noexcept
 {
 	return (0 <= position.row) && (position.row < boardRows)
 		&& (0 <= position.column) && (position.column < boardColumns);
@@ -182,6 +197,21 @@ void ReversiState::turnBrick(Position position)
 	case Tile::White: setTile(position, Tile::Black); break;
 	default: ; /* Do nothing if empty */
 	}
+}
+
+bool ReversiState::existsNonpassAction() const noexcept
+{
+	bool foundLegalMove{false}; //XXX Bad Name
+
+	for (auto row = 0; (! foundLegalMove) && (row < boardRows); row++ ) {
+		for (auto col = 0; (! foundLegalMove) && (col < boardColumns); col++) {
+
+			auto flips = searchFlips(ReversiAction(Position(row,col)));
+			foundLegalMove = foundLegalMove || (flips.size() != 0);
+		}
+	}
+
+	return foundLegalMove;
 }
 
 } //namespace reversi

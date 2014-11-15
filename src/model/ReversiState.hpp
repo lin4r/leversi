@@ -49,21 +49,23 @@ public:
 	virtual Player whosTurn() const noexcept;
 	virtual Tile inspectTile(Position position) const;
 	virtual void performAction(ReversiAction action);
+	virtual bool existsNonpassAction() const noexcept;
 
 	void setTile(Position position, Tile value);
 
 	/* Lists which bricks are turned by the action.
 	 * Ret: A vector of positions where the bricks where turned
 	 */
-	virtual std::vector<Position> searchFlips(ReversiAction action);
+	virtual std::vector<Position> searchFlips(ReversiAction action) const;
 
 	//TODO Reverse action.
 
 private:
 
+	/* XXX Rename flip */
 	void turnBrick(Position position);
 
-	bool isInsideGrid(Position position);
+	bool isInsideGrid(Position position) const noexcept;
 
 	Tile playerColour(Player player) const noexcept;
 

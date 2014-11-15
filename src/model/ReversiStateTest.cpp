@@ -226,9 +226,11 @@ TEST_CASE("Test that flip searching.", "[ReversiState, ]")
 
 TEST_CASE("Test modifications of the state", "[ReversiState, actions]")
 {
-	ReversiState state;
+	ReversiState empty;
+	auto state = ReversiState::initialState();
 
-	Position pos1(0,0), pos2(1,1), pos3(3,3);
+	//3 consecutive legal moves.
+	Position pos1(3,2), pos2(2,2), pos3(1,1);
 	ReversiAction action1(pos1), action2(pos2), pass(pos3,true);
 
 	SECTION("Verify that the initial state is according to game rules.")
@@ -273,7 +275,7 @@ TEST_CASE("Test modifications of the state", "[ReversiState, actions]")
 	{
 		ReversiAction outsidePass(Position(-1,-1), true);
 
-		REQUIRE_NOTHROW(state.performAction(outsidePass));
+		REQUIRE_NOTHROW(empty.performAction(outsidePass));
 
 		//TODO illegal inside grid.
 	}
@@ -291,7 +293,7 @@ TEST_CASE("Test modifications of the state", "[ReversiState, actions]")
 
 	SECTION("Performing actions places tiles")
 	{
-		/* The tile is empty before placement. */
+		// The tile is empty before placement.
 		REQUIRE(Tile::Empty == state.inspectTile(pos1));
 
 		state.performAction(action1);
@@ -302,21 +304,22 @@ TEST_CASE("Test modifications of the state", "[ReversiState, actions]")
 
 		state.performAction(action2);
 
-		/*Next placement is black.*/
+		// Next placement is white.
 		REQUIRE(Tile::White == state.inspectTile(pos2));
 
-		REQUIRE(Tile::Empty == state.inspectTile(pos3));
 
-		state.performAction(pass);
 
-		/*The position is still empty after the pass. */
-		REQUIRE(Tile::Empty == state.inspectTile(pos3));
+		// Pass test are performed on the empty board.
+		REQUIRE(Tile::Empty == empty.inspectTile(pos3));
+		REQUIRE(Player::Black == empty.whosTurn());
 
-		ReversiAction nonPass(pass.get_position());
+		empty.performAction(pass);
 
-		state.performAction(nonPass);
+		// The position is still empty after the pass.
+		REQUIRE(Tile::Empty == empty.inspectTile(pos3));
 
-		/* The turn still changed. */
-		REQUIRE(Tile::White == state.inspectTile(nonPass.get_position()));
+		//The turn still changed.
+		REQUIRE(Player::White == empty.whosTurn());
 	}
 }
+
