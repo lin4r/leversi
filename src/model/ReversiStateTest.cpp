@@ -119,7 +119,26 @@ TEST_CASE("Test that flip searching.", "[ReversiState, ]")
 {
 	auto state = ReversiState::initialState();
 
-	Position occupied(3,3), illegal(4,2), legal(3,4);
+	Position outside(-1,-1), occupied(3,3), illegal(4,2), legal(3,4);
+
+	SECTION("Causes no flips if pass")
+	{
+		ReversiAction pass(legal, true);
+		auto flips = state.searchFlips(pass);
+		REQUIRE(flips.empty());
+	}
+
+	SECTION("Gets no flips if outside the grid")
+	{
+		/* Place a white, which would have been flipped if (-1,-1) was inside
+		 * the grid
+		 */
+		state.setTile(Position(0,0), Tile::White);
+		state.setTile(Position(1,1), Tile::Black);
+
+		auto flips = state.searchFlips(ReversiAction(outside));
+		REQUIRE(flips.empty());
+	}
 
 	SECTION("Cant place on an non-empty tile.")
 	{

@@ -64,7 +64,12 @@ vector<Position> ReversiState::searchFlips(ReversiAction action)
 	const auto brickColour = playerColour(turn);
 	vector<Position> flips;
 
-	if (inspectTile(positionToPlace) != Tile::Empty)
+	/* Obviusly there are no flips if the action is a pass, outside the grid
+	 * or the tile is non-empty.
+	 */
+	if (action.get_pass()
+			|| (! isInsideGrid(positionToPlace))
+			|| inspectTile(positionToPlace) != Tile::Empty)
 	{
 		return flips;
 	}
