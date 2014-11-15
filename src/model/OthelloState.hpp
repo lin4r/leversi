@@ -14,8 +14,8 @@
  *
  * Linus Narva.
  */
-#ifndef REVERSI_STATE_HPP_
-#define REVERSI_STATE_HPP_
+#ifndef OTHELLO_STATE_HPP_
+#define OTHELLO_STATE_HPP_
 
 #include "Tile.hpp"
 #include "Player.hpp"
@@ -28,20 +28,20 @@
 
 namespace othello {
 
-class ReversiState
+class OthelloState
 {	
 public:
 
-	ReversiState() noexcept;
-	ReversiState(int boardRows, int boardColumns, Player starter) noexcept;
+	OthelloState() noexcept;
+	OthelloState(int boardRows, int boardColumns, Player starter) noexcept;
 
-	virtual ~ReversiState() = default;
+	virtual ~OthelloState() = default;
 
 	/* FIXME It turns out that this is the Othello starting state and that
 	 * Othello techbically differs from othello in this rule only. 
 	 * SO I NEED TO RENAME EVRYTHING :(
 	 */
-	static ReversiState initialState() noexcept;
+	static OthelloState initialState() noexcept;
 
 	GETTER(int, boardRows)
 	GETTER(int, boardColumns)
@@ -85,4 +85,4 @@ private:
 
 } //namespace othello
 
-#endif //REVERSI_STATE_HPP_
+#endif //OTHELLO_STATE_HPP_

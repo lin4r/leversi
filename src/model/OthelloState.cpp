@@ -10,11 +10,11 @@
  *******************************************************/
 
 /*
- * Implements ReversiState.hpp
+ * Implements OthelloState.hpp
  *
  * Linus Narva.
  */
-#include "ReversiState.hpp"
+#include "OthelloState.hpp"
 
 #include <vector>
 #include <functional>
@@ -23,11 +23,11 @@ using std::vector;
 
 namespace othello {
 
-ReversiState::ReversiState() noexcept : ReversiState(8,8,Player::Black)
+OthelloState::OthelloState() noexcept : OthelloState(8,8,Player::Black)
 {
 }
 
-ReversiState::ReversiState(int boardRows, int boardColumns, Player starter)
+OthelloState::OthelloState(int boardRows, int boardColumns, Player starter)
 		noexcept
 		: previousAction(Position(-1,-1), false), turn{starter}
 		, boardRows{boardRows}, boardColumns{boardColumns}
@@ -36,9 +36,9 @@ ReversiState::ReversiState(int boardRows, int boardColumns, Player starter)
 {
 }
 
-ReversiState ReversiState::initialState() noexcept
+OthelloState OthelloState::initialState() noexcept
 {
-	ReversiState initial;
+	OthelloState initial;
 
 	initial.setTile(Position(3,3), Tile::White);
 	initial.setTile(Position(3,4), Tile::Black);
@@ -48,7 +48,7 @@ ReversiState ReversiState::initialState() noexcept
 	return initial;
 }
 
-Tile ReversiState::playerColour(Player player) const noexcept
+Tile OthelloState::playerColour(Player player) const noexcept
 {
 	switch (player) {
 	case Player::Black: return Tile::Black;
@@ -57,7 +57,7 @@ Tile ReversiState::playerColour(Player player) const noexcept
 	}
 }
 
-vector<Position> ReversiState::searchFlips(ReversiAction action) const
+vector<Position> OthelloState::searchFlips(ReversiAction action) const
 {
 	using std::mem_fn;
 
@@ -125,7 +125,7 @@ vector<Position> ReversiState::searchFlips(ReversiAction action) const
 	return flips;
 }
 
-void ReversiState::performAction(ReversiAction action)
+void OthelloState::performAction(ReversiAction action)
 {
 	Tile pieceColour;
 
@@ -173,28 +173,28 @@ void ReversiState::performAction(ReversiAction action)
 	changeTurn();
 }
 
-bool ReversiState::isInsideGrid(Position position) const noexcept
+bool OthelloState::isInsideGrid(Position position) const noexcept
 {
 	return (0 <= position.row) && (position.row < boardRows)
 		&& (0 <= position.column) && (position.column < boardColumns);
 }
 
-Player ReversiState::whosTurn() const noexcept
+Player OthelloState::whosTurn() const noexcept
 {
 	return turn;
 }
 
-Tile ReversiState::inspectTile(Position position) const
+Tile OthelloState::inspectTile(Position position) const
 {
 	return grid.at(position.row).at(position.column);
 }
 
-void ReversiState::setTile(Position position, Tile value)
+void OthelloState::setTile(Position position, Tile value)
 {
 	grid.at(position.row).at(position.column) = value;
 }
 
-void ReversiState::turnBrick(Position position)
+void OthelloState::turnBrick(Position position)
 {
 	switch (inspectTile(position)) {
 	case Tile::Black: setTile(position, Tile::White); break;
@@ -203,7 +203,7 @@ void ReversiState::turnBrick(Position position)
 	}
 }
 
-bool ReversiState::existsNonpassAction() const noexcept
+bool OthelloState::existsNonpassAction() const noexcept
 {
 	bool foundLegalMove{false}; //XXX Bad Name
 
@@ -218,12 +218,12 @@ bool ReversiState::existsNonpassAction() const noexcept
 	return foundLegalMove;
 }
 
-bool ReversiState::gameOver() const noexcept
+bool OthelloState::gameOver() const noexcept
 {
 	return gameIsOver;
 }
 
-void ReversiState::changeTurn() noexcept
+void OthelloState::changeTurn() noexcept
 {
 	switch(turn) {
 	case Player::Black: turn = Player::White; break;
@@ -234,4 +234,4 @@ void ReversiState::changeTurn() noexcept
 
 } //namespace othello
 
-//std::ostream& operator<<(std::ostream& os, othello::ReversiState action);
+//std::ostream& operator<<(std::ostream& os, othello::OthelloState action);

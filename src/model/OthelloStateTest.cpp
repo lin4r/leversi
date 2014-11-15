@@ -10,20 +10,20 @@
  *******************************************************/
 
 /*
- * Unit tests for ReversiState.
+ * Unit tests for OthelloState.
  *
  * Linus Narva.
  */
 #define CATCH_CONFIG_MAIN
 #include <catch.hpp>
 
-#include "ReversiState.hpp"
+#include "OthelloState.hpp"
 
 using namespace othello;
 
-TEST_CASE("Default values", "[ReversiState, defaultValues]")
+TEST_CASE("Default values", "[OthelloState, defaultValues]")
 {
-	ReversiState state;
+	OthelloState state;
 
 	SECTION("Black player starts.")
 	{
@@ -49,9 +49,9 @@ TEST_CASE("Default values", "[ReversiState, defaultValues]")
  * #####
  *
  */
-ReversiState getSurroundedState()
+OthelloState getSurroundedState()
 {
-	ReversiState state(5,5,Player::Black);
+	OthelloState state(5,5,Player::Black);
 
 	state.setTile(Position(1,1), Tile::White);
 	state.setTile(Position(1,2), Tile::White);
@@ -74,9 +74,9 @@ ReversiState getSurroundedState()
  * BWWWB
  * BW#WB
  */
-ReversiState getHoleState()
+OthelloState getHoleState()
 {
-	ReversiState state(3,5,Player::Black);
+	OthelloState state(3,5,Player::Black);
 
 	state.setTile(Position(0,0), Tile::Black);
 	state.setTile(Position(0,1), Tile::Black);
@@ -103,9 +103,9 @@ ReversiState getHoleState()
  *
  * #WWWB
  */
-ReversiState longrowState()
+OthelloState longrowState()
 {
-	ReversiState state(1,5,Player::Black);
+	OthelloState state(1,5,Player::Black);
 
 	state.setTile(Position(0,1), Tile::White);
 	state.setTile(Position(0,2), Tile::White);
@@ -115,9 +115,9 @@ ReversiState longrowState()
 	return state;
 }
 
-TEST_CASE("Test that flip searching.", "[ReversiState, ]")
+TEST_CASE("Test that flip searching.", "[OthelloState, ]")
 {
-	auto state = ReversiState::initialState();
+	auto state = OthelloState::initialState();
 
 	Position outside(-1,-1), occupied(3,3), illegal(4,2), legal(3,4);
 
@@ -224,10 +224,10 @@ TEST_CASE("Test that flip searching.", "[ReversiState, ]")
 	}
 }
 
-TEST_CASE("Test modifications of the state", "[ReversiState, actions]")
+TEST_CASE("Test modifications of the state", "[OthelloState, actions]")
 {
-	ReversiState empty;
-	auto state = ReversiState::initialState();
+	OthelloState empty;
+	auto state = OthelloState::initialState();
 
 	//3 consecutive legal moves.
 	Position pos1(3,2), pos2(2,2), pos3(1,1);
@@ -235,7 +235,7 @@ TEST_CASE("Test modifications of the state", "[ReversiState, actions]")
 
 	SECTION("Verify that the initial state is according to game rules.")
 	{
-		auto initial = ReversiState::initialState();
+		auto initial = OthelloState::initialState();
 
 		REQUIRE(Tile::White == initial.inspectTile(Position(3,3)));
 		REQUIRE(Tile::Black == initial.inspectTile(Position(3,4)));
