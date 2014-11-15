@@ -271,13 +271,17 @@ TEST_CASE("Test modifications of the state", "[ReversiState, actions]")
 			, illegal_move_exception);
 	}
 
+	SECTION("Can't pass if a placement is possible.")
+	{
+		REQUIRE_THROWS_AS(state.performAction(pass)
+			, illegal_move_exception);
+	}
+
 	SECTION("Dont throw if pass, even if outside grid or the position is illegal")
 	{
 		ReversiAction outsidePass(Position(-1,-1), true);
 
 		REQUIRE_NOTHROW(empty.performAction(outsidePass));
-
-		//TODO illegal inside grid.
 	}
 
 	SECTION("Performing an action changes turn.")
