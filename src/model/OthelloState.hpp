@@ -44,8 +44,8 @@ public:
 
 	virtual Player whosTurn() const noexcept;
 	virtual Tile inspectTile(Position position) const;
-	virtual void performAction(OthelloAction action);
-	virtual bool existsNonpassAction() const noexcept; //XXX Rename placementPossible
+	virtual void execute(OthelloAction action);
+	virtual bool existsLegalPlacement() const noexcept;
 	virtual void setTile(Position position, Tile value);
 	virtual bool gameOver() const noexcept;
 
@@ -54,28 +54,18 @@ public:
 	 */
 	virtual std::vector<Position> searchFlips(OthelloAction action) const;
 
-	//TODO Reverse action.
-
 private:
 
 	void changeTurn() noexcept;
-
-	/* XXX Rename flip */
-	void turnBrick(Position position);
-
+	void flipBrick(Position position);
 	bool isInsideGrid(Position position) const noexcept;
-
-	Tile playerColour(Player player) const noexcept;
-
 	bool gameIsOver{false};
 	OthelloAction previousAction;
 
-	Player turn;
+	Player playersTurn;
 
 	const int boardRows;
 	const int boardColumns;
-
-	/* XXX Improvement: const const matrix. */
 	std::vector<std::vector<Tile>> grid;
 };
 

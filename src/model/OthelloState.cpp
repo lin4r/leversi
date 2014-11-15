@@ -29,7 +29,7 @@ OthelloState::OthelloState() noexcept : OthelloState(8,8,Player::Black)
 
 OthelloState::OthelloState(int boardRows, int boardColumns, Player starter)
 		noexcept
-		: previousAction(Position(-1,-1), false), turn{starter}
+		: previousAction(Position(-1,-1), false), playersTurn{starter}
 		, boardRows{boardRows}, boardColumns{boardColumns}
 		, grid{vector<vector<Tile>>(boardRows,vector<Tile>(boardColumns
 			,Tile::Empty))}
@@ -48,21 +48,12 @@ OthelloState OthelloState::initialState() noexcept
 	return initial;
 }
 
-Tile OthelloState::playerColour(Player player) const noexcept
-{
-	switch (player) {
-	case Player::Black: return Tile::Black;
-	case Player::White:
-	default: return Tile::White;
-	}
-}
-
 vector<Position> OthelloState::searchFlips(OthelloAction action) const
 {
 	using std::mem_fn;
 
 	const auto positionToPlace = action.get_position();
-	const auto brickColour = playerColour(turn);
+	const auto brickColour = playerBrickColour(playersTurn);
 	vector<Position> flips;
 
 	/* Obviusly there are no flips if the action is a pass, outside the grid
@@ -125,24 +116,15 @@ vector<Position> OthelloState::searchFlips(OthelloAction action) const
 	return flips;
 }
 
-void OthelloState::performAction(OthelloAction action)
+void OthelloState::execute(OthelloAction action)
 {
-	Tile pieceColour;
-
-	switch (turn) {
-	case Player::White:
-		pieceColour = Tile::White;
-		break;
-	case Player::Black:
-	default:
-		pieceColour = Tile::Black;
-	}
+	auto pieceColour = playerBrickColour(playersTurn);
 
 	/* Pass iss only allowed if it is the only option.
 	 */
 	if (action.get_pass()) {
 
-		if (existsNonpassAction()) {
+		if (existsLegalPlacement()) {
 			throw illegal_action_exception(action);
 		}
 
@@ -150,6 +132,7 @@ void OthelloState::performAction(OthelloAction action)
 		 * over.
 		 */
 		gameIsOver = previousAction.get_pass();
+
 	} else {
 
 		auto flips = searchFlips(action);
@@ -165,7 +148,7 @@ void OthelloState::performAction(OthelloAction action)
 		setTile(action.get_position(), pieceColour);
 
 		for (auto flipPosition : flips) {
-			turnBrick(flipPosition);
+			flipBrick(flipPosition);
 		}
 	}
 
@@ -181,7 +164,7 @@ bool OthelloState::isInsideGrid(Position position) const noexcept
 
 Player OthelloState::whosTurn() const noexcept
 {
-	return turn;
+	return playersTurn;
 }
 
 Tile OthelloState::inspectTile(Position position) const
@@ -194,7 +177,7 @@ void OthelloState::setTile(Position position, Tile value)
 	grid.at(position.row).at(position.column) = value;
 }
 
-void OthelloState::turnBrick(Position position)
+void OthelloState::flipBrick(Position position)
 {
 	switch (inspectTile(position)) {
 	case Tile::Black: setTile(position, Tile::White); break;
@@ -203,7 +186,7 @@ void OthelloState::turnBrick(Position position)
 	}
 }
 
-bool OthelloState::existsNonpassAction() const noexcept
+bool OthelloState::existsLegalPlacement() const noexcept
 {
 	bool foundLegalMove{false}; //XXX Bad Name
 
@@ -225,10 +208,10 @@ bool OthelloState::gameOver() const noexcept
 
 void OthelloState::changeTurn() noexcept
 {
-	switch(turn) {
-	case Player::Black: turn = Player::White; break;
+	switch(playersTurn) {
+	case Player::Black: playersTurn = Player::White; break;
 	case Player::White:
-	default: turn = Player::Black;
+	default: playersTurn = Player::Black;
 	}
 }
 

@@ -17,12 +17,23 @@
 #ifndef PLAYER_HPP_
 #define PLAYER_HPP_
 
+#include "Tile.hpp"
+
 namespace othello {
 
 enum class Player
 {
 	Black, White
 };
+
+inline Tile playerBrickColour(Player player)
+{
+	switch (player) {
+	case Player::Black: return Tile::Black;
+	case Player::White:
+	default: return Tile::White;
+	}
+}
 
 } //namespace othello
 
