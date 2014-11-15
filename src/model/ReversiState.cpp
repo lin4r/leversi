@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of reversi-assignment.
+ * This file is part of othello-assignment.
  * 
- * reversi-assignment can not be copied and/or
+ * othello-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -21,7 +21,7 @@
 
 using std::vector;
 
-namespace reversi {
+namespace othello {
 
 ReversiState::ReversiState() noexcept : ReversiState(8,8,Player::Black)
 {
@@ -232,6 +232,6 @@ void ReversiState::changeTurn() noexcept
 	}
 }
 
-} //namespace reversi
+} //namespace othello
 
-//std::ostream& operator<<(std::ostream& os, reversi::ReversiState action);
+//std::ostream& operator<<(std::ostream& os, othello::ReversiState action);

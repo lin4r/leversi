@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of reversi-assignment.
+ * This file is part of othello-assignment.
  * 
- * reversi-assignment can not be copied and/or
+ * othello-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -18,7 +18,7 @@
 
 #include <sstream>
 
-namespace reversi {
+namespace othello {
 
 illegal_move_exception::illegal_move_exception(ReversiAction action) noexcept
 		: action{action}
@@ -35,9 +35,9 @@ const char* illegal_move_exception::what() const noexcept
 	using std::stringstream;
 
 	stringstream ss;
-	ss << "The action " << action << ", is illegal in reversi.";
+	ss << "The action " << action << ", is illegal in othello.";
 
 	return ss.str().c_str();
 }
 
-} //namespace reversi
+} //namespace othello

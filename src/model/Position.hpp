@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of reversi-assignment.
+ * This file is part of othello-assignment.
  * 
- * reversi-assignment can not be copied and/or
+ * othello-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -19,7 +19,7 @@
 
 #include <iostream>
 
-namespace reversi {
+namespace othello {
 
 struct Position
 {
@@ -43,10 +43,10 @@ public:
 	virtual Position northWest() const noexcept;
 };
 
-} //namespace reversi
+} //namespace othello
 
-bool operator==(const reversi::Position& p1, const reversi::Position& p2);
+bool operator==(const othello::Position& p1, const othello::Position& p2);
 
-std::ostream& operator<<(std::ostream& os, const reversi::Position& p);
+std::ostream& operator<<(std::ostream& os, const othello::Position& p);
 
 #endif //POSITION_HPP_

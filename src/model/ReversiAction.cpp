@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of reversi-assignment.
+ * This file is part of othello-assignment.
  * 
- * reversi-assignment can not be copied and/or
+ * othello-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -23,7 +23,7 @@
 using std::string;
 using std::ostream;
 
-namespace reversi {
+namespace othello {
 
 
 ReversiAction::ReversiAction(Position position) noexcept
@@ -87,9 +87,9 @@ string ReversiAction::actionString() const noexcept
 	return actionStr;
 }
 
-} //namespace reversi
+} //namespace othello
 
-std::ostream& operator<<(std::ostream& os, reversi::ReversiAction action)
+std::ostream& operator<<(std::ostream& os, othello::ReversiAction action)
 {
 	return os << "ReversiAction[" << action.actionString() << "]";
 }

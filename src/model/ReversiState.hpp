@@ -2,15 +2,15 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of reversi-assignment.
+ * This file is part of othello-assignment.
  * 
- * reversi-assignment can not be copied and/or
+ * othello-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /*
- * A state of the reversi game.
+ * A state of the othello game.
  *
  * Linus Narva.
  */
@@ -26,7 +26,7 @@
 
 #include <vector>
 
-namespace reversi {
+namespace othello {
 
 class ReversiState
 {	
@@ -38,7 +38,7 @@ public:
 	virtual ~ReversiState() = default;
 
 	/* FIXME It turns out that this is the Othello starting state and that
-	 * Othello techbically differs from reversi in this rule only. 
+	 * Othello techbically differs from othello in this rule only. 
 	 * SO I NEED TO RENAME EVRYTHING :(
 	 */
 	static ReversiState initialState() noexcept;
@@ -83,6 +83,6 @@ private:
 	std::vector<std::vector<Tile>> grid;
 };
 
-} //namespace reversi
+} //namespace othello
 
 #endif //REVERSI_STATE_HPP_

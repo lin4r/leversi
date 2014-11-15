@@ -2,15 +2,15 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of reversi-assignment.
+ * This file is part of othello-assignment.
  * 
- * reversi-assignment can not be copied and/or
+ * othello-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /*
- * Enum class specifying a tile on the reversi board.
+ * Enum class specifying a tile on the othello board.
  *
  * Linus Narva.
  */
@@ -19,7 +19,7 @@
 
 #include <iostream>
 
-namespace reversi {
+namespace othello {
 
 enum class Tile
 {
@@ -37,15 +37,15 @@ inline Tile oppositeColor(Tile t)
 	}
 }
 
-} //namespace reversi
+} //namespace othello
 
-inline std::ostream& operator<<(std::ostream& os, reversi::Tile tile)
+inline std::ostream& operator<<(std::ostream& os, othello::Tile tile)
 {
 	std::string stringRepresentation;
 
 	switch (tile) {
-	case reversi::Tile::Black: stringRepresentation = "Tile::Black";
-	case reversi::Tile::White: stringRepresentation = "Tile::White";
+	case othello::Tile::Black: stringRepresentation = "Tile::Black";
+	case othello::Tile::White: stringRepresentation = "Tile::White";
 	default: stringRepresentation = "Tile::Empty";
 	}
 

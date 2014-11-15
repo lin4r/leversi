@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of reversi-assignment.
+ * This file is part of othello-assignment.
  * 
- * reversi-assignment can not be copied and/or
+ * othello-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -16,7 +16,7 @@
  */
 #include "Position.hpp"
 
-namespace reversi {
+namespace othello {
 
 Position::Position(int row, int column) : row{row}, column{column} {}
 
@@ -60,14 +60,14 @@ Position Position::northWest() const noexcept
 	return north().west();
 }
 
-} //namespace reversi
+} //namespace othello
 
-bool operator==(const reversi::Position& p1, const reversi::Position& p2)
+bool operator==(const othello::Position& p1, const othello::Position& p2)
 {
 	return (p1.row == p2.row) && (p1.column == p2.column);
 }
 
-std::ostream& operator<<(std::ostream& os, const reversi::Position& p)
+std::ostream& operator<<(std::ostream& os, const othello::Position& p)
 {
-	return os << "reversi::Position(" << p.row << "," << p.column << ")";
+	return os << "othello::Position(" << p.row << "," << p.column << ")";
 }

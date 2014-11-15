@@ -2,15 +2,15 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of reversi-assignment.
+ * This file is part of othello-assignment.
  * 
- * reversi-assignment can not be copied and/or
+ * othello-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /*
- * Interface for an algorithm playing the reversi game.
+ * Interface for an algorithm playing the othello game.
  *
  * Linus Narva.
  */
@@ -21,7 +21,7 @@
 #include "ReversiAction.hpp"
 #include "ReversiPosition.hpp"
 
-namespace reversi {
+namespace othello {
 
 class ReversiAlgorithm
 {	
@@ -41,6 +41,6 @@ public:
 	 */
 	void setSearchDepth(int depth) = 0;
 
-} //namespace reversi
+} //namespace othello
 
 #endif //REVERSI_ALGORITHM_HPP_

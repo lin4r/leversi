@@ -2,15 +2,15 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of reversi-assignment.
+ * This file is part of othello-assignment.
  * 
- * reversi-assignment can not be copied and/or
+ * othello-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /*
- * The requested move is illegal in reversi rules.
+ * The requested move is illegal in othello rules.
  *
  * Linus Narva.
  */
@@ -22,7 +22,7 @@
 
 #include <exception>
 
-namespace reversi {
+namespace othello {
 
 class illegal_move_exception : public std::exception
 {
@@ -40,6 +40,6 @@ private:
 	ReversiAction action;
 };
 
-} //namespace reversi
+} //namespace othello
 
 #endif //ILLEGAL_MOVE_EXCEPTION_HPP_

@@ -2,15 +2,15 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of reversi-assignment.
+ * This file is part of othello-assignment.
  * 
- * reversi-assignment can not be copied and/or
+ * othello-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /*
- * A reversi action i.e. putting the reversi brick on some position on the
+ * A othello action i.e. putting the othello brick on some position on the
  * board.
  *
  * Linus Narva.
@@ -25,7 +25,7 @@
 #include <string>
 #include <iostream>
 
-namespace reversi {
+namespace othello {
 
 class ReversiAction
 {	
@@ -50,8 +50,8 @@ public:
 
 };
 
-} //namespace reversi
+} //namespace othello
 
-std::ostream& operator<<(std::ostream& os, reversi::ReversiAction action);
+std::ostream& operator<<(std::ostream& os, othello::ReversiAction action);
 
 #endif //REVERSI_ACTION_HPP_
