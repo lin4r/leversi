@@ -49,9 +49,9 @@ public:
 	virtual Player whosTurn() const noexcept;
 	virtual Tile inspectTile(Position position) const;
 	virtual void performAction(ReversiAction action);
-	virtual bool existsNonpassAction() const noexcept;
-
-	void setTile(Position position, Tile value);
+	virtual bool existsNonpassAction() const noexcept; //XXX Rename placementPossible
+	virtual void setTile(Position position, Tile value);
+	virtual bool gameOver() const noexcept;
 
 	/* Lists which bricks are turned by the action.
 	 * Ret: A vector of positions where the bricks where turned
@@ -62,12 +62,17 @@ public:
 
 private:
 
+	void changeTurn() noexcept;
+
 	/* XXX Rename flip */
 	void turnBrick(Position position);
 
 	bool isInsideGrid(Position position) const noexcept;
 
 	Tile playerColour(Player player) const noexcept;
+
+	bool gameIsOver{false};
+	ReversiAction previousAction;
 
 	Player turn;
 

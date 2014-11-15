@@ -325,5 +325,24 @@ TEST_CASE("Test modifications of the state", "[ReversiState, actions]")
 		//The turn still changed.
 		REQUIRE(Player::White == empty.whosTurn());
 	}
+
+	SECTION("Game over if both players are out of moves and thus pass.")
+	{
+		auto state = longrowState();
+
+		REQUIRE(! state.gameOver());
+
+		//Start of with a legal placement.
+		state.performAction(ReversiAction(Position(0,0)));
+		REQUIRE(! state.gameOver());
+
+		//White can/must pass but it is not over yet.
+		empty.performAction(pass);
+		REQUIRE(! empty.gameOver());
+
+		//Black must also pass, it's over.
+		empty.performAction(pass);
+		REQUIRE(empty.gameOver());
+	}
 }
 

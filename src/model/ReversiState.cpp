@@ -29,7 +29,8 @@ ReversiState::ReversiState() noexcept : ReversiState(8,8,Player::Black)
 
 ReversiState::ReversiState(int boardRows, int boardColumns, Player starter)
 		noexcept
-		: turn{starter}, boardRows{boardRows}, boardColumns{boardColumns}
+		: previousAction(Position(-1,-1), false), turn{starter}
+		, boardRows{boardRows}, boardColumns{boardColumns}
 		, grid{vector<vector<Tile>>(boardRows,vector<Tile>(boardColumns
 			,Tile::Empty))}
 {
@@ -126,18 +127,15 @@ vector<Position> ReversiState::searchFlips(ReversiAction action) const
 
 void ReversiState::performAction(ReversiAction action)
 {
-	Player nextTurn;
 	Tile pieceColour;
 
 	switch (turn) {
 	case Player::White:
 		pieceColour = Tile::White;
-		nextTurn = Player::Black;
 		break;
 	case Player::Black:
 	default:
 		pieceColour = Tile::Black;
-		nextTurn = Player::White;
 	}
 
 	/* Pass iss only allowed if it is the only option.
@@ -147,6 +145,11 @@ void ReversiState::performAction(ReversiAction action)
 		if (existsNonpassAction()) {
 			throw illegal_move_exception(action);
 		}
+
+		/* If the previous player passed and pass is legal, then the game is
+		 * over.
+		 */
+		gameIsOver = previousAction.get_pass();
 	} else {
 
 		auto flips = searchFlips(action);
@@ -166,7 +169,8 @@ void ReversiState::performAction(ReversiAction action)
 		}
 	}
 
-	turn = nextTurn;
+	previousAction = action;
+	changeTurn();
 }
 
 bool ReversiState::isInsideGrid(Position position) const noexcept
@@ -212,6 +216,20 @@ bool ReversiState::existsNonpassAction() const noexcept
 	}
 
 	return foundLegalMove;
+}
+
+bool ReversiState::gameOver() const noexcept
+{
+	return gameIsOver;
+}
+
+void ReversiState::changeTurn() noexcept
+{
+	switch(turn) {
+	case Player::Black: turn = Player::White; break;
+	case Player::White:
+	default: turn = Player::Black;
+	}
 }
 
 } //namespace reversi
