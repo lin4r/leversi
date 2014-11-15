@@ -26,6 +26,17 @@ enum class Tile
 	Empty, Black, White
 };
 
+/* Returns the opposite colour of t, or Empty if t=Empty.
+ */
+inline Tile oppositeColor(Tile t)
+{
+	switch (t) {
+	case Tile::Black: return Tile::White;
+	case Tile::White: return Tile::Black;
+	default: return t; /* Empty has no opposite, so it is just returned. */
+	}
+}
+
 } //namespace reversi
 
 inline std::ostream& operator<<(std::ostream& os, reversi::Tile tile)

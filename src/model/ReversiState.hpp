@@ -50,13 +50,22 @@ public:
 	virtual Tile inspectTile(Position position) const;
 	virtual void performAction(ReversiAction action);
 
+	/* Lists which bricks are turned by the action.
+	 * Ret: A vector of positions where the bricks where turned
+	 */
+	virtual std::vector<Position> getTurnings(ReversiAction action);
+
 	//TODO Reverse action.
 
 private:
 
 	void setTile(Position position, Tile value);
 
+	void turnBrick(Position position);
+
 	bool isInsideGrid(Position position);
+
+	Tile playerColour(Player player) const noexcept;
 
 	Player turn;
 
