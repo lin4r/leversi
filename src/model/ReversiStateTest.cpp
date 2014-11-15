@@ -40,8 +40,109 @@ TEST_CASE("Default values", "[ReversiState, defaultValues]")
 		REQUIRE(8 == state.get_boardColumns());
 	}
 }
+/* Looks like this_
+ *
+ * #####
+ * #WWW#
+ * #WBW#
+ * #WWW#
+ * #####
+ *
+ *
+ *
+ */
+ReversiState getSurroundedState()
+{
+	ReversiState state(5,5,Player::Black);
 
-TEST_CASE("Test modifications of the state", "[ReversiState,], actions")
+	state.setTile(Position(1,1), Tile::White);
+	state.setTile(Position(1,2), Tile::White);
+	state.setTile(Position(1,3), Tile::White);
+
+	state.setTile(Position(2,1), Tile::White);
+	state.setTile(Position(2,2), Tile::Black);
+	state.setTile(Position(2,3), Tile::White);
+
+	state.setTile(Position(3,1), Tile::White);
+	state.setTile(Position(3,2), Tile::White);
+	state.setTile(Position(3,3), Tile::White);
+
+	return state;
+}
+
+TEST_CASE("Test that flip searching.", "[ReversiState, ]")
+{
+	auto state = ReversiState::initialState();
+
+	Position occupied(3,3), illegal(4,2), legal(3,4);
+
+	SECTION("Cant place on an non-empty tile.")
+	{
+		auto flips = state.searchFlips(ReversiAction(occupied));
+		REQUIRE(flips.empty());
+	}
+
+	SECTION("Cant place if all adjacent bricks have the same colour.")
+	{
+		auto flips = state.searchFlips(ReversiAction(illegal));
+		REQUIRE(flips.empty());
+	}
+
+	SECTION("Borders are skipped and inward flips are handled.")
+	{
+		auto state = getSurroundedState();
+
+		Position placement(0,0);
+		Position expectedFlip(1,1);
+		auto flips = state.searchFlips(ReversiAction(placement));
+		REQUIRE(1 == flips.size());
+		REQUIRE(expectedFlip == flips.at(0));
+
+		placement = Position(0,2);
+		expectedFlip = Position(1,2);
+		flips = state.searchFlips(ReversiAction(placement));
+		REQUIRE(1 == flips.size());
+		REQUIRE(expectedFlip == flips.at(0));
+
+		placement = Position(0,4);
+		expectedFlip = Position(1,3);
+		flips = state.searchFlips(ReversiAction(placement));
+		REQUIRE(1 == flips.size());
+		REQUIRE(expectedFlip == flips.at(0));
+
+		placement = Position(2,4);
+		expectedFlip = Position(2,3);
+		flips = state.searchFlips(ReversiAction(placement));
+		REQUIRE(1 == flips.size());
+		REQUIRE(expectedFlip == flips.at(0));
+
+		placement = Position(4,4);
+		expectedFlip = Position(3,3);
+		flips = state.searchFlips(ReversiAction(placement));
+		REQUIRE(1 == flips.size());
+		REQUIRE(expectedFlip == flips.at(0));
+
+		placement = Position(4,2);
+		expectedFlip = Position(3,2);
+		flips = state.searchFlips(ReversiAction(placement));
+		REQUIRE(1 == flips.size());
+		REQUIRE(expectedFlip == flips.at(0));
+
+		placement = Position(4,0);
+		expectedFlip = Position(3,1);
+		flips = state.searchFlips(ReversiAction(placement));
+		REQUIRE(1 == flips.size());
+		REQUIRE(expectedFlip == flips.at(0));
+
+		placement = Position(2,0);
+		expectedFlip = Position(2,1);
+		flips = state.searchFlips(ReversiAction(placement));
+		REQUIRE(1 == flips.size());
+		REQUIRE(expectedFlip == flips.at(0));
+	}
+}
+
+TEST_CASE("Test modifications of the state", "[ReversiState, actions]")
 {
 	ReversiState state;
 

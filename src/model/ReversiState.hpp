@@ -50,16 +50,16 @@ public:
 	virtual Tile inspectTile(Position position) const;
 	virtual void performAction(ReversiAction action);
 
+	void setTile(Position position, Tile value);
+
 	/* Lists which bricks are turned by the action.
 	 * Ret: A vector of positions where the bricks where turned
 	 */
-	virtual std::vector<Position> getTurnings(ReversiAction action);
+	virtual std::vector<Position> searchFlips(ReversiAction action);
 
 	//TODO Reverse action.
 
 private:
-
-	void setTile(Position position, Tile value);
 
 	void turnBrick(Position position);
 

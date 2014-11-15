@@ -56,16 +56,20 @@ Tile ReversiState::playerColour(Player player) const noexcept
 	}
 }
 
-vector<Position> ReversiState::getTurnings(ReversiAction action)
+vector<Position> ReversiState::searchFlips(ReversiAction action)
 {
 	using std::mem_fn;
 
 	const auto positionToPlace = action.get_position();
 	const auto brickColour = playerColour(turn);
-
 	vector<Position> flips;
 
-	auto directions =
+	if (inspectTile(positionToPlace) != Tile::Empty)
+	{
+		return flips;
+	}
+
+	static const auto directions =
 		{ mem_fn(&Position::north), mem_fn(&Position::northEast)
 		, mem_fn(&Position::east),  mem_fn(&Position::southEast)
 		, mem_fn(&Position::south), mem_fn(&Position::southWest)
@@ -78,36 +82,35 @@ vector<Position> ReversiState::getTurnings(ReversiAction action)
 		 * brick of the same colour ocurrs. */
 		vector<Position> possibleFlips;
 
-		/* Will be set true if the flips where 'terminated' by a brick of same
-		 * color as the player. */
-		bool directionHasFlips{false};
+		/* Will be set true if a brick of the same colour was found along the
+		 * direction.
+		 */
+		bool foundSameColour{false};
 
 		/* Search for turnings in the direction, inside the grid and an Empty
 		 * Tile has not ocurred. */
 		for (auto p = step(positionToPlace)
 				; isInsideGrid(p) && (inspectTile(p) != Tile::Empty)
-					&& (!directionHasFlips)
+					&& (! foundSameColour)
 				; p = step(p))
 		{
 			auto tile = inspectTile(p);
 
-			/* If it passes over brick of opposite color, it is a possible
-			 * turns. Tile is not Tile::Empty, because of the for constraint;
+			/* If a terminating brick of the same colour was found along the
+			 * direction, then the search is done. Otherwise the tile had the
+			 * oposite colour and can be flipped.
 			 */
-			if (brickColour != tile) {
-
+			if (brickColour == tile) {
+				foundSameColour = true;
+			} else {
 				possibleFlips.push_back(p);
-
-			/* If it passe over a tile of the same color and has caused flips
-			 * the search is done.
-			 */
-			} else if (possibleFlips.size() > 0) {
-				directionHasFlips = true;
 			}
 		}
 
-		/* If flips where found, commit them. */
-		if (directionHasFlips) {
+		/* If the direction of search was terminated by a brick of the same
+		 * colour, then commit the flipped positions (possibly zero).
+		 */
+		if (foundSameColour) {
 			flips.insert(flips.end(), possibleFlips.begin()
 				, possibleFlips.end());
 		}
