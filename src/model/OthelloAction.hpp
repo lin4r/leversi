@@ -48,7 +48,7 @@ public:
 
 	virtual std::string actionString() const noexcept;
 
-	virtual void execute(OthelloState& state);
+	virtual std::vector<Position> execute(OthelloState& state);
 	virtual bool existsLegalPlacement(const OthelloState& state) const noexcept;
 
 	/* Lists which bricks are turned by the action.

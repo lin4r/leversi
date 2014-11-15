@@ -164,8 +164,10 @@ vector<Position> OthelloAction::searchFlips(const OthelloState& state) const
 	return flips;
 }
 
-void OthelloAction::execute(OthelloState& state)
+vector<Position> OthelloAction::execute(OthelloState& state)
 {
+	vector<Position> flips;
+
 	auto pieceColour = playerBrickColour(state.whosTurn());
 
 	/* Pass iss only allowed if it is the only option.
@@ -178,7 +180,7 @@ void OthelloAction::execute(OthelloState& state)
 
 	} else {
 
-		auto flips = searchFlips(state);
+		flips = searchFlips(state);
 
 		/* At least one brick must flip for the move to be legal. */
 		if (flips.size() == 0) {
@@ -195,6 +197,8 @@ void OthelloAction::execute(OthelloState& state)
 
 	state.updateGameStatus(pass);
 	state.changeTurn();
+
+	return flips;
 }
 
 bool OthelloAction::existsLegalPlacement(const OthelloState& state)
