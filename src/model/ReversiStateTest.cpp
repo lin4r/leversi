@@ -40,15 +40,13 @@ TEST_CASE("Default values", "[ReversiState, defaultValues]")
 		REQUIRE(8 == state.get_boardColumns());
 	}
 }
-/* Looks like this_
+/* Looks like this:
  *
  * #####
  * #WWW#
  * #WBW#
  * #WWW#
  * #####
- *
- *
  *
  */
 ReversiState getSurroundedState()
@@ -66,6 +64,53 @@ ReversiState getSurroundedState()
 	state.setTile(Position(3,1), Tile::White);
 	state.setTile(Position(3,2), Tile::White);
 	state.setTile(Position(3,3), Tile::White);
+
+	return state;
+}
+
+/* Looks like this:
+ *
+ * BBBBB
+ * BWWWB
+ * BW#WB
+ */
+ReversiState getHoleState()
+{
+	ReversiState state(3,5,Player::Black);
+
+	state.setTile(Position(0,0), Tile::Black);
+	state.setTile(Position(0,1), Tile::Black);
+	state.setTile(Position(0,2), Tile::Black);
+	state.setTile(Position(0,3), Tile::Black);
+	state.setTile(Position(0,4), Tile::Black);
+
+	state.setTile(Position(1,0), Tile::Black);
+	state.setTile(Position(1,1), Tile::White);
+	state.setTile(Position(1,2), Tile::White);
+	state.setTile(Position(1,3), Tile::White);
+	state.setTile(Position(1,4), Tile::Black);
+
+	state.setTile(Position(2,0), Tile::Black);
+	state.setTile(Position(2,1), Tile::White);
+	state.setTile(Position(2,2), Tile::Empty);
+	state.setTile(Position(2,3), Tile::White);
+	state.setTile(Position(2,4), Tile::Black);
+
+	return state;
+}
+
+/* Looks like this:
+ *
+ * #WWWB
+ */
+ReversiState longrowState()
+{
+	ReversiState state(1,5,Player::Black);
+
+	state.setTile(Position(0,1), Tile::White);
+	state.setTile(Position(0,2), Tile::White);
+	state.setTile(Position(0,3), Tile::White);
+	state.setTile(Position(0,4), Tile::Black);
 
 	return state;
 }
@@ -139,6 +184,24 @@ TEST_CASE("Test that flip searching.", "[ReversiState, ]")
 		flips = state.searchFlips(ReversiAction(placement));
 		REQUIRE(1 == flips.size());
 		REQUIRE(expectedFlip == flips.at(0));
+	}
+
+	SECTION("Can flip in many directions at once")
+	{
+		auto state = getHoleState();
+
+		Position placement(2,2);
+		auto flips = state.searchFlips(ReversiAction(placement));
+		REQUIRE(5 == flips.size());
+	}
+
+	SECTION("Can flip multiple in row.")
+	{
+		auto state = longrowState();
+
+		Position placement(0,0);
+		auto flips = state.searchFlips(ReversiAction(placement));
+		REQUIRE(3 == flips.size());
 	}
 }
 
