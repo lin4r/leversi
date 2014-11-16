@@ -21,6 +21,9 @@
 #include "illegal_action_exception.hpp"
 #include "actionstring_syntax_exception.hpp"
 
+#include <set>
+using std::set;
+
 using namespace othello;
 
 /* Looks like this:
@@ -318,6 +321,61 @@ TEST_CASE("Test modifications of the state", "[OthelloAction, stateTransitions]"
 	}
 }
 
+TEST_CASE("Test operators", "[OthelloAction, operators]")
+{
+	OthelloAction action(Position(1,2)), equalAction(Position(1,2))
+		, largerRow(Position(2,1)), largerCol(Position(1,4))
+		, pass(Position(1,2), true);
+
+	SECTION("Test equality") {
+		REQUIRE(action == equalAction);
+		REQUIRE(!(action == largerRow));
+		REQUIRE(!(action == pass));
+	}
+
+	SECTION("Test less-than") {
+		REQUIRE(!(action < equalAction));
+		REQUIRE(!(equalAction < action));
+		REQUIRE(pass < action);
+		REQUIRE(pass < largerRow);
+		REQUIRE(pass < largerCol);
+	}
+
+	SECTION("BUG, Couldn evaluate these actions.")
+	{
+		OthelloAction p1(Position(2,3)), p2(Position(3,2));
+		REQUIRE(p1 < p2);
+	}
+}
+
+TEST_CASE("Test placement search.", "[OthelloAction, placementSearch]")
+{
+	auto state = OthelloState::initialState();
+
+	SECTION("Finds exactly the legal placements.")
+	{
+		auto placementsVector = OthelloAction::findLegalPlacements(state);
+
+		REQUIRE(4 == placementsVector.size());
+
+		/* Convert to set so that we easily can test membership. */
+		set<OthelloAction> placementsSet(
+			placementsVector.begin(), placementsVector.end());
+
+		const auto has = [&] (OthelloAction action) {
+			return placementsSet.find(action) != placementsSet.end();
+		};
+
+		/* Just check that the elements was evaluated correctly. */
+		CHECK(4 == placementsSet.size());
+
+		/* These are the legal moves on the first turn of the game. */
+		REQUIRE(has(OthelloAction(Position(3,2))));
+		REQUIRE(has(OthelloAction(Position(2,3))));
+		REQUIRE(has(OthelloAction(Position(4,5))));
+		REQUIRE(has(OthelloAction(Position(5,4))));
+	}
+}
 
 
 TEST_CASE("Test action string conversion.", "[OthelloAction, actionString]")

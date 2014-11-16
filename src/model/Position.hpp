@@ -43,10 +43,14 @@ public:
 	virtual Position northWest() const noexcept;
 };
 
+bool operator==(const Position& p1, const Position& p2);
+
+/* This operator is defined so that the position can be put in a set. Rows
+ * first decides predecense. If the rows are equal then the columns decide.*/
+bool operator<(const Position& p1, const Position& p2);
+
+std::ostream& operator<<(std::ostream& os, const Position& p);
+
 } //namespace othello
-
-bool operator==(const othello::Position& p1, const othello::Position& p2);
-
-std::ostream& operator<<(std::ostream& os, const othello::Position& p);
 
 #endif //POSITION_HPP_

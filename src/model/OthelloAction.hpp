@@ -49,7 +49,13 @@ public:
 	virtual std::string actionString() const noexcept;
 
 	virtual std::vector<Position> execute(OthelloState& state);
-	virtual bool existsLegalPlacement(const OthelloState& state) const noexcept;
+
+	//FIXME static
+	virtual bool existsLegalPlacement(const OthelloState& state)
+		const noexcept;
+
+	static std::vector<OthelloAction> findLegalPlacements(
+		const OthelloState& state) noexcept;
 
 	/* Lists which bricks are turned by the action.
 	 * Ret: A vector of positions where the bricks where turned
@@ -57,8 +63,16 @@ public:
 	virtual std::vector<Position> searchFlips(const OthelloState& state) const;
 };
 
+/* This operator is defined so that the actions can be put in a set. Passes are
+ * considered lower than non-passes. If pass is equal the position < determines
+ * order.
+ */
+bool operator<(const OthelloAction& a1, const OthelloAction& a2);
+bool operator==(const OthelloAction& a1, const OthelloAction& a2);
+std::ostream& operator<<(std::ostream& os, const OthelloAction& action);
+
 } //namespace othello
 
-std::ostream& operator<<(std::ostream& os, othello::OthelloAction action);
+
 
 #endif //OTHELLO_ACTION_HPP_

@@ -221,9 +221,46 @@ bool OthelloAction::existsLegalPlacement(const OthelloState& state)
 	return foundLegalPlacement;
 }
 
-} //namespace othello
+vector<OthelloAction> OthelloAction::findLegalPlacements(
+		const OthelloState& state) noexcept
+{
+	vector<OthelloAction> placements;
 
-std::ostream& operator<<(std::ostream& os, othello::OthelloAction action)
+	for (auto row = 0; row < state.get_boardRows(); row++ ) {
+		for (auto col = 0; col < state.get_boardColumns(); col++) {
+
+			OthelloAction placement(Position(row,col));
+			auto flips = placement.searchFlips(state);
+
+			if (flips.size() > 0) {
+				placements.push_back(placement);
+			}
+		}
+	}
+
+	return placements;
+}
+
+bool operator==(const OthelloAction& a1, const OthelloAction& a2)
+{
+	return (a1.get_position() == a2.get_position())
+		&& (a1.isPass() == a2.isPass());
+}
+
+bool operator<(const OthelloAction& a1, const OthelloAction& a2)
+{
+	if (a1.isPass() && (! a2.isPass())) {
+		return true;
+	} else if ((!a1.isPass()) && a2.isPass()) {
+		return false;
+	} else {
+		return a1.get_position() < a2.get_position();
+	}
+}
+
+std::ostream& operator<<(std::ostream& os, const OthelloAction& action)
 {
 	return os << "OthelloAction[" << action.actionString() << "]";
 }
+
+} //namespace othello

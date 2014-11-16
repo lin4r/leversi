@@ -60,14 +60,23 @@ Position Position::northWest() const noexcept
 	return north().west();
 }
 
-} //namespace othello
-
 bool operator==(const othello::Position& p1, const othello::Position& p2)
 {
 	return (p1.row == p2.row) && (p1.column == p2.column);
+}
+
+bool operator<(const othello::Position& p1, const othello::Position& p2)
+{
+	if (p1.row == p2.row) {
+		return p1.column < p2.column;
+	} else {
+		return p1.row < p2.row;
+	}
 }
 
 std::ostream& operator<<(std::ostream& os, const othello::Position& p)
 {
 	return os << "othello::Position(" << p.row << "," << p.column << ")";
 }
+
+} //namespace othello
