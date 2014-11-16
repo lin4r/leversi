@@ -135,17 +135,19 @@ vector<Position> OthelloAction::searchFlips(const OthelloState& state) const
 		/* Search for turnings in the direction, inside the grid and an Empty
 		 * Tile has not ocurred. */
 		for (auto p = step(position)
-				; state.isInsideGrid(p) && (state.inspectTile(p) != Tile::Empty)
-					&& (! foundSameColour)
+				; state.isInsideGrid(p) && (! foundSameColour)
 				; p = step(p))
 		{
-			auto tile = state.inspectTile(p); //XXX Refactor ocurrs twice!
+			auto tile = state.inspectTile(p);
 
-			/* If a terminating brick of the same colour was found along the
-			 * direction, then the search is done. Otherwise the tile had the
-			 * oposite colour and can be flipped.
+			/* If an empty tile ocurred, just terminate. Else, If a terminating
+			 * brick of the same colour was found along the  direction, then
+			 * the search is done. Otherwise the tile had the oposite colour
+			 * and can be flipped.
 			 */
-			if (brickColour == tile) {
+			if (tile == Tile::Empty) {
+				break;
+			} else if (tile == brickColour) {
 				foundSameColour = true;
 			} else {
 				possibleFlips.push_back(p);
