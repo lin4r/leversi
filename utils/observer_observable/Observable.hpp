@@ -14,11 +14,6 @@
  *
  * TODO Info on how to use the pattern.
  *
- * TODO Delete objects which are unique in the shared pointers. They are
- * useless because no client uses them. Using weak ptr's are not an option
- * because they dont have relational operators, and would yield an inconsistent
- * set state, should the objects pointed to bee deleted.
- *
  * Linus Narva.
  */
 #ifndef OBSERVABLE_HPP_
@@ -30,25 +25,70 @@
 
 namespace lut {
 
+template<typename T>
 class Observable
 {
 public:
 	virtual ~Observable() = default;
 
-	virtual bool addObserver(std::shared_ptr<Observer> observer) noexcept;
-	virtual bool removeObserver(std::shared_ptr<Observer> observer) noexcept;
+	virtual bool addObserver(std::shared_ptr<Observer<T>> observer) noexcept;
+	virtual bool removeObserver(std::shared_ptr<Observer<T>> observer)
+		noexcept;
 
-	virtual bool notify(std::shared_ptr<Observer> toNotify);
+	virtual bool notify(std::shared_ptr<Observer<T>> toNotify);
 	virtual void notifyAll();
 
-	virtual const int* getNotifyData() const = 0; //int is a dummy type, will be a template.
+	virtual const T* getNotifyData() const = 0;
 
 	virtual int numObservers() const noexcept;
 
+	//TODO get observers function.
+
 private:
 
-	std::set<std::shared_ptr<Observer>> observers;
+	std::set<std::shared_ptr<Observer<T>>> observers;
 };
+
+template<typename T>
+bool Observable<T>::addObserver(std::shared_ptr<Observer<T>> observer) noexcept
+{
+	return observers.insert(observer).second;
+}
+
+template<typename T>
+bool Observable<T>::removeObserver(std::shared_ptr<Observer<T>> observer)
+		noexcept
+{
+	return observers.erase(observer) == 1;
+}
+
+template<typename T>
+bool Observable<T>::notify(std::shared_ptr<Observer<T>> toNotify)
+{
+	bool foundMember{false};
+
+	if (observers.find(toNotify) != observers.end()) {
+
+		toNotify->notify(getNotifyData());
+		foundMember = true;
+	}
+
+	return foundMember;
+}
+
+template<typename T>
+void Observable<T>::notifyAll()
+{
+	for (auto observer : observers) {
+		notify(observer);
+	}
+}
+
+template<typename T>
+int Observable<T>::numObservers() const noexcept
+{
+	return observers.size();
+}
 
 } //namespace lut
 

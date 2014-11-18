@@ -2,7 +2,7 @@ CC=g++
 CFLAGS=-Wall -g -std=c++11
 LDFLAGS=
 
-OBJ=Observable.o
+OBJ=
 DEPS=Observable.hpp Observer.hpp
 
 .PHONY: all build clean runtest purge

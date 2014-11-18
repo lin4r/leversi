@@ -21,13 +21,14 @@
 
 namespace lut {
 
+template<typename T>
 class Observer
 {
 public:
 
 	virtual ~Observer() = default;
 
-	virtual void notify(const int* state) = 0; //XXX The int is a dummy object, it will be a template when done
+	virtual void notify(const T* state) = 0;
 };
 
 } //namespace lut

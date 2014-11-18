@@ -25,7 +25,7 @@
 using namespace lut;
 using namespace std;
 
-class MockObserver : public Observer
+class MockObserver : public Observer<int>
 {
 public:
 
@@ -39,7 +39,7 @@ public:
 	int receivedArg{-1};
 };
 
-class MockObservable : public Observable
+class MockObservable : public Observable<int>
 {
 public:
 
