@@ -32,14 +32,12 @@ bool Observable::removeObserver(shared_ptr<Observer> observer) noexcept
 
 bool Observable::notify(shared_ptr<Observer> toNotify)
 {
-	bool foundMember;
+	bool foundMember{false};
 
 	if (observers.find(toNotify) != observers.end()) {
 
 		toNotify->notify(getNotifyData());
-
-	} else {
-		foundMember = false;
+		foundMember = true;
 	}
 
 	return foundMember;
