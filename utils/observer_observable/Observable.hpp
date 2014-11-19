@@ -28,7 +28,7 @@
 #include <set>
 #include <memory>
 
-namespace lut {
+namespace othello {
 
 template<typename T>
 class Observable
@@ -132,6 +132,6 @@ std::set<std::shared_ptr<Observer<T>>> Observable<T>::getObservers()
 	return observers;
 }
 
-} //namespace lut
+} //namespace othello
 
 #endif //OBSERVABLE_HPP_

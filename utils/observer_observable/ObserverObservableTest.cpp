@@ -22,8 +22,7 @@
 
 #include <memory>
 
-using namespace lut;
-using namespace std;
+using namespace othello;
 
 class MockObserver : public Observer<int>
 {
@@ -54,6 +53,8 @@ public:
 TEST_CASE("Testing Observer Observable notifications"
 		, "[Observer, Observable]")
 {
+	using std::shared_ptr;
+
 	/* I call them receiver emmiter for better readability. */
 	shared_ptr<MockObserver> receiver1{new MockObserver()};
 	shared_ptr<MockObserver> receiver2{new MockObserver()};

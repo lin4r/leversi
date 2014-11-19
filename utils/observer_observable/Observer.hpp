@@ -24,7 +24,7 @@
 #ifndef OBSERVER_HPP_
 #define OBSERVER_HPP_
 
-namespace lut {
+namespace othello {
 
 template<typename T>
 class Observer
@@ -41,6 +41,6 @@ public:
 	virtual void notify(const T* state) = 0;
 };
 
-} //namespace lut
+} //namespace othello
 
 #endif //OBSERVER_HPP_
