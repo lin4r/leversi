@@ -42,7 +42,7 @@ public:
 
 	virtual int numObservers() const noexcept;
 
-	//TODO get observers function.
+	virtual std::set<std::shared_ptr<Observer<T>>> getObservers();
 
 private:
 
@@ -88,6 +88,12 @@ template<typename T>
 int Observable<T>::numObservers() const noexcept
 {
 	return observers.size();
+}
+
+template<typename T>
+std::set<std::shared_ptr<Observer<T>>> Observable<T>::getObservers()
+{
+	return observers;
 }
 
 } //namespace lut
