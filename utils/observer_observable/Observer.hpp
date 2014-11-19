@@ -12,7 +12,12 @@
 /*
  * Observer in the Observer-Observer design pattern.
  *
- * TODO info on how to use the pattern
+ * Observer-Observable is useful an update in the state of some objects affects
+ * the state a set of objects, according to the change.
+ *
+ * A good example is in grafical user interfaces when the state of a model
+ * object e.g. the state of the othello game, is reflected in a set of view
+ * of the graphical user interface.
  *
  * Linus Narva.
  */
@@ -28,6 +33,11 @@ public:
 
 	virtual ~Observer() = default;
 
+	/* Called by Observable when a state changed occurred. Be careful when using
+	 * the state pointer. Depending on the implementation the object pointed to
+	 * might go out of scope after the call, so extract the relevant data.
+	 * params:	Raw pointer to the state object.
+	 */
 	virtual void notify(const T* state) = 0;
 };
 
