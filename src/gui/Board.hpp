@@ -2,22 +2,22 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of reversi-assignment.
+ * This file is part of othello-assignment.
  * 
- * reversi-assignment can not be copied and/or
+ * othello-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /*
- * Reversi board widget.
+ * Othello board widget.
  *
  * Linus Narva.
  */
 #ifndef BOARD_HPP_
 #define BOARD_HPP_
 
-#include "ReversiView.hpp"
+#include "OthelloView.hpp"
 
 #include <gtkmm/drawingarea.h>
 #include <gdkmm/pixbuf.h>
@@ -25,7 +25,7 @@
 #include <vector>
 #include <utility>
 
-namespace reversi {
+namespace othello {
 
 struct BorderSize
 {
@@ -46,7 +46,7 @@ struct BoardGraphics
 	virtual bool isInitialized() const noexcept;
 };
 
-class Board : public Gtk::DrawingArea, public ReversiView
+class Board : public Gtk::DrawingArea, public OthelloView
 {
 public:
 
@@ -85,6 +85,6 @@ private:
 	std::vector<std::vector<Tile>> grid;
 };
 
-} //namespace reversi
+} //namespace othello
 
 #endif //BOARD_HPP_

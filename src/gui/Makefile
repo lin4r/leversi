@@ -2,11 +2,11 @@ CC=g++
 CFLAGS=-Wall -g -std=c++11 `pkg-config --cflags gtkmm-3.0` -I../model/
 LDFLAGS=`pkg-config --libs gtkmm-3.0`
 
-TARGET=reversi
+TARGET=othello
 OBJ=main.o GUI.o Board.o
-DEPS=GUI.hpp Board.hpp ReversiView.hpp ReversiController.hpp ../model/Tile.hpp
+DEPS=GUI.hpp Board.hpp OthelloView.hpp OthelloController.hpp ../model/Tile.hpp
 
-.PHONY: all clean
+.PHONY: all clean purge
 
 all: $(TARGET)
 
@@ -18,3 +18,6 @@ $(TARGET): $(OBJ)
 
 clean:
 	rm -f *.o
+
+purge: clean
+	rm -f *~

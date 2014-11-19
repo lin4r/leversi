@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of reversi-assignment.
+ * This file is part of othello-assignment.
  * 
- * reversi-assignment can not be copied and/or
+ * othello-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -31,7 +31,7 @@ using std::pair;
 using std::vector;
 using std::size_t;
 
-namespace reversi {
+namespace othello {
 
 bool BoardGraphics::isInitialized() const noexcept
 {
@@ -224,4 +224,4 @@ bool Board::on_button_press(GdkEventButton* event)
 //	return true;
 //}
 
-} //namespace reversi
+} //namespace othello
