@@ -21,6 +21,7 @@
 
 #include "OthelloState.hpp"
 #include "OthelloAction.hpp"
+#include "getter_setter.hpp"
 
 #include <vector>
 #include <utility>
@@ -34,12 +35,16 @@ public:
 	Game() = default;
 	virtual ~Game() = default;
 
-	virtual void commit(OthelloAction action);
+	GETTER(OthelloState, state)
+
+	virtual void commitAction(OthelloAction action);
 	virtual void undoLastAction() noexcept;
+	virtual int numTurns() const noexcept;
+	virtual const OthelloState& refState() const noexcept;
 
 private:
 
-	OthelloState state;
+	OthelloState state{OthelloState::initialState()};
 
 	/* The history consists of a vector of Action - Result pairs, the result
 	 * being the positions of the flipped bricks.

@@ -21,7 +21,27 @@
 
 using namespace othello;
 
-TEST_CASE("Always fails.", "[Game, fails]")
+TEST_CASE("Comitting and undoing actoins.", "[Game]")
 {
-	REQUIRE(false);
+	Game game;
+	OthelloState initial = game.refState();
+
+	Position pos1(3,2), pos2(2,2);
+	OthelloAction legal1(pos1), legal2(pos2);
+
+	game.commitAction(legal1);
+
+	SECTION("State changed after commit")
+	{
+		OthelloState after = game.refState();
+		REQUIRE(initial != after);
+	}
+
+	game.undoLastAction();
+
+	SECTION("State restored after undo.")
+	{
+		OthelloState restored = game.refState();
+		REQUIRE(initial == restored);
+	}
 }

@@ -209,7 +209,8 @@ TEST_CASE("Test flip searching.", "[OthelloAction, stateTransitions]")
 	}
 }
 
-TEST_CASE("Test modifications of the state", "[OthelloAction, stateTransitions]")
+TEST_CASE("Test modifications of the state"
+		, "[OthelloAction, stateTransitions]")
 {
 	OthelloState empty;
 	auto state = OthelloState::initialState();
@@ -227,7 +228,6 @@ TEST_CASE("Test modifications of the state", "[OthelloAction, stateTransitions]"
 		OthelloAction illegal2(Position(8,8));
 		REQUIRE_THROWS_AS(illegal2.execute(state)
 			, illegal_action_exception);
-
 
 		OthelloAction illegal3(Position(0,-1));
 		REQUIRE_THROWS_AS(illegal3.execute(state)
