@@ -12,7 +12,12 @@
 /*
  * Observable in the Observer-Observable design pattern.
  *
- * TODO Info on how to use the pattern.
+ * Observer-Observable is useful an update in the state of some objects affects
+ * the state a set of objects, according to the change.
+ *
+ * A good example is in grafical user interfaces when the state of a model
+ * object e.g. the state of the othello game, is reflected in a set of view
+ * of the graphical user interface.
  *
  * Linus Narva.
  */
@@ -31,21 +36,52 @@ class Observable
 public:
 	virtual ~Observable() = default;
 
+	/* Adds observer to be called on notifications. An observer can only be
+	 * added once.
+	 * param:	Smart pointer to the observer to add.
+	 * return:	True iff the observer was added. Otherwise false if it was
+	 *			already added.
+	 */
 	virtual bool addObserver(std::shared_ptr<Observer<T>> observer) noexcept;
+
+	/* Removes an observer, so that it is not called on notifications.
+	 * param:	Smart pointer to the observer to remove.
+	 * return:	True iff the observer was successfully removed. Otherwise false
+	 *			if it was never added to begin with.
+	 */
 	virtual bool removeObserver(std::shared_ptr<Observer<T>> observer)
 		noexcept;
 
+	/* Calls the specific observers notify() function.
+	 * param:	Smart pointer to the observer to notify.
+	 * return:	True iff toNotify was notified. Otherwise false if it was not
+	 *			added.
+	 */
 	virtual bool notify(std::shared_ptr<Observer<T>> toNotify);
+
+	/* Notifies all observers of the object.
+	 */
 	virtual void notifyAll();
 
+	/* Gets the notification data, which is sent to all observers when
+	 * notified.
+	 * return:	A non modifiable pointer state data.
+	 */
 	virtual const T* getNotifyData() const = 0;
 
+	/* Gets the number of observers of the object.
+	 * return:	The number of observers.
+	 */
 	virtual int numObservers() const noexcept;
 
+	/* Gets the set of observers of the object.
+	 * return:	The set of observers.
+	 */
 	virtual std::set<std::shared_ptr<Observer<T>>> getObservers();
 
 private:
 
+	/* The set of observers observing the object. */
 	std::set<std::shared_ptr<Observer<T>>> observers;
 };
 
