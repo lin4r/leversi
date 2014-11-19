@@ -17,6 +17,11 @@
 #ifndef OTHELLO_CONTROLLER_HPP_
 #define OTHELLO_CONTROLLER_HPP_
 
+#include "Observer.hpp"
+#include "OthelloState.hpp"
+
+#include <memory>
+
 namespace othello {
 
 class OthelloController
@@ -24,6 +29,12 @@ class OthelloController
 public:
 
 	virtual void pressedTile(int indexX, int indexY) = 0;
+
+	/* XXX Ugly forwarding solution, Ill fix a consistent construction logic
+	 * later.
+	 */
+	virtual void addGameObserver(std::shared_ptr<Observer<OthelloState>> observer)
+		noexcept = 0;
 };
 
 } //namespace othello

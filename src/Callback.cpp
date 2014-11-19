@@ -24,6 +24,8 @@
 using namespace std;
 //XXX DEBUG <<
 
+using std::shared_ptr;
+
 namespace othello {
 
 Callback::Callback() : model{new Game()}
@@ -40,12 +42,19 @@ void Callback::pressedTile(int indexX, int indexY)
 
 	try {
 		model->commitAction(action);
+		model->notifyAll();
 	} catch (illegal_action_exception e) {
-
+		cerr << e.what() << endl;
 	}
 
 	//XXX DEBUG
 	cout << model->getState() << endl;
+}
+
+void Callback::addGameObserver(shared_ptr<Observer<OthelloState>> observer)
+		noexcept
+{
+	model->addObserver(observer);
 }
 
 } //namespace othello

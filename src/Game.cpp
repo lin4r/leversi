@@ -58,6 +58,11 @@ OthelloState Game::getState() const noexcept
 	return history.back();
 }
 
+const OthelloState* Game::getNotifyData() const
+{
+	return &(history.back());
+}
+
 Game Game::testEmptyBoard()
 {
 	Game game;

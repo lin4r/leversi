@@ -18,8 +18,12 @@
 #define GUI_HPP_
 
 #include "Board.hpp"
+#include "OthelloState.hpp"
+#include "Observer.hpp"
 
 #include <gtkmm/window.h>
+
+#include <memory>
 
 namespace othello {
 
@@ -37,6 +41,7 @@ protected:
 private:
 
 	void initBoard();
+
 };
 
 } //namespace othello

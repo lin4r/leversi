@@ -16,6 +16,8 @@
  */
 #include "Board.hpp"
 #include "Callback.hpp"
+#include "Player.hpp"
+#include "Position.hpp"
 
 #include <cairomm/context.h>
 #include <gdkmm/general.h> // set_source_pixbuf()
@@ -34,6 +36,15 @@ using std::size_t;
 
 namespace othello {
 
+NotificationReceiver::NotificationReceiver(Board* updateObject)
+		: updateObject{updateObject}
+{}
+
+void NotificationReceiver::notify(const OthelloState* state)
+{
+	updateObject->update(*state);
+}
+
 bool BoardGraphics::isInitialized() const noexcept
 {
 	return backgroundImage && blackPieceSprite && whitePieceSprite;
@@ -42,6 +53,7 @@ bool BoardGraphics::isInitialized() const noexcept
 Board::Board() : Board(8,8) {};
 Board::Board(int sizeX, int sizeY) : gridSizeX{sizeX}, gridSizeY{sizeY}
 		, grid(sizeX, vector<Tile>(sizeY, Tile::Empty))
+		, notifyReceiver{new NotificationReceiver(this)}
 		, controller{new Callback()} //XXX Should not depend on this class.
 {
 	add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK
@@ -55,6 +67,11 @@ Board::Board(int sizeX, int sizeY) : gridSizeX{sizeX}, gridSizeY{sizeY}
 
 //	signal_button_release_event().connect(sigc::mem_fun(*this
 //		, &Board::on_button_release));
+
+	controller->addGameObserver(notifyReceiver);
+
+	/* Initially, show othellos initial state. */
+	update(OthelloState::initialState());
 }
 
 void Board::setGraphics(BorderSize bgImageBorderSize, BoardGraphics graphics)
@@ -121,6 +138,28 @@ bool Board::on_draw(const Cairo::RefPtr<Context>& cr)
 void Board::placePiece(Tile colour, int gridX, int gridY)
 {
 	grid.at(gridX).at(gridY) = colour;
+}
+
+void Board::update(OthelloState state)
+{
+	const auto rows = state.get_boardRows();
+	const auto columns = state.get_boardColumns();
+
+	for (auto row = 0; row < rows; row++) {
+		for (auto col = 0; col < columns; col++) {
+
+			const Position pos(row, col);
+			const auto colour = state.inspectTile(pos);
+
+			/* Uses different coordinate systems. */
+			const auto x = col;
+			const auto y = row;
+
+			placePiece(colour, x, y);
+		}
+	}
+
+	queue_draw();
 }
 
 pair<double,double> Board::tileDrawCoordinates(

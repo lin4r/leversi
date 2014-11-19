@@ -21,6 +21,7 @@
 
 #include "OthelloState.hpp"
 #include "OthelloAction.hpp"
+#include "Observable.hpp"
 
 #include <vector>
 #include <exception>
@@ -36,7 +37,7 @@ public:
 	virtual const char* what() const noexcept override;
 };
 
-class Game
+class Game : public Observable<OthelloState>
 {	
 public:
 
@@ -47,6 +48,8 @@ public:
 	virtual void undoLastAction() noexcept;
 	virtual int numTurns() const noexcept;
 	virtual OthelloState getState() const noexcept;
+
+	virtual const OthelloState* getNotifyData() const override;
 
 	/* Used for testing with passes. */
 	static Game testEmptyBoard();

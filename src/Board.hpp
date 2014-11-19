@@ -19,6 +19,8 @@
 
 #include "OthelloView.hpp"
 #include "OthelloController.hpp"
+#include "OthelloState.hpp"
+#include "Observer.hpp"
 
 #include <gtkmm/drawingarea.h>
 #include <gdkmm/pixbuf.h>
@@ -28,6 +30,22 @@
 #include <memory>
 
 namespace othello {
+
+class Board;
+
+class NotificationReceiver : public Observer<OthelloState>
+{
+public:
+
+	NotificationReceiver(Board* updateObject);
+	virtual ~NotificationReceiver() = default;
+
+	virtual void notify(const OthelloState* state) override;
+
+private:
+
+	Board* updateObject;
+};
 
 struct BorderSize
 {
@@ -58,6 +76,8 @@ public:
 
 	virtual void placePiece(Tile colour, int gridX, int gridY) override;
 
+	virtual void update(OthelloState state);
+
 	virtual void setGraphics(BorderSize bgImageBorderSize
 		, BoardGraphics graphics) noexcept;
 
@@ -85,6 +105,8 @@ private:
 	BoardGraphics graphics;
 
 	std::vector<std::vector<Tile>> grid;
+
+	std::shared_ptr<NotificationReceiver> notifyReceiver;
 
 	std::unique_ptr<OthelloController> controller;
 };

@@ -49,7 +49,7 @@ OthelloState.o: OthelloState.cpp OthelloState.hpp Tile.hpp Player.hpp getter_set
 OthelloAction.o: OthelloAction.cpp OthelloAction.hpp getter_setter.hpp Position.hpp OthelloState.hpp illegal_action_exception.hpp actionstring_syntax_exception.hpp
 	$(CC) $(CFLAGS) -c $<
 
-Game.o: Game.cpp Game.hpp OthelloState.hpp OthelloAction.hpp
+Game.o: Game.cpp Game.hpp OthelloState.hpp OthelloAction.hpp Observable.hpp
 	$(CC) $(CFLAGS) -c $<
 
 
@@ -81,10 +81,10 @@ GameTest: GameTest.o Game.o OthelloAction.o OthelloState.o illegal_action_except
 
 
 # Compile gui parts.
-Callback.o: Callback.cpp Callback.hpp Game.hpp OthelloController.hpp illegal_action_exception.hpp
+Callback.o: Callback.cpp Callback.hpp Game.hpp OthelloController.hpp illegal_action_exception.hpp OthelloState.hpp Observer.hpp
 	$(CC) $(CFLAGS) -c $<
 
-Board.o: Board.cpp Board.hpp OthelloView.hpp OthelloController.hpp Callback.hpp
+Board.o: Board.cpp Board.hpp OthelloView.hpp OthelloController.hpp Callback.hpp Tile.hpp Observer.hpp OthelloState.hpp Player.hpp Position.hpp
 	$(CC) $(CFLAGS) `pkg-config --cflags gtkmm-3.0` -c $<
 
 GUI.o: GUI.cpp GUI.hpp Board.hpp
