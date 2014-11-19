@@ -11,10 +11,10 @@ all: build runtest
 
 build: $(OBJ)
 
-runtest: testObserverObservable
-	./testObserverObservable
+runtest: test
+	./test
 
-testObserverObservable: ObserverObservableTest.o $(OBJ)
+test: ObserverObservableTest.o $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 %.o: %.cpp $(DEPS)
