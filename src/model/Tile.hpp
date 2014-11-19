@@ -37,8 +37,6 @@ inline Tile oppositeColor(Tile t)
 	}
 }
 
-} //namespace othello
-
 inline std::ostream& operator<<(std::ostream& os, othello::Tile tile)
 {
 	std::string stringRepresentation;
@@ -51,5 +49,7 @@ inline std::ostream& operator<<(std::ostream& os, othello::Tile tile)
 
 	return os << stringRepresentation;
 }
+
+} //namespace othello
 
 #endif //TILE_HPP_

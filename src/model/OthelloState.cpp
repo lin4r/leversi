@@ -17,8 +17,14 @@
 #include "OthelloState.hpp"
 
 #include <vector>
+#include <string>
+#include <sstream>
 
 using std::vector;
+using std::string;
+using std::stringstream;
+using std::ostream;
+using std::endl;
 
 namespace othello {
 
@@ -100,6 +106,53 @@ void OthelloState::changeTurn() noexcept
 	}
 }
 
+string OthelloState::gridString() const noexcept
+{
+	stringstream ss;
+
+	const auto hline = [&]() {
+		for (auto col = 0; col < boardColumns+2; col++) {
+			ss << "-";
+		}
+	};
+
+	hline();
+	ss << " ..." << endl;
+	for (auto row = 0; row < boardRows; row++) {
+		ss << "|";
+		for (auto col = 0; col < boardColumns; col++) {
+
+			const Position pos(row,col);
+			switch (inspectTile(pos)) {
+			case Tile::White: ss << "X"; break;
+			case Tile::Black: ss << "O"; break;
+			default: ss << " ";
+			}
+		}
+		ss << "| ..." << endl;
+	}
+
+	hline();
+
+	return ss.str();
+}
+
+string OthelloState::toString() const noexcept
+{
+	#define PVAR(var) #var << "{" << var << "}"
+
+	stringstream ss;
+
+	ss << "othello::OthelloState[" << PVAR(gameIsOver) << ", "
+		<< PVAR(previousActionWasPass) << ", " << PVAR(playersTurn) << ", "
+		<< PVAR(boardRows) << ", " << PVAR(boardColumns) << ", grid{ ..."
+		<< endl << gridString() << "}]";
+
+	#undef PVAR
+
+	return ss.str();
+}
+
 bool operator==(const OthelloState& state1, const OthelloState& state2)
 {
 	const auto rows = state1.get_boardRows();
@@ -108,6 +161,7 @@ bool operator==(const OthelloState& state1, const OthelloState& state2)
 	if ( (rows != state2.get_boardRows())
 			|| (columns != state2.get_boardColumns())
 			|| (state1.whosTurn() != state2.whosTurn())
+			|| (state1.previousActionWasPass != state2.previousActionWasPass)
 			|| (state1.gameOver() != state2.gameOver()) )
 	{
 		return false;
@@ -130,6 +184,11 @@ bool operator==(const OthelloState& state1, const OthelloState& state2)
 bool operator!=(const OthelloState& state1, const OthelloState& state2)
 {
 	return !(state1 == state2);
+}
+
+ostream& operator<<(ostream& os, const OthelloState& state)
+{
+	return os << state.toString();
 }
 
 } //namespace othello

@@ -131,4 +131,11 @@ TEST_CASE("Veerify that equality operator works.", "[OthelloState, operator]")
 
 		REQUIRE(smallBoard != largeBoard);
 	}
+
+
+	SECTION("Not equal id passStatus changes")
+	{
+		state1.updateGameStatus(true);
+		REQUIRE(state1 != state2);
+	}
 }

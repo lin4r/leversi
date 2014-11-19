@@ -23,6 +23,8 @@
 #include "Position.hpp"
 
 #include <vector>
+#include <string>
+#include <iostream>
 
 namespace othello {
 
@@ -49,6 +51,10 @@ public:
 	virtual void updateGameStatus(bool actionWasPass) noexcept;
 	virtual bool gameOver() const noexcept;
 
+	virtual std::string toString() const noexcept;
+	virtual std::string gridString() const noexcept;
+
+
 private:
 
 	bool gameIsOver{false};
@@ -59,10 +65,20 @@ private:
 	const int boardRows;
 	const int boardColumns;
 	std::vector<std::vector<Tile>> grid;
+
+//Friends
+
+	friend bool operator==(const OthelloState& state1
+		, const OthelloState& state2);
+
+	friend std::ostream& operator<<(std::ostream& os
+		, const OthelloState& state);
 };
 
 bool operator==(const OthelloState& state1, const OthelloState& state2);
 bool operator!=(const OthelloState& state1, const OthelloState& state2);
+
+std::ostream& operator<<(std::ostream& os, const OthelloState& state);
 
 } //namespace othello
 

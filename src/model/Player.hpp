@@ -19,6 +19,8 @@
 
 #include "Tile.hpp"
 
+#include <iostream>
+
 namespace othello {
 
 enum class Player
@@ -33,6 +35,19 @@ inline Tile playerBrickColour(Player player)
 	case Player::White:
 	default: return Tile::White;
 	}
+}
+
+inline std::ostream& operator<<(std::ostream& os, const Player& player)
+{
+	std::string playerStr;
+
+	switch (player) {
+	case Player::Black: playerStr = "Player::Black"; break;
+	case Player::White:
+	default: playerStr = "Player::White"; break;
+	}
+
+	return os << playerStr;
 }
 
 } //namespace othello
