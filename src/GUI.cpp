@@ -63,15 +63,15 @@ GUI::GUI()
 	initBoard();
 
 	//XXX DEBUG code.
-	board.placePiece(Tile::White, 0,0);
-	board.placePiece(Tile::Black, 0,7);
-	board.placePiece(Tile::Black, 7,0);
-	board.placePiece(Tile::White, 7,7);
+	board.placePiece(Tile::Black, 0,0);
+	board.placePiece(Tile::White, 0,7);
+	board.placePiece(Tile::White, 7,0);
+	board.placePiece(Tile::Black, 7,7);
 
-	board.placePiece(Tile::Black, 3,3);
-	board.placePiece(Tile::White, 4,3);
-	board.placePiece(Tile::Black, 4,4);
-	board.placePiece(Tile::White, 3,4);
+	board.placePiece(Tile::White, 3,3);
+	board.placePiece(Tile::Black, 4,3);
+	board.placePiece(Tile::White, 4,4);
+	board.placePiece(Tile::Black, 3,4);
 	board.queue_draw();
 	//<<XXX DEBUG code.
 }

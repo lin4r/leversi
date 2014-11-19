@@ -81,10 +81,10 @@ GameTest: GameTest.o Game.o OthelloAction.o OthelloState.o illegal_action_except
 
 
 # Compile gui parts.
-Callback.o: Callback.cpp Callback.hpp Game.hpp OthelloController.hpp
+Callback.o: Callback.cpp Callback.hpp Game.hpp OthelloController.hpp illegal_action_exception.hpp
 	$(CC) $(CFLAGS) -c $<
 
-Board.o: Board.cpp Board.hpp OthelloView.hpp
+Board.o: Board.cpp Board.hpp OthelloView.hpp OthelloController.hpp Callback.hpp
 	$(CC) $(CFLAGS) `pkg-config --cflags gtkmm-3.0` -c $<
 
 GUI.o: GUI.cpp GUI.hpp Board.hpp

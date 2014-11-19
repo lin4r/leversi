@@ -18,12 +18,14 @@
 #define BOARD_HPP_
 
 #include "OthelloView.hpp"
+#include "OthelloController.hpp"
 
 #include <gtkmm/drawingarea.h>
 #include <gdkmm/pixbuf.h>
 
 #include <vector>
 #include <utility>
+#include <memory>
 
 namespace othello {
 
@@ -83,6 +85,8 @@ private:
 	BoardGraphics graphics;
 
 	std::vector<std::vector<Tile>> grid;
+
+	std::unique_ptr<OthelloController> controller;
 };
 
 } //namespace othello

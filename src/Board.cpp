@@ -15,6 +15,7 @@
  * Linus Narva.
  */
 #include "Board.hpp"
+#include "Callback.hpp"
 
 #include <cairomm/context.h>
 #include <gdkmm/general.h> // set_source_pixbuf()
@@ -41,6 +42,7 @@ bool BoardGraphics::isInitialized() const noexcept
 Board::Board() : Board(8,8) {};
 Board::Board(int sizeX, int sizeY) : gridSizeX{sizeX}, gridSizeY{sizeY}
 		, grid(sizeX, vector<Tile>(sizeY, Tile::Empty))
+		, controller{new Callback()} //XXX Should not depend on this class.
 {
 	add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK
 		| Gdk::BUTTON_RELEASE_MASK);
@@ -210,6 +212,7 @@ bool Board::on_button_press(GdkEventButton* event)
 			&& event->type == GDK_2BUTTON_PRESS)
 	{
 		auto tile = tileAt(event->x, event->y);
+		controller->pressedTile(tile.first, tile.second);
 
 		cout << "Double click at (x,y)=(" << tile.first << "," << tile.second << ")." << endl; //XXX DEBUG
 	}
