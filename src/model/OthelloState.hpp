@@ -61,6 +61,9 @@ private:
 	std::vector<std::vector<Tile>> grid;
 };
 
+bool operator==(const OthelloState& state1, const OthelloState& state2);
+bool operator!=(const OthelloState& state1, const OthelloState& state2);
+
 } //namespace othello
 
 #endif //OTHELLO_STATE_HPP_

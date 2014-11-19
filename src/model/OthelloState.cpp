@@ -28,7 +28,8 @@ OthelloState::OthelloState() noexcept : OthelloState(8,8,Player::Black)
 
 OthelloState::OthelloState(int boardRows, int boardColumns, Player starter)
 		noexcept
-		: playersTurn{starter}, boardRows{boardRows}, boardColumns{boardColumns}
+		: playersTurn{starter}, boardRows{boardRows}
+		, boardColumns{boardColumns}
 		, grid{vector<vector<Tile>>(boardRows,vector<Tile>(boardColumns
 			,Tile::Empty))}
 {
@@ -97,6 +98,38 @@ void OthelloState::changeTurn() noexcept
 	case Player::White:
 	default: playersTurn = Player::Black;
 	}
+}
+
+bool operator==(const OthelloState& state1, const OthelloState& state2)
+{
+	const auto rows = state1.get_boardRows();
+	const auto columns = state1.get_boardColumns();
+	/* Check the 'simple components before the board.' */
+	if ( (rows != state2.get_boardRows())
+			|| (columns != state2.get_boardColumns())
+			|| (state1.whosTurn() != state2.whosTurn())
+			|| (state1.gameOver() != state2.gameOver()) )
+	{
+		return false;
+	}
+
+	bool boardEqual{true};
+
+	for (auto row = 0; boardEqual && (row < rows); row++) {
+		for (auto col = 0; boardEqual && (col < columns); col++) {
+
+			const Position pos(row,col);
+			boardEqual = boardEqual
+				&& (state1.inspectTile(pos) == state2.inspectTile(pos));
+		}
+	}
+
+	return boardEqual;
+}
+
+bool operator!=(const OthelloState& state1, const OthelloState& state2)
+{
+	return !(state1 == state2);
 }
 
 } //namespace othello

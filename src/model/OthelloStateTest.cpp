@@ -51,7 +51,7 @@ TEST_CASE("Default values", "[OthelloState, defaultValues]")
 	}
 }
 
-TEST_CASE("Verify Game over.")
+TEST_CASE("Verify Game over.", "[OthelloState, gameOver]")
 {
 	OthelloState state;
 
@@ -79,5 +79,56 @@ TEST_CASE("Verify Game over.")
 		state.updateGameStatus(true);
 		state.updateGameStatus(false);
 		REQUIRE(state.gameOver());
+	}
+}
+
+TEST_CASE("Veerify that equality operator works.", "[OthelloState, operator]")
+{
+	auto state1 = OthelloState::initialState();
+	auto state2 = OthelloState::initialState();
+
+	SECTION("Initially, they're equal")
+	{
+		REQUIRE(state1 == state2);
+	}
+
+	state1.flipBrick(Position(3,3));
+
+	SECTION("Not equal after a modification.")
+	{
+		REQUIRE(state1 != state2);
+	}
+
+	state2.flipBrick(Position(3,3));
+
+	SECTION("After the other state was adjusted, theyr'e equal again.")
+	{
+		REQUIRE(state1 == state2);
+	}
+
+	SECTION("Not equal after change of turn.")
+	{
+		state1.changeTurn();
+		REQUIRE(state1 != state2);
+	}
+
+	SECTION("Not equal if one game is over.")
+	{
+		const auto setGameOver = [](OthelloState& state)
+		{
+			state.updateGameStatus(true);
+			state.updateGameStatus(true);
+		};
+
+		setGameOver(state1);
+		REQUIRE(state1 != state2);
+	}
+
+	SECTION("Not equal if size differs.")
+	{
+		OthelloState smallBoard(4,4,Player::Black);
+		OthelloState largeBoard(4,5,Player::Black);
+
+		REQUIRE(smallBoard != largeBoard);
 	}
 }
