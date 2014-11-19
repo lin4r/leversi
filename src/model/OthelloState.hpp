@@ -62,8 +62,8 @@ private:
 
 	Player playersTurn;
 
-	const int boardRows;
-	const int boardColumns;
+	int boardRows;
+	int boardColumns;
 	std::vector<std::vector<Tile>> grid;
 
 //Friends

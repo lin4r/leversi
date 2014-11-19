@@ -21,10 +21,10 @@
 
 using namespace othello;
 
-TEST_CASE("Comitting and undoing actoins.", "[Game]")
+TEST_CASE("Comitting and undoing placements.", "[Game, placement]")
 {
 	Game game;
-	OthelloState initial = game.refState();
+	auto initial = game.getState();
 
 	Position pos1(3,2), pos2(2,2);
 	OthelloAction legal1(pos1), legal2(pos2);
@@ -33,7 +33,7 @@ TEST_CASE("Comitting and undoing actoins.", "[Game]")
 
 	SECTION("State changed after commit")
 	{
-		OthelloState after = game.refState();
+		auto after = game.getState();
 		REQUIRE(initial != after);
 	}
 
@@ -41,7 +41,42 @@ TEST_CASE("Comitting and undoing actoins.", "[Game]")
 
 	SECTION("State restored after undo.")
 	{
-		OthelloState restored = game.refState();
+		auto restored = game.getState();
+		REQUIRE(initial == restored);
+	}
+
+	game.commitAction(legal1);
+	game.commitAction(legal2);
+
+	game.undoLastAction();
+	game.undoLastAction();
+
+	SECTION("Can undo multiple commits.")
+	{
+		auto restored = game.getState();
+		REQUIRE(initial == restored);
+	}
+}
+
+TEST_CASE("Comitting and undoing pass actions.", "[Game]")
+{
+	auto game = Game::testEmptyBoard();
+	auto initial = game.getState();
+	OthelloAction pass(Position(-1,-1), true);
+
+	game.commitAction(pass);
+
+	SECTION("State changed after commit")
+	{
+		auto after = game.getState();
+		REQUIRE(initial != after);
+	}
+
+	game.undoLastAction();
+
+	SECTION("State restored after undo.")
+	{
+		auto restored = game.getState();
 		REQUIRE(initial == restored);
 	}
 }

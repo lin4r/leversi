@@ -21,35 +21,41 @@
 
 #include "OthelloState.hpp"
 #include "OthelloAction.hpp"
-#include "getter_setter.hpp"
 
 #include <vector>
-#include <utility>
+#include <exception>
 
 namespace othello {
+
+class undo_initial_state_exception : std::exception
+{
+public:
+
+	virtual ~undo_initial_state_exception() = default;
+
+	virtual const char* what() const noexcept override;
+};
 
 class Game
 {	
 public:
 
-	Game() = default;
+	Game() noexcept;
 	virtual ~Game() = default;
-
-	GETTER(OthelloState, state)
 
 	virtual void commitAction(OthelloAction action);
 	virtual void undoLastAction() noexcept;
 	virtual int numTurns() const noexcept;
-	virtual const OthelloState& refState() const noexcept;
+	virtual OthelloState getState() const noexcept;
+
+	/* Used for testing with passes. */
+	static Game testEmptyBoard();
 
 private:
 
-	OthelloState state{OthelloState::initialState()};
-
-	/* The history consists of a vector of Action - Result pairs, the result
-	 * being the positions of the flipped bricks.
+	/* The history: all states this far.
 	 */
-	std::vector<std::pair<OthelloAction,std::vector<Position>>> history;
+	std::vector<OthelloState> history;
 };
 
 } //namespace othello

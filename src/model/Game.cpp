@@ -22,39 +22,48 @@ using std::pair;
 
 namespace othello {
 
+Game::Game() noexcept
+{
+	history.push_back(OthelloState::initialState());
+}
+
 void Game::commitAction(OthelloAction action)
 {
-	auto effect = action.execute(state);
+	auto state = getState();
+	action.execute(state);
+	history.push_back(state);
+}
 
-	pair<OthelloAction,std::vector<Position>> event(action, effect);
-	history.push_back(event);
+const char* undo_initial_state_exception::what() const noexcept
+{
+	return "The initial state of the game can not be undone.";
 }
 
 void Game::undoLastAction() noexcept
 {
-	const auto event = history.back();
-	history.pop_back();
-
-	const auto action = event.first;
-	const auto effect = event.second;
-
-	/* Remove the placed tile */
-	state.setTile(action.get_position(), Tile::Empty);
-
-	/* Flip back all bricks that where flipped. */
-	for (auto flippedPos : effect) {
-		state.flipBrick(flippedPos);
+	if (history.size() > 1) {
+		history.pop_back();
+	} else {
+		throw undo_initial_state_exception();
 	}
 }
 
 int Game::numTurns() const noexcept
 {
-	return history.size();
+	return history.size() -1;
 }
 
-const OthelloState& Game::refState() const noexcept
+OthelloState Game::getState() const noexcept
 {
-	return state;
+	return history.back();
+}
+
+Game Game::testEmptyBoard()
+{
+	Game game;
+	game.history[0] = OthelloState();
+
+	return game;
 }
 
 } //namespace othello
