@@ -354,20 +354,26 @@ TEST_CASE("Test placement search.", "[OthelloAction, placementSearch]")
 
 	SECTION("Finds exactly the legal placements.")
 	{
-		auto placementsVector = OthelloAction::findLegalPlacements(state);
+		auto placementsAndEffectPairs
+			= OthelloAction::findLegalPlacements(state);
 
-		REQUIRE(4 == placementsVector.size());
+		REQUIRE(4 == placementsAndEffectPairs.size());
 
-		/* Convert to set so that we easily can test membership. */
-		set<OthelloAction> placementsSet(
-			placementsVector.begin(), placementsVector.end());
+		/* Insert to set so that we easily can test membership. */
+//		set<OthelloAction> placementsSet(
+//			placementsVector.begin(), placementsVector.end());
+		set<OthelloAction> placements;
+		for (auto placementsAndEffectPair : placementsAndEffectPairs) {
+			placements.insert(placementsAndEffectPair.first);
+		}
+		
 
 		const auto has = [&] (OthelloAction action) {
-			return placementsSet.find(action) != placementsSet.end();
+			return placements.find(action) != placements.end();
 		};
 
 		/* Just check that the elements was evaluated correctly. */
-		CHECK(4 == placementsSet.size());
+		CHECK(4 == placements.size());
 
 		/* These are the legal moves on the first turn of the game. */
 		REQUIRE(has(OthelloAction(Position(3,2))));

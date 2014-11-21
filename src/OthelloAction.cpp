@@ -23,10 +23,12 @@
 #include <cctype> //FIXME Not needed with regex.
 #include <functional>
 #include <vector>
+#include <utility>
 
 using std::vector;
 using std::string;
 using std::ostream;
+using std::pair;
 
 namespace othello {
 
@@ -227,10 +229,10 @@ bool OthelloAction::existsLegalPlacement(const OthelloState& state)
 	return foundLegalPlacement;
 }
 
-vector<OthelloAction> OthelloAction::findLegalPlacements(
-		const OthelloState& state) noexcept
+vector<pair<OthelloAction,vector<Position>>>
+		OthelloAction::findLegalPlacements(const OthelloState& state) noexcept
 {
-	vector<OthelloAction> placements;
+	vector<pair<OthelloAction,vector<Position>>> placements;
 
 	for (auto row = 0; row < state.get_boardRows(); row++ ) {
 		for (auto col = 0; col < state.get_boardColumns(); col++) {
@@ -239,7 +241,8 @@ vector<OthelloAction> OthelloAction::findLegalPlacements(
 			auto flips = placement.searchFlips(state);
 
 			if (flips.size() > 0) {
-				placements.push_back(placement);
+				placements.push_back(pair<OthelloAction,vector<Position>>
+					(placement,flips));
 			}
 		}
 	}

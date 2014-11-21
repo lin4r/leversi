@@ -25,6 +25,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <utility>
 
 namespace othello {
 
@@ -57,8 +58,11 @@ public:
 	virtual bool existsLegalPlacement(const OthelloState& state)
 		const noexcept;
 
-	static std::vector<OthelloAction> findLegalPlacements(
-		const OthelloState& state) noexcept;
+	/* Searches for legal placements. Also returns the corresponding flips
+	 * since the algorithm basically gets them for free.
+	 */
+	static std::vector<std::pair<OthelloAction,std::vector<Position>>>
+		findLegalPlacements(const OthelloState& state) noexcept;
 
 	/* Lists which bricks are turned by the action.
 	 * Ret: A vector of positions where the bricks where turned

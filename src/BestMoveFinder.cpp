@@ -14,10 +14,11 @@ pair<OthelloAction, score_t> BestMoveFinder::getBestMove()
 {
 	using std::vector;
 
-	auto placements = OthelloAction::findLegalPlacements(game.getState());
+	auto placementEffectPairs =
+		OthelloAction::findLegalPlacements(game.getState());
 
 	/* Handle pass. */
-	if (placements.empty()) {
+	if (placementEffectPairs.empty()) {
 		const score_t score{0}; //Evaluator pass.
 		const auto action = OthelloAction::constructPass();
 
@@ -28,9 +29,9 @@ pair<OthelloAction, score_t> BestMoveFinder::getBestMove()
 	OthelloAction bestAction(Position(-1,-1));
 
 	//TODO at the time being, just return a legal action.
-	auto action = placements.at(0);
+	auto action = placementEffectPairs.at(0).first;
 	auto flips = game.commitAction(action);
-	earnedScore = flips.size();
+	earnedScore = flips.size()+1;
 	game.undoLastAction();
 
 	return pair<OthelloAction,score_t>(action, earnedScore);
