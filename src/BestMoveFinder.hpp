@@ -10,6 +10,7 @@ namespace othello {
 
 typedef int score_t;
 const score_t SCORE_INFIMUM{INT_MIN};
+const score_t SCORE_SUPERMUM{INT_MAX};
 
 class BestMoveFinder {
 public:
@@ -36,8 +37,6 @@ private:
 	static bool actionEffectPairLt(
 		std::pair<OthelloAction,std::vector<Position>> p1
 		, std::pair<OthelloAction,std::vector<Position>> p2);
-
-	static score_t getScoreInfimum();
 
 	Game game;
 };

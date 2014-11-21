@@ -51,7 +51,7 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove()
 	sort(placementEffectPairs.begin(), placementEffectPairs.end()
 		, actionEffectPairLt);
 
-	auto earnedScore = getScoreInfimum();
+	auto earnedScore = SCORE_INFIMUM;
 	OthelloAction bestAction(Position(-1,-1));
 
 	for (auto placementEffectPair : placementEffectPairs) {
@@ -86,11 +86,6 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove()
 	currentDepth--; //Ascend.
 
 	return pair<OthelloAction,score_t>(bestAction, earnedScore);
-}
-
-score_t BestMoveFinder::getScoreInfimum()
-{
-	return SCORE_INFIMUM;
 }
 
 bool BestMoveFinder::actionEffectPairLt(pair<OthelloAction,vector<Position>> p1
