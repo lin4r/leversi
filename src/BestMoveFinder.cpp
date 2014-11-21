@@ -6,6 +6,7 @@
 
 using std::pair;
 using std::vector;
+using std::max;
 
 namespace othello {
 
@@ -19,11 +20,12 @@ pair<OthelloAction, score_t> BestMoveFinder::getBestMove()
 	 * unexpected exception.
 	 */
 	currentDepth = 0;
-	return _getBestMove();
+	return _getBestMove(SCORE_INFIMUM, SCORE_SUPERMUM);
 }
 
 
-pair<OthelloAction, score_t> BestMoveFinder::_getBestMove()
+pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
+		score_t alpha, score_t beta)
 {
 	using std::sort;
 
@@ -66,11 +68,17 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove()
 		/* Perform the action. */
 		game.commitAction(action);
 
-		/* The best score the advisary can make. */
-		const auto advisaryEarnedScore = _getBestMove().second;
+		/* The best score the advisary can make. By swaping beta and alpha we
+		 * solve the dual problem of MIN-VALUE. */
+		const auto advisaryEarnedScore = _getBestMove(beta, alpha).second;
 
 		/* The score if the player shoul choose the action. */
 		const auto actionScore = actionValue - advisaryEarnedScore;
+
+		/* Restore the original state. */
+		game.undoLastAction();
+
+		/* Analyse the result. */
 
 		/* It the score is better than any previously evaluated, choose it. */
 		if (actionScore > earnedScore) {
@@ -78,8 +86,12 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove()
 			bestAction = action;
 		}
 
-		/* Restore the original state. */
-		game.undoLastAction();
+		/* If it is also better tham beta, then break the loop. */
+		if (earnedScore >= beta) {
+			break;
+		}
+
+		alpha = max(alpha, earnedScore);
 	}
 
 	//XXX Consider a try block, to guarantee that the depth is consistent.

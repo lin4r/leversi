@@ -28,7 +28,8 @@ public:
 
 private:
 
-	virtual std::pair<OthelloAction, score_t> _getBestMove();
+	virtual std::pair<OthelloAction, score_t> _getBestMove(score_t alpha
+		, score_t beta);
 
 	int currentDepth{0};
 	int maxDepth{4};
