@@ -54,6 +54,7 @@ public:
 	virtual std::string toString() const noexcept;
 	virtual std::string gridString() const noexcept;
 
+	virtual std::string whoLeads() const noexcept;
 
 private:
 

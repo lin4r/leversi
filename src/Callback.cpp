@@ -72,6 +72,7 @@ void Callback::executePlayerAction(OthelloAction action)
 		if (model->getState().gameOver()) {
 
 			cout << "Game Over!!!" << endl;
+			cout << "Winner> " << model->getState().whoLeads() << endl;
 
 		/* If no move is possible, then recursively execute pass. */
 		} else if (! OthelloAction::existsLegalPlacement(model->getState())) {

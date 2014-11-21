@@ -137,6 +137,30 @@ string OthelloState::gridString() const noexcept
 	return ss.str();
 }
 
+string OthelloState::whoLeads() const noexcept
+{
+	int numWhite{0}, numBlack{0};
+	
+	for (auto row = 0; row < boardRows; row++) {
+		for (auto col = 0; col < boardColumns; col++) {
+			const Position pos(row,col);
+			switch (inspectTile(pos)) {
+			case Tile::White: numWhite++; break;
+			case Tile::Black: numBlack++; break;
+			default: ;
+			}
+		}
+	}
+
+	if (numWhite > numBlack) {
+		return "White player";
+	} else if (numBlack > numWhite) {
+		return "Black player";
+	} else {
+		return "Tie";
+	}
+}
+
 string OthelloState::toString() const noexcept
 {
 	#define PVAR(var) #var << "{" << var << "}"
