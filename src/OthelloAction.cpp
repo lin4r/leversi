@@ -209,8 +209,7 @@ vector<Position> OthelloAction::execute(OthelloState& state)
 	return flips;
 }
 
-bool OthelloAction::existsLegalPlacement(const OthelloState& state)
-		const noexcept
+bool OthelloAction::existsLegalPlacement(const OthelloState& state) noexcept
 {
 	bool foundLegalPlacement{false};
 

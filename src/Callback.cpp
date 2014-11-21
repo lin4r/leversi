@@ -33,7 +33,6 @@ Callback::Callback() : model{new Game()}
 {
 }
 
-/* TODO handle player pass and game over.*/
 void Callback::pressedTile(int indexX, int indexY)
 {
 	/* The coordinates are reversed because the model uses row-col coordinates
@@ -42,7 +41,23 @@ void Callback::pressedTile(int indexX, int indexY)
 	Position pos(indexY, indexX);
 	OthelloAction action(pos);
 
+	executePlayerAction(action);
+}
+
+/* TODO handle player pass and game over.*/
+void Callback::executePlayerAction(OthelloAction action)
+{
+	/* The coordinates are reversed because the model uses row-col coordinates
+	 * which effectively inverts x,y.
+	 */
+
+	if (model->getState().gameOver()) {
+
+		return;
+	}
+
 	try {
+
 		model->commitAction(action);
 		cout << "Player Action> " << action << "." << endl;
 
@@ -53,6 +68,15 @@ void Callback::pressedTile(int indexX, int indexY)
 		auto advisaryAction = advisary.getBestMove().first;
 		model->commitAction(advisaryAction);
 		cout << "Computer Action> " << advisaryAction << "." << endl;
+
+		if (model->getState().gameOver()) {
+
+			cout << "Game Over!!!" << endl;
+
+		/* If no move is possible, then recursively execute pass. */
+		} else if (! OthelloAction::existsLegalPlacement(model->getState())) {
+			executePlayerAction(OthelloAction::constructPass());
+		}
 
 		model->notifyAll();
 	} catch (illegal_action_exception e) {

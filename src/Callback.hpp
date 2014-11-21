@@ -43,6 +43,8 @@ public:
 
 private:
 
+	void executePlayerAction(OthelloAction action);
+
 	std::unique_ptr<Game> model;
 };
 

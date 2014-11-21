@@ -54,9 +54,7 @@ public:
 
 	virtual std::vector<Position> execute(OthelloState& state);
 
-	//FIXME static
-	virtual bool existsLegalPlacement(const OthelloState& state)
-		const noexcept;
+	static bool existsLegalPlacement(const OthelloState& state) noexcept;
 
 	/* Searches for legal placements. Also returns the corresponding flips
 	 * since the algorithm basically gets them for free.
