@@ -32,7 +32,7 @@ private:
 		, score_t beta);
 
 	int currentDepth{0};
-	int maxDepth{4};
+	int maxDepth{5};
 
 	/* XXX Later this should be the evaluators duty. */
 	static bool actionEffectPairLt(
