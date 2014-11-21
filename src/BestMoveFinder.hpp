@@ -21,6 +21,11 @@ public:
 
 private:
 
+	/* XXX Later this should be the evaluators duty. */
+	static bool actionEffectPairLt(
+		std::pair<OthelloAction,std::vector<Position>> p1
+		, std::pair<OthelloAction,std::vector<Position>> p2);
+
 	static score_t getScoreInfimum();
 
 	Game game;

@@ -2,8 +2,10 @@
 
 #include <utility>
 #include <vector>
+#include <algorithm>
 
 using std::pair;
+using std::vector;
 
 namespace othello {
 
@@ -12,7 +14,7 @@ BestMoveFinder::BestMoveFinder(Game game) : game(game)
 
 pair<OthelloAction, score_t> BestMoveFinder::getBestMove()
 {
-	using std::vector;
+	using std::sort;
 
 	auto placementEffectPairs =
 		OthelloAction::findLegalPlacements(game.getState());
@@ -24,6 +26,10 @@ pair<OthelloAction, score_t> BestMoveFinder::getBestMove()
 
 		return pair<OthelloAction,score_t>(action, score);
 	}
+
+	/* Sort the vector according to direct effect. */
+	sort(placementEffectPairs.begin(), placementEffectPairs.end()
+		, actionEffectPairLt);
 
 	auto earnedScore = getScoreInfimum();
 	OthelloAction bestAction(Position(-1,-1));
@@ -40,6 +46,12 @@ pair<OthelloAction, score_t> BestMoveFinder::getBestMove()
 score_t BestMoveFinder::getScoreInfimum()
 {
 	return SCORE_INFIMUM;
+}
+
+bool BestMoveFinder::actionEffectPairLt(pair<OthelloAction,vector<Position>> p1
+		, pair<OthelloAction,vector<Position>> p2)
+{
+	return p1.second.size() < p2.second.size();
 }
 
 } //namespace othello
