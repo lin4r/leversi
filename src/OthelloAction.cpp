@@ -30,7 +30,6 @@ using std::ostream;
 
 namespace othello {
 
-
 OthelloAction::OthelloAction(Position position) noexcept
 		: position(position), pass{false}
 {
@@ -39,6 +38,11 @@ OthelloAction::OthelloAction(Position position) noexcept
 OthelloAction::OthelloAction(Position position, bool pass) noexcept
 		: position(position), pass{pass}
 {
+}
+
+OthelloAction OthelloAction::constructPass() noexcept
+{
+	return OthelloAction(Position(-1,-1),true);
 }
 
 bool OthelloAction::isPass() const noexcept

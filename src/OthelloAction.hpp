@@ -40,6 +40,9 @@ public:
 	OthelloAction(Position position, bool pass) noexcept;
 	OthelloAction(std::string action);
 
+	//XXX I really want it's name to be pass. It looks prettier when its called.
+	static OthelloAction constructPass() noexcept;
+
 	virtual ~OthelloAction() = default;
 
 	GETTER(Position, position);

@@ -12,6 +12,8 @@ OOTEST=ObserverObservableTest.o
 
 TEST=PositionTest OthelloStateTest OthelloActionTest GameTest ObserverObservableTest
 
+AI=BestMoveFinder.o
+
 TARGET=othello
 
 .PHONY: all build clean test purge
@@ -30,7 +32,7 @@ test: $(TEST)
 main.o: main.cpp GUI.hpp
 	$(CC) $(CFLAGS) `pkg-config --cflags gtkmm-3.0` -c $<
 
-$(TARGET): main.o $(MODELEX) $(MODEL) $(GUI)
+$(TARGET): main.o $(MODELEX) $(MODEL) $(GUI) $(AI)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) `pkg-config --cflags --libs gtkmm-3.0`
 
 # Compile model parts.
@@ -81,7 +83,7 @@ GameTest: GameTest.o Game.o OthelloAction.o OthelloState.o illegal_action_except
 
 
 # Compile gui parts.
-Callback.o: Callback.cpp Callback.hpp Game.hpp OthelloController.hpp illegal_action_exception.hpp OthelloState.hpp Observer.hpp
+Callback.o: Callback.cpp Callback.hpp Game.hpp OthelloController.hpp illegal_action_exception.hpp OthelloState.hpp Observer.hpp BestMoveFinder.hpp
 	$(CC) $(CFLAGS) -c $<
 
 Board.o: Board.cpp Board.hpp OthelloView.hpp OthelloController.hpp Callback.hpp Tile.hpp Observer.hpp OthelloState.hpp Player.hpp Position.hpp
@@ -93,6 +95,11 @@ GUI.o: GUI.cpp GUI.hpp Board.hpp
 
 # Observer Observable tests.
 ObserverObservableTest.o: ObserverObservableTest.cpp Observer.hpp Observable.hpp
+	$(CC) $(CFLAGS) -c $<
+
+
+# Compile AI.
+BestMoveFinder.o: BestMoveFinder.cpp BestMoveFinder.hpp Game.hpp OthelloAction.hpp
 	$(CC) $(CFLAGS) -c $<
 
 ObserverObservableTest: ObserverObservableTest.o

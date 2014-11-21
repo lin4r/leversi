@@ -18,11 +18,12 @@
 #include "Position.hpp"
 #include "OthelloAction.hpp"
 #include "illegal_action_exception.hpp"
+#include "BestMoveFinder.hpp"
 
-//XXX DEBUG >>
 #include <iostream>
-using namespace std;
-//XXX DEBUG <<
+using std::cout;
+using std::cerr;
+using std::endl;
 
 using std::shared_ptr;
 
@@ -32,6 +33,7 @@ Callback::Callback() : model{new Game()}
 {
 }
 
+/* TODO handle player pass and game over.*/
 void Callback::pressedTile(int indexX, int indexY)
 {
 	/* The coordinates are reversed because the model uses row-col coordinates
@@ -42,13 +44,17 @@ void Callback::pressedTile(int indexX, int indexY)
 
 	try {
 		model->commitAction(action);
+		cout << "Player Action> " << action << "." << endl;
+
+		BestMoveFinder advisary(*model);
+		auto advisaryAction = advisary.getBestMove().first;
+		model->commitAction(advisaryAction);
+		cout << "Computer Action> " << advisaryAction << "." << endl;
+
 		model->notifyAll();
 	} catch (illegal_action_exception e) {
 		cerr << e.what() << endl;
 	}
-
-	//XXX DEBUG
-	cout << model->getState() << endl;
 }
 
 void Callback::addGameObserver(shared_ptr<Observer<OthelloState>> observer)
