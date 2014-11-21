@@ -18,7 +18,7 @@
 
 #include <vector>
 
-using std::pair;
+using std::vector;
 
 namespace othello {
 
@@ -27,11 +27,12 @@ Game::Game() noexcept
 	history.push_back(OthelloState::initialState());
 }
 
-void Game::commitAction(OthelloAction action)
+vector<Position> Game::commitAction(OthelloAction action)
 {
 	auto state = getState();
-	action.execute(state);
+	auto flips = action.execute(state);
 	history.push_back(state);
+	return flips;
 }
 
 const char* undo_initial_state_exception::what() const noexcept

@@ -44,7 +44,9 @@ public:
 	Game() noexcept;
 	virtual ~Game() = default;
 
-	virtual void commitAction(OthelloAction action);
+	/* Commits an action to the game. Returns a vector of flips.
+	 */
+	virtual std::vector<Position> commitAction(OthelloAction action);
 	virtual void undoLastAction() noexcept;
 	virtual int numTurns() const noexcept;
 	virtual OthelloState getState() const noexcept;
