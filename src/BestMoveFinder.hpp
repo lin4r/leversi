@@ -19,7 +19,18 @@ public:
 
 	virtual std::pair<OthelloAction, score_t> getBestMove();
 
+	virtual int getMaxDepth() const noexcept { return maxDepth; }
+
+	//XXX Should guard agins invalid values.
+	virtual void setMaxDepth(int newDepth) noexcept
+			{ maxDepth = newDepth; }
+
 private:
+
+	virtual std::pair<OthelloAction, score_t> _getBestMove();
+
+	int currentDepth{0};
+	int maxDepth{4};
 
 	/* XXX Later this should be the evaluators duty. */
 	static bool actionEffectPairLt(

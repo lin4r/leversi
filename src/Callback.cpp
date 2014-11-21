@@ -46,6 +46,9 @@ void Callback::pressedTile(int indexX, int indexY)
 		model->commitAction(action);
 		cout << "Player Action> " << action << "." << endl;
 
+		//Extra notify because the ai might take a while to choose.
+		model->notifyAll();
+
 		BestMoveFinder advisary(*model);
 		auto advisaryAction = advisary.getBestMove().first;
 		model->commitAction(advisaryAction);
