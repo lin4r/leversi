@@ -4,6 +4,10 @@
 #include <vector>
 #include <algorithm>
 
+//XXX DEBUG
+#include <iostream>
+using namespace std;
+
 using std::pair;
 using std::vector;
 using std::max;
@@ -51,7 +55,12 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 
 	/* Sort the vector according to direct effect. */
 	sort(placementEffectPairs.begin(), placementEffectPairs.end()
-		, actionEffectPairLt);
+		, actionEffectPairGt);
+
+//	//XXX DEBUG Largest first.
+//	for (auto derp : placementEffectPairs)
+//			cout <<  derp.second.size() << ", ";
+//	cout << endl;
 
 	auto earnedScore = SCORE_INFIMUM;
 	OthelloAction bestAction(Position(-1,-1));
@@ -100,10 +109,10 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 	return pair<OthelloAction,score_t>(bestAction, earnedScore);
 }
 
-bool BestMoveFinder::actionEffectPairLt(pair<OthelloAction,vector<Position>> p1
+bool BestMoveFinder::actionEffectPairGt(pair<OthelloAction,vector<Position>> p1
 		, pair<OthelloAction,vector<Position>> p2)
 {
-	return p1.second.size() < p2.second.size();
+	return p1.second.size() > p2.second.size();
 }
 
 } //namespace othello

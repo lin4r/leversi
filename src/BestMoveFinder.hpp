@@ -32,10 +32,10 @@ private:
 		, score_t beta);
 
 	int currentDepth{0};
-	int maxDepth{5};
+	int maxDepth{6};
 
 	/* XXX Later this should be the evaluators duty. */
-	static bool actionEffectPairLt(
+	static bool actionEffectPairGt(
 		std::pair<OthelloAction,std::vector<Position>> p1
 		, std::pair<OthelloAction,std::vector<Position>> p2);
 
