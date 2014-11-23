@@ -20,6 +20,7 @@
 #include "OthelloAction.hpp"
 
 #include <exception>
+#include <string>
 
 namespace othello {
 
@@ -27,17 +28,15 @@ class illegal_action_exception : public std::exception
 {
 public:
 
-	illegal_action_exception() noexcept;
-	illegal_action_exception(OthelloAction action) noexcept;
+	illegal_action_exception(std::string message) noexcept : message{message} {}
 	virtual ~illegal_action_exception() = default;
 
-	virtual OthelloAction getAction() const noexcept;
-
-	virtual const char* what() const noexcept override;
+	virtual const char* what() const noexcept override
+		{ return message.c_str(); }
 
 private:
 
-	OthelloAction action;
+	std::string message;
 };
 
 } //namespace othello

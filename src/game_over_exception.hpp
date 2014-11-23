@@ -13,10 +13,12 @@ class game_over_exception : public illegal_action_exception
 {
 public:
 
-	virtual ~game_over_exception() = default;
+	game_over_exception() noexcept
+		: illegal_action_exception(
+			"Can't apply action because the game is over.")
+	{}
 
-	virtual const char* what() const noexcept override
-		{ return "Can't apply action because the game is over."; }
+	virtual ~game_over_exception() = default;
 };
 
 } //namespace othello

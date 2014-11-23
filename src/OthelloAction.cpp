@@ -188,7 +188,8 @@ vector<Position> OthelloAction::execute(OthelloState& state) const
 	if (pass) {
 
 		if (existsLegalPlacement(state)) {
-			throw illegal_action_exception(*this);
+			throw illegal_action_exception(
+				"Can't pass because thera are placements avalible.");
 		}
 
 	} else {
@@ -197,7 +198,8 @@ vector<Position> OthelloAction::execute(OthelloState& state) const
 
 		/* At least one brick must flip for the move to be legal. */
 		if (flips.size() == 0) {
-			throw illegal_action_exception(*this);
+			throw illegal_action_exception(
+				"This move is illegal, because no bricks are flipped.");
 		}
 
 		/* Lastly commit the effects of the move. */

@@ -2,7 +2,7 @@ CC=g++
 CFLAGS=-Wall -g -std=c++11 -O0
 LDFLAGS=
 
-MODELEX=actionstring_syntax_exception.o illegal_action_exception.o
+MODELEX=actionstring_syntax_exception.o
 MODEL=Position.o OthelloState.o OthelloAction.o Game.o
 MODELTEST=PositionTest.o OthelloStateTest.o OthelloActionTest.o GameTest.o
 
@@ -42,9 +42,6 @@ Position.o: Position.cpp Position.hpp
 actionstring_syntax_exception.o: actionstring_syntax_exception.cpp actionstring_syntax_exception.hpp getter_setter.hpp
 	$(CC) $(CFLAGS) -c $<
 
-illegal_action_exception.o: illegal_action_exception.cpp illegal_action_exception.hpp OthelloAction.hpp
-	 $(CC) $(CFLAGS) -c $<
-
 OthelloState.o: OthelloState.cpp OthelloState.hpp Tile.hpp Player.hpp getter_setter.hpp Position.hpp
 	$(CC) $(CFLAGS) -c $<
 
@@ -72,13 +69,13 @@ OthelloStateTest: OthelloStateTest.o OthelloState.o Position.o
 OthelloActionTest.o: OthelloActionTest.cpp illegal_action_exception.hpp game_over_exception.hpp actionstring_syntax_exception.hpp
 	$(CC) $(CFLAGS) -c $<
 
-OthelloActionTest: OthelloActionTest.o OthelloAction.o OthelloState.o illegal_action_exception.o actionstring_syntax_exception.o Position.o
+OthelloActionTest: OthelloActionTest.o OthelloAction.o OthelloState.o actionstring_syntax_exception.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 GameTest.o: GameTest.cpp Game.hpp undo_initial_state_exception.hpp
 	$(CC) $(CFLAGS) -c $<
 
-GameTest: GameTest.o Game.o OthelloAction.o OthelloState.o illegal_action_exception.o  actionstring_syntax_exception.o Position.o
+GameTest: GameTest.o Game.o OthelloAction.o OthelloState.o actionstring_syntax_exception.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 

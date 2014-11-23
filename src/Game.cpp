@@ -36,7 +36,7 @@ vector<Position> Game::commitAction(OthelloAction action)
 	return flips;
 }
 
-void Game::undoLastAction() noexcept
+void Game::undoLastAction()
 {
 	if (history.size() > 1) {
 		history.pop_back();
