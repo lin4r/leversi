@@ -45,6 +45,7 @@ public:
 	virtual std::string toString() const noexcept;
 	virtual std::string gridString() const noexcept;
 
+	// XXX Replace this ugly function with a function for counting tiles of a given type
 	virtual std::string whoLeads() const noexcept;
 
 	virtual bool isGameOver() const noexcept
