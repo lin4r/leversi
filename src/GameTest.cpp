@@ -18,6 +18,7 @@
 #include <catch.hpp>
 
 #include "Game.hpp"
+#include "undo_initial_state_exception.hpp"
 
 using namespace othello;
 
@@ -79,4 +80,10 @@ TEST_CASE("Comitting and undoing pass actions.", "[Game]")
 		auto restored = game.getState();
 		REQUIRE(initial == restored);
 	}
+}
+
+TEST_CASE("Can't undo the initial state.", "[Game]")
+{
+	Game game;
+	REQUIRE_THROWS_AS(game.undoLastAction(), undo_initial_state_exception);
 }

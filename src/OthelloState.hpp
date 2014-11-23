@@ -57,6 +57,7 @@ public:
 	virtual bool wasActionPass() const noexcept
 		{ return actionWasPass; }
 
+	//XXX Rename tellActionWasPass
 	virtual void setActionWasPass(bool actionWasPass) noexcept
 		{ this->actionWasPass = actionWasPass; }
 
@@ -68,6 +69,9 @@ public:
 
 	virtual Player whosTurn() const noexcept
 		{ return playersTurn; }
+
+	virtual void setTurn(Player player) noexcept
+		{ playersTurn = player; }
 
 	virtual int getBoardRows() const noexcept
 		{ return boardRows; }

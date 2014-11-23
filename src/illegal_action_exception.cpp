@@ -20,6 +20,11 @@
 
 namespace othello {
 
+illegal_action_exception::illegal_action_exception()
+		noexcept
+		: action(Position(-1,-1)) //FIXME SUPER UGLY :(
+{}
+
 illegal_action_exception::illegal_action_exception(OthelloAction action)
 		noexcept
 		: action{action}

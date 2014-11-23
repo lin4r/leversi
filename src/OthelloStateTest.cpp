@@ -40,6 +40,16 @@ TEST_CASE("Default values", "[OthelloState, defaultValues]")
 		REQUIRE(8 == state.getBoardColumns());
 	}
 
+	SECTION("Not game over")
+	{
+		REQUIRE(! state.isGameOver());
+	}
+
+	SECTION("Was not pass")
+	{
+		REQUIRE(! state.wasActionPass());
+	}
+
 	SECTION("Verify that the initial state is according to game rules.")
 	{
 		auto initial = OthelloState::initialState();
@@ -50,38 +60,6 @@ TEST_CASE("Default values", "[OthelloState, defaultValues]")
 		REQUIRE(Tile::Black == initial.inspectTile(Position(4,3)));
 	}
 }
-
-//TODO Test belongs in othello action.
-//TEST_CASE("Verify Game over.", "[OthelloState, gameOver]")
-//{
-//	OthelloState state;
-//
-//	SECTION("Game Over after two pass")
-//	{
-//		REQUIRE(! state.gameOver());
-//		state.updateGameStatus(true);
-//		REQUIRE(! state.gameOver());
-//		state.updateGameStatus(true);
-//		REQUIRE(state.gameOver());
-//	}
-//
-//	SECTION("Not game over if placement ocurrs between two pass.")
-//	{
-//		state.updateGameStatus(true);
-//		state.updateGameStatus(false);
-//		REQUIRE(! state.gameOver());
-//		state.updateGameStatus(true);
-//		REQUIRE(! state.gameOver());
-//	}
-//
-//	SECTION("Still game over if i make an (erroneus) placement after two passes")
-//	{
-//		state.updateGameStatus(true);
-//		state.updateGameStatus(true);
-//		state.updateGameStatus(false);
-//		REQUIRE(state.gameOver());
-//	}
-//}
 
 TEST_CASE("Veerify that equality operator works.", "[OthelloState, operator]")
 {

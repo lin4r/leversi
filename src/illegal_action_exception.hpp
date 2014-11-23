@@ -27,6 +27,7 @@ class illegal_action_exception : public std::exception
 {
 public:
 
+	illegal_action_exception() noexcept;
 	illegal_action_exception(OthelloAction action) noexcept;
 	virtual ~illegal_action_exception() = default;
 

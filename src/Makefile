@@ -48,10 +48,10 @@ illegal_action_exception.o: illegal_action_exception.cpp illegal_action_exceptio
 OthelloState.o: OthelloState.cpp OthelloState.hpp Tile.hpp Player.hpp getter_setter.hpp Position.hpp
 	$(CC) $(CFLAGS) -c $<
 
-OthelloAction.o: OthelloAction.cpp OthelloAction.hpp getter_setter.hpp Position.hpp OthelloState.hpp illegal_action_exception.hpp actionstring_syntax_exception.hpp
+OthelloAction.o: OthelloAction.cpp OthelloAction.hpp getter_setter.hpp Position.hpp OthelloState.hpp illegal_action_exception.hpp actionstring_syntax_exception.hpp game_over_exception.hpp
 	$(CC) $(CFLAGS) -c $<
 
-Game.o: Game.cpp Game.hpp OthelloState.hpp OthelloAction.hpp Observable.hpp
+Game.o: Game.cpp Game.hpp OthelloState.hpp OthelloAction.hpp Observable.hpp undo_initial_state_exception.hpp
 	$(CC) $(CFLAGS) -c $<
 
 
@@ -69,16 +69,16 @@ OthelloStateTest.o: OthelloStateTest.cpp
 OthelloStateTest: OthelloStateTest.o OthelloState.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-OthelloActionTest.o: OthelloActionTest.cpp illegal_action_exception.hpp actionstring_syntax_exception.hpp
+OthelloActionTest.o: OthelloActionTest.cpp illegal_action_exception.hpp game_over_exception.hpp actionstring_syntax_exception.hpp
 	$(CC) $(CFLAGS) -c $<
 
 OthelloActionTest: OthelloActionTest.o OthelloAction.o OthelloState.o illegal_action_exception.o actionstring_syntax_exception.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-GameTest.o: GameTest.cpp Game.hpp
+GameTest.o: GameTest.cpp Game.hpp undo_initial_state_exception.hpp
 	$(CC) $(CFLAGS) -c $<
 
-GameTest: GameTest.o Game.o OthelloAction.o OthelloState.o illegal_action_exception.o actionstring_syntax_exception.o Position.o
+GameTest: GameTest.o Game.o OthelloAction.o OthelloState.o illegal_action_exception.o  actionstring_syntax_exception.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 

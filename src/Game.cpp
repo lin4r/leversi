@@ -15,6 +15,7 @@
  * Linus Narva.
  */
 #include "Game.hpp"
+#include "undo_initial_state_exception.hpp"
 
 #include <vector>
 
@@ -33,11 +34,6 @@ vector<Position> Game::commitAction(OthelloAction action)
 	auto flips = action.execute(state);
 	history.push_back(state);
 	return flips;
-}
-
-const char* undo_initial_state_exception::what() const noexcept
-{
-	return "The initial state of the game can not be undone.";
 }
 
 void Game::undoLastAction() noexcept

@@ -48,7 +48,7 @@ public:
 
 	virtual std::string actionString() const noexcept;
 
-	virtual std::vector<Position> execute(OthelloState& state);
+	virtual std::vector<Position> execute(OthelloState& state) const;
 
 	static bool existsLegalPlacement(const OthelloState& state) noexcept;
 

@@ -20,6 +20,7 @@
 #include "OthelloAction.hpp"
 #include "illegal_action_exception.hpp"
 #include "actionstring_syntax_exception.hpp"
+#include "game_over_exception.hpp"
 
 #include <set>
 using std::set;
@@ -300,26 +301,48 @@ TEST_CASE("Test modifications of the state"
 		//The turn still changed.
 		REQUIRE(Player::White == empty.whosTurn());
 	}
+}
 
-//TODO Update this test as this functionality is moved to OthelloAction.
-//	SECTION("Game over if both players are out of moves and thus pass.")
-//	{
-//		auto state = longrowState();
-//
-//		REQUIRE(! state.isGameOver());
-//
-//		//Start of with a legal placement.
-//		OthelloAction(Position(0,0)).execute(state);
-//		REQUIRE(! state.isGameOver());
-//
-//		//White can/must pass but it is not over yet.
-//		pass.execute(state);
-//		REQUIRE(! state.isGameOver());
-//
-//		//Black must also pass, it's over.
-//		pass.execute(state);
-//		REQUIRE(state.isGameOver());
-//	}
+TEST_CASE("Verify Game over.", "[OthelloAction, gameOver]")
+{
+	OthelloState state;
+	auto pass = OthelloAction::constructPass();
+
+	SECTION("Game Over after two pass")
+	{
+		pass.execute(state);
+		REQUIRE(! state.isGameOver());
+		pass.execute(state);
+		REQUIRE(state.isGameOver());
+	}
+
+	SECTION("Not game over if placement ocurrs between two pass.")
+	{
+		pass.execute(state);
+
+		//Make a legal placement possible.
+		state.setTile(Position(0,1), Tile::Black);
+		state.setTile(Position(0,2), Tile::White);
+		OthelloAction legal(Position(0,0));
+
+		legal.execute(state);
+		REQUIRE(! state.isGameOver());
+
+		//Remove the bricks so that no move is possible again.
+		state.setTile(Position(0,0), Tile::Empty);
+		state.setTile(Position(0,1), Tile::Empty);
+		state.setTile(Position(0,2), Tile::Empty);
+
+		pass.execute(state);
+
+		REQUIRE(! state.isGameOver());
+	}
+
+	SECTION("Throws game_over_exception if the game is over.")
+	{
+		state.setGameOver(true);
+		REQUIRE_THROWS_AS(pass.execute(state), game_over_exception);
+	}
 }
 
 TEST_CASE("Test operators", "[OthelloAction, operators]")

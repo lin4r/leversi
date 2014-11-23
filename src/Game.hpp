@@ -28,15 +28,6 @@
 
 namespace othello {
 
-class undo_initial_state_exception : std::exception
-{
-public:
-
-	virtual ~undo_initial_state_exception() = default;
-
-	virtual const char* what() const noexcept override;
-};
-
 class Game : public Observable<OthelloState>
 {	
 public:
