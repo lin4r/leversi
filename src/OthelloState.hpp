@@ -47,7 +47,6 @@ public:
 
 	virtual std::string whoLeads() const noexcept;
 
-	//Getters and setters.
 	virtual bool isGameOver() const noexcept
 		{ return gameIsOver; }
 
@@ -57,7 +56,6 @@ public:
 	virtual bool wasActionPass() const noexcept
 		{ return actionWasPass; }
 
-	//XXX Rename tellActionWasPass
 	virtual void setActionWasPass(bool actionWasPass) noexcept
 		{ this->actionWasPass = actionWasPass; }
 
