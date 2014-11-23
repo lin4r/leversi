@@ -18,7 +18,6 @@
 #ifndef OTHELLO_ACTION_HPP_
 #define OTHELLO_ACTION_HPP_
 
-#include "getter_setter.hpp"
 #include "Position.hpp"
 #include "OthelloState.hpp"
 
@@ -30,7 +29,7 @@
 namespace othello {
 
 class OthelloAction
-{	
+{
 public:
 
 	OthelloAction(Position position) noexcept;
@@ -41,8 +40,6 @@ public:
 	static OthelloAction constructPass() noexcept;
 
 	virtual ~OthelloAction() = default;
-
-	GETTER(Position, position);
 
 	virtual bool isPass() const noexcept;
 
@@ -62,6 +59,9 @@ public:
 	 * Ret: A vector of positions where the bricks where turned
 	 */ 
 	virtual std::vector<Position> searchFlips(const OthelloState& state) const;
+
+	virtual Position getPosition() const noexcept
+		{ return position; }
 
 private:
 

@@ -203,7 +203,7 @@ vector<Position> OthelloAction::execute(OthelloState& state) const
 		}
 
 		/* Lastly commit the effects of the move. */
-		state.setTile(get_position(), pieceColour);
+		state.setTile(getPosition(), pieceColour);
 
 		for (auto flipPosition : flips) {
 			state.flipBrick(flipPosition);
@@ -270,7 +270,7 @@ vector<pair<OthelloAction,vector<Position>>>
 
 bool operator==(const OthelloAction& a1, const OthelloAction& a2)
 {
-	return (a1.get_position() == a2.get_position())
+	return (a1.getPosition() == a2.getPosition())
 		&& (a1.isPass() == a2.isPass());
 }
 
@@ -281,7 +281,7 @@ bool operator<(const OthelloAction& a1, const OthelloAction& a2)
 	} else if ((!a1.isPass()) && a2.isPass()) {
 		return false;
 	} else {
-		return a1.get_position() < a2.get_position();
+		return a1.getPosition() < a2.getPosition();
 	}
 }
 

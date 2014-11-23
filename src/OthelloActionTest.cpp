@@ -458,7 +458,7 @@ TEST_CASE("Test action string parseing", "[OthelloAction, actionString]")
 		OthelloAction nonPass1("(3,4)");
 		Position excpected = {3,4};
 
-		REQUIRE(excpected == nonPass1.get_position());
+		REQUIRE(excpected == nonPass1.getPosition());
 
 		/* TODO Robuster matching allowing this and whitespaces in the
 		 * parantheses will be implemented once gcc supports regex (4.9)
