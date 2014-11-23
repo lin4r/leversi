@@ -28,47 +28,55 @@
 
 namespace othello {
 
+typedef std::vector<Position> flips_t;
+
 class OthelloAction
 {
 public:
 
-	OthelloAction(Position position) noexcept;
-	OthelloAction(Position position, bool pass) noexcept;
-	OthelloAction(std::string action);
+	OthelloAction(Position position) noexcept
+		: OthelloAction(position, false)
+	{}
 
-	//XXX I really want it's name to be pass. It looks prettier when its called.
-	static OthelloAction constructPass() noexcept;
+	OthelloAction(Position position, bool ispass) noexcept
+		: position(position), ispass{ispass}
+	{}
 
 	virtual ~OthelloAction() = default;
 
-	virtual bool isPass() const noexcept;
+	static OthelloAction pass() noexcept;
+
+	static OthelloAction parse(std::string actionstring);
 
 	virtual std::string actionString() const noexcept;
 
-	virtual std::vector<Position> execute(OthelloState& state) const;
+	virtual flips_t execute(OthelloState& state) const;
 
 	static bool existsLegalPlacement(const OthelloState& state) noexcept;
 
 	/* Searches for legal placements. Also returns the corresponding flips
 	 * since the algorithm basically gets them for free.
 	 */
-	static std::vector<std::pair<OthelloAction,std::vector<Position>>>
-		findLegalPlacements(const OthelloState& state) noexcept;
+	static std::vector<std::pair<OthelloAction,flips_t>> findLegalPlacements(
+		const OthelloState& state) noexcept;
 
 	/* Lists which bricks are turned by the action.
 	 * Ret: A vector of positions where the bricks where turned
 	 */ 
-	virtual std::vector<Position> searchFlips(const OthelloState& state) const;
+	virtual flips_t searchFlips(const OthelloState& state) const;
 
 	virtual Position getPosition() const noexcept
 		{ return position; }
+
+	virtual bool isPass() const noexcept
+		{ return ispass; }
 
 private:
 
 	void updateGameOverStaus(bool wasPass, OthelloState& state) const noexcept;
 
 	Position position = {-1,-1};
-	bool pass{false};
+	bool ispass{false};
 
 };
 
@@ -77,7 +85,12 @@ private:
  * order.
  */
 bool operator<(const OthelloAction& a1, const OthelloAction& a2);
+
 bool operator==(const OthelloAction& a1, const OthelloAction& a2);
+
+inline bool operator!=(const OthelloAction& a1, const OthelloAction& a2)
+	{ return !(a1 == a2); }
+
 std::ostream& operator<<(std::ostream& os, const OthelloAction& action);
 
 } //namespace othello

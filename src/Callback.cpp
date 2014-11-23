@@ -76,7 +76,7 @@ void Callback::executePlayerAction(OthelloAction action)
 
 		/* If no move is possible, then recursively execute pass. */
 		} else if (! OthelloAction::existsLegalPlacement(model->getState())) {
-			executePlayerAction(OthelloAction::constructPass());
+			executePlayerAction(OthelloAction::pass());
 		}
 
 		model->notifyAll();

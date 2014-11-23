@@ -33,30 +33,15 @@ using std::pair;
 
 namespace othello {
 
-OthelloAction::OthelloAction(Position position) noexcept
-		: position(position), pass{false}
-{
-}
-
-OthelloAction::OthelloAction(Position position, bool pass) noexcept
-		: position(position), pass{pass}
-{
-}
-
-OthelloAction OthelloAction::constructPass() noexcept
+OthelloAction OthelloAction::pass() noexcept
 {
 	return OthelloAction(Position(-1,-1),true);
-}
-
-bool OthelloAction::isPass() const noexcept
-{
-	return pass;
 }
 
 /* FIXME Use regular expressions. However it turns out these don't exist until
  *gcc 4.9 :(
  */
-OthelloAction::OthelloAction(string action)
+OthelloAction OthelloAction::parse(string actionstring)
 {
 //	using std::regex;
 //	using std::regex_match;
@@ -64,28 +49,38 @@ OthelloAction::OthelloAction(string action)
 //	const regex passEx("pass");
 //	const regex putPieceEx(R"([[:digit:]])"); //FIXME
 //
-//	if (regex_match(action, passEx)) {
-//		pass = true;
-//	} else if (regex_match(action, putPieceEx)) {
+//	if (regex_match(actionstring, passEx)) {
+//		ispass = true;
+//	} else if (regex_match(actionstring, putPieceEx)) {
 //		//FIXME
 //		row = 3;
 //		column = 4;
 //	} else {
-//		throw actionstring_syntax_exception(action);
+//		throw actionstring_syntax_exception(actionstring);
 //	}
 
 	using std::isdigit;
 	using std::stoi;
 
-	if (action.compare("pass") == 0) {
-		pass = true;
-	} else if ((action.size() > 4) && isdigit(action.at(1))
-			&& isdigit(action.at(3))) {
-		position.row = stoi(action.substr(1,1));
-		position.column = stoi(action.substr(3,1));
+	OthelloAction action(Position(-1,-1));
+
+	if (actionstring.compare("pass") == 0) {
+
+		action = pass();
+
+	} else if ((actionstring.size() > 4) && isdigit(actionstring.at(1))
+			&& isdigit(actionstring.at(3))) {
+
+		const auto row = stoi(actionstring.substr(1,1));
+		const auto column = stoi(actionstring.substr(3,1));
+
+		action = OthelloAction(Position(row, column));
+
 	} else {
-		throw actionstring_syntax_exception(action);
+		throw actionstring_syntax_exception(actionstring);
 	}
+
+	return action;
 }
 
 string OthelloAction::actionString() const noexcept
@@ -94,7 +89,7 @@ string OthelloAction::actionString() const noexcept
 
 	string actionStr;
 
-	if (pass) {
+	if (ispass) {
 		actionStr = "pass";
 	} else {
 		actionStr = "(" + to_string(position.row) + ","
@@ -114,7 +109,7 @@ vector<Position> OthelloAction::searchFlips(const OthelloState& state) const
 	/* Obviusly there are no flips if the action is a pass, outside the grid
 	 * or the tile is non-empty.
 	 */
-	if (pass
+	if (ispass
 			|| (! state.isInsideGrid(position))
 			|| state.inspectTile(position) != Tile::Empty)
 	{
@@ -185,7 +180,7 @@ vector<Position> OthelloAction::execute(OthelloState& state) const
 
 	/* Pass is only allowed if it is the only option.
 	 */
-	if (pass) {
+	if (ispass) {
 
 		if (existsLegalPlacement(state)) {
 			throw illegal_action_exception(
@@ -210,7 +205,7 @@ vector<Position> OthelloAction::execute(OthelloState& state) const
 		}
 	}
 
-	updateGameOverStaus(pass, state);
+	updateGameOverStaus(ispass, state);
 	state.changeTurn();
 
 	return flips;

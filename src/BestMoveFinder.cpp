@@ -37,7 +37,7 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 	if (currentDepth >= maxDepth || game.getState().isGameOver()) {
 		/* The 'action is irrelevant since it will never be executed
 		 * so long as the maxDepth is valid.' */
-		return pair<OthelloAction, score_t>(OthelloAction::constructPass(), 0);
+		return pair<OthelloAction, score_t>(OthelloAction::pass(), 0);
 	}
 
 	currentDepth++; //Decend.
@@ -48,7 +48,7 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 	/* Handle pass. */
 	if (placementEffectPairs.empty()) {
 		const score_t score{0}; //Evaluator pass.
-		const auto action = OthelloAction::constructPass();
+		const auto action = OthelloAction::pass();
 
 		return pair<OthelloAction,score_t>(action, score);
 	}

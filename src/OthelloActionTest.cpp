@@ -306,7 +306,7 @@ TEST_CASE("Test modifications of the state"
 TEST_CASE("Verify Game over.", "[OthelloAction, gameOver]")
 {
 	OthelloState state;
-	auto pass = OthelloAction::constructPass();
+	auto pass = OthelloAction::pass();
 
 	SECTION("Game Over after two pass")
 	{
@@ -430,32 +430,32 @@ TEST_CASE("Test action string parseing", "[OthelloAction, actionString]")
 
 	SECTION("Throws if misspelled.")
 	{
-		REQUIRE_THROWS_AS(OthelloAction("pards")
+		REQUIRE_THROWS_AS(OthelloAction::parse("pards")
 			, actionstring_syntax_exception);
 	}
 
 	SECTION("Throws if we add tail")
 	{
-		REQUIRE_THROWS_AS(OthelloAction("pardsasdf")
+		REQUIRE_THROWS_AS(OthelloAction::parse("pardsasdf")
 			, actionstring_syntax_exception);
 	}
 
 	SECTION("Throws if we add head")
 	{
-		REQUIRE_THROWS_AS(OthelloAction("asdfpass")
+		REQUIRE_THROWS_AS(OthelloAction::parse("asdfpass")
 			, actionstring_syntax_exception);
 	}
 
 	SECTION("Can parse pass")
 	{
-		OthelloAction pass("pass");
+		auto pass = OthelloAction::parse("pass");
 
 		REQUIRE(pass.isPass());
 	}
 
 	SECTION("Can parse a non-pass")
 	{
-		OthelloAction nonPass1("(3,4)");
+		auto nonPass1 = OthelloAction::parse("(3,4)");
 		Position excpected = {3,4};
 
 		REQUIRE(excpected == nonPass1.getPosition());
