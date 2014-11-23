@@ -17,8 +17,6 @@
 #ifndef ACTIONSTRING_SYNTAX_EXCEPTION_
 #define ACTIONSTRING_SYNTAX_EXCEPTION_
 
-#include "getter_setter.hpp"
-
 #include <exception>
 #include <string>
 
@@ -28,18 +26,31 @@ class actionstring_syntax_exception : public std::exception
 {
 public:
 
-	actionstring_syntax_exception() noexcept;
-	actionstring_syntax_exception(std::string action) noexcept;
+	actionstring_syntax_exception(std::string action) noexcept : action{action}
+		{}
+
 	virtual ~actionstring_syntax_exception() = default;
 
-	GETTER(std::string, action)
+	virtual std::string getActionString() const noexcept
+		{ return action; }
 
-	virtual const char* what() const noexcept override;
+	inline virtual const char* what() const noexcept override;
 
 private:
 
 	const std::string action;
 };
+
+const char* actionstring_syntax_exception::what() const noexcept
+{
+	std::string message{"The action pattern was note well formed."};
+
+	if (! action.empty()) {
+		message += " The pattern was \"" + action + "\".";
+	}
+
+	return message.c_str();
+}
 
 } //namespace othello
 
