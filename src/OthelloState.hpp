@@ -19,7 +19,7 @@
 
 #include "Tile.hpp"
 #include "Player.hpp"
-#include "getter_setter.hpp"
+#include "getter_setter.hpp" //XXX Deptrecated.
 #include "Position.hpp"
 
 #include <vector>
@@ -39,27 +39,52 @@ public:
 
 	static OthelloState initialState() noexcept;
 
-	GETTER(int, boardRows)
-	GETTER(int, boardColumns)
+	GETTER(int, boardRows) //XXX Deptrecated
+	GETTER(int, boardColumns) //XXX Deprecated
 
-	virtual Player whosTurn() const noexcept;
-	virtual Tile inspectTile(Position position) const;
-	virtual void setTile(Position position, Tile value);
 	virtual void changeTurn() noexcept;
 	virtual void flipBrick(Position position);
 	virtual bool isInsideGrid(Position position) const noexcept;
-	virtual void updateGameStatus(bool actionWasPass) noexcept;
-	virtual bool gameOver() const noexcept;
+	virtual void updateGameStatus(bool actionWasPass) noexcept; //XXX Deprecated
+	virtual bool gameOver() const noexcept; //XXX Deprecated.
 
 	virtual std::string toString() const noexcept;
 	virtual std::string gridString() const noexcept;
 
 	virtual std::string whoLeads() const noexcept;
 
+	//Getters and setters.
+	virtual bool isGameOver() const noexcept
+		{ return gameIsOver; }
+
+	virtual void setGameOver(bool gameOver) noexcept
+		{ gameIsOver = gameOver; }
+
+	virtual bool wasActionPass() const noexcept
+		{ return actionWasPass; }
+
+	virtual void setActionWasPass(bool actionWasPass) noexcept
+		{ this->actionWasPass = actionWasPass; }
+
+	virtual Tile inspectTile(Position position) const
+		{ return grid.at(position.row).at(position.column); }
+
+	virtual void setTile(Position position, Tile value)
+		{ grid.at(position.row).at(position.column) = value; }
+
+	virtual Player whosTurn() const noexcept
+		{ return playersTurn; }
+
+	virtual int getBoardRows() const noexcept
+		{ return boardRows; }
+
+	virtual int getBoardColumns() const noexcept
+		{ return boardColumns; }
+
 private:
 
 	bool gameIsOver{false};
-	bool previousActionWasPass{false};
+	bool actionWasPass{false};
 
 	Player playersTurn;
 
@@ -77,9 +102,12 @@ private:
 };
 
 bool operator==(const OthelloState& state1, const OthelloState& state2);
-bool operator!=(const OthelloState& state1, const OthelloState& state2);
 
-std::ostream& operator<<(std::ostream& os, const OthelloState& state);
+inline bool operator!=(const OthelloState& state1, const OthelloState& state2)
+	{ return !(state1 == state2); }
+
+inline std::ostream& operator<<(std::ostream& os, const OthelloState& state)
+	{ return os << state.toString(); }
 
 } //namespace othello
 

@@ -59,21 +59,6 @@ bool OthelloState::isInsideGrid(Position position) const noexcept
 		&& (0 <= position.column) && (position.column < boardColumns);
 }
 
-Player OthelloState::whosTurn() const noexcept
-{
-	return playersTurn;
-}
-
-Tile OthelloState::inspectTile(Position position) const
-{
-	return grid.at(position.row).at(position.column);
-}
-
-void OthelloState::setTile(Position position, Tile value)
-{
-	grid.at(position.row).at(position.column) = value;
-}
-
 void OthelloState::flipBrick(Position position)
 {
 	switch (inspectTile(position)) {
@@ -88,8 +73,8 @@ void OthelloState::updateGameStatus(bool actionWasPass) noexcept
 	/* If the previous player passed and pass is legal, then the game is
 	 * over.
 	 */
-	gameIsOver = (previousActionWasPass && actionWasPass) || gameIsOver;
-	previousActionWasPass = actionWasPass;
+	gameIsOver = (this->actionWasPass && actionWasPass) || gameIsOver;
+	this->actionWasPass = actionWasPass;
 }
 
 bool OthelloState::gameOver() const noexcept
@@ -168,7 +153,7 @@ string OthelloState::toString() const noexcept
 	stringstream ss;
 
 	ss << "othello::OthelloState[" << PVAR(gameIsOver) << ", "
-		<< PVAR(previousActionWasPass) << ", " << PVAR(playersTurn) << ", "
+		<< PVAR(actionWasPass) << ", " << PVAR(playersTurn) << ", "
 		<< PVAR(boardRows) << ", " << PVAR(boardColumns) << ", grid{ ..."
 		<< endl << gridString() << "}]";
 
@@ -185,7 +170,7 @@ bool operator==(const OthelloState& state1, const OthelloState& state2)
 	if ( (rows != state2.get_boardRows())
 			|| (columns != state2.get_boardColumns())
 			|| (state1.whosTurn() != state2.whosTurn())
-			|| (state1.previousActionWasPass != state2.previousActionWasPass)
+			|| (state1.actionWasPass != state2.actionWasPass)
 			|| (state1.gameOver() != state2.gameOver()) )
 	{
 		return false;
@@ -205,16 +190,4 @@ bool operator==(const OthelloState& state1, const OthelloState& state2)
 	return boardEqual;
 }
 
-bool operator!=(const OthelloState& state1, const OthelloState& state2)
-{
-	return !(state1 == state2);
-}
-
-ostream& operator<<(ostream& os, const OthelloState& state)
-{
-	return os << state.toString();
-}
-
 } //namespace othello
-
-//std::ostream& operator<<(std::ostream& os, othello::OthelloState action);
