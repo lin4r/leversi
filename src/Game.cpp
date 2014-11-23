@@ -18,28 +18,54 @@
 #include "undo_initial_state_exception.hpp"
 
 #include <vector>
+#include <utility>
 
 using std::vector;
+using std::pair;
 
 namespace othello {
 
-Game::Game() noexcept
+flips_t Game::commitAction(OthelloAction action)
 {
-	history.push_back(OthelloState::initialState());
-}
-
-vector<Position> Game::commitAction(OthelloAction action)
-{
-	auto state = getState();
 	auto flips = action.execute(state);
-	history.push_back(state);
+	history.push_back(pair<OthelloAction,flips_t>(action,flips));
+
 	return flips;
 }
 
 void Game::undoLastAction()
 {
-	if (history.size() > 1) {
+	if (history.size() > 0) {
+
+		const auto actionFlipsPair = history.back();
 		history.pop_back();
+
+		const auto action = actionFlipsPair.first;
+		const auto flips = actionFlipsPair.second;
+
+		if (! action.isPass()) {
+
+			/* Remove the placed brick. */
+			state.setTile(action.getPosition(), Tile::Empty);
+
+			/* Unflip flipped bricks. */
+			for (auto flip : flips) {
+				state.flipBrick(flip);
+			}
+		}
+
+		state.changeTurn();
+
+		/* Nothin can have happened after game over. */
+		state.setGameOver(false);
+
+		/* Set the action was pass flag in the state. Its false if i was the
+		 * first action.
+		 */
+		const auto previousActionWasPass =
+			history.empty() ? false : history.back().first.isPass();
+		state.setActionWasPass(previousActionWasPass);
+
 	} else {
 		throw undo_initial_state_exception();
 	}
@@ -47,23 +73,18 @@ void Game::undoLastAction()
 
 int Game::numTurns() const noexcept
 {
-	return history.size() -1;
-}
-
-OthelloState Game::getState() const noexcept
-{
-	return history.back();
+	return history.size();
 }
 
 const OthelloState* Game::getNotifyData() const
 {
-	return &(history.back());
+	return &state;
 }
 
 Game Game::testEmptyBoard()
 {
 	Game game;
-	game.history[0] = OthelloState();
+	game.state = OthelloState();
 
 	return game;
 }

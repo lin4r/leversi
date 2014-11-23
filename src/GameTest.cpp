@@ -81,6 +81,7 @@ TEST_CASE("Comitting and undoing pass actions.", "[Game]")
 		REQUIRE(initial == restored);
 	}
 }
+
 /*
 TEST_CASE("Can't undo the initial state.", "[Game]")
 {

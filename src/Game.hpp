@@ -25,6 +25,7 @@
 
 #include <vector>
 #include <exception>
+#include <utility>
 
 namespace othello {
 
@@ -32,26 +33,31 @@ class Game : public Observable<OthelloState>
 {	
 public:
 
-	Game() noexcept;
+	Game() noexcept : state{OthelloState::initialState()} {}
+
 	virtual ~Game() = default;
 
 	/* Commits an action to the game. Returns a vector of flips.
 	 */
-	virtual std::vector<Position> commitAction(OthelloAction action);
+	virtual flips_t commitAction(OthelloAction action);
 	virtual void undoLastAction();
 	virtual int numTurns() const noexcept;
-	virtual OthelloState getState() const noexcept;
 
 	virtual const OthelloState* getNotifyData() const override;
 
 	/* Used for testing with passes. */
 	static Game testEmptyBoard();
 
+	virtual OthelloState getState() const noexcept
+		{ return state; }
+
 private:
 
-	/* The history: all states this far.
+	OthelloState state;
+
+	/* The history: all actions and flips so far.
 	 */
-	std::vector<OthelloState> history;
+	std::vector<std::pair<OthelloAction,flips_t>> history;
 };
 
 } //namespace othello
