@@ -68,20 +68,6 @@ void OthelloState::flipBrick(Position position)
 	}
 }
 
-void OthelloState::updateGameStatus(bool actionWasPass) noexcept
-{
-	/* If the previous player passed and pass is legal, then the game is
-	 * over.
-	 */
-	gameIsOver = (this->actionWasPass && actionWasPass) || gameIsOver;
-	this->actionWasPass = actionWasPass;
-}
-
-bool OthelloState::gameOver() const noexcept
-{
-	return gameIsOver;
-}
-
 void OthelloState::changeTurn() noexcept
 {
 	switch(playersTurn) {
@@ -164,14 +150,15 @@ string OthelloState::toString() const noexcept
 
 bool operator==(const OthelloState& state1, const OthelloState& state2)
 {
-	const auto rows = state1.get_boardRows();
-	const auto columns = state1.get_boardColumns();
+	const auto rows = state1.getBoardRows();
+	const auto columns = state1.getBoardColumns();
+
 	/* Check the 'simple components before the board.' */
-	if ( (rows != state2.get_boardRows())
-			|| (columns != state2.get_boardColumns())
+	if ( (rows != state2.getBoardRows())
+			|| (columns != state2.getBoardColumns())
 			|| (state1.whosTurn() != state2.whosTurn())
-			|| (state1.actionWasPass != state2.actionWasPass)
-			|| (state1.gameOver() != state2.gameOver()) )
+			|| (state1.wasActionPass() != state2.wasActionPass())
+			|| (state1.isGameOver() != state2.isGameOver()) )
 	{
 		return false;
 	}

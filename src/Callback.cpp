@@ -51,7 +51,7 @@ void Callback::executePlayerAction(OthelloAction action)
 	 * which effectively inverts x,y.
 	 */
 
-	if (model->getState().gameOver()) {
+	if (model->getState().isGameOver()) {
 
 		return;
 	}
@@ -69,7 +69,7 @@ void Callback::executePlayerAction(OthelloAction action)
 		model->commitAction(advisaryAction);
 		cout << "Computer Action> " << advisaryAction << "." << endl;
 
-		if (model->getState().gameOver()) {
+		if (model->getState().isGameOver()) {
 
 			cout << "Game Over!!!" << endl;
 			cout << "Winner> " << model->getState().whoLeads() << endl;

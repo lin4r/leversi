@@ -142,8 +142,8 @@ void Board::placePiece(Tile colour, int gridX, int gridY)
 
 void Board::update(OthelloState state)
 {
-	const auto rows = state.get_boardRows();
-	const auto columns = state.get_boardColumns();
+	const auto rows = state.getBoardRows();
+	const auto columns = state.getBoardColumns();
 
 	for (auto row = 0; row < rows; row++) {
 		for (auto col = 0; col < columns; col++) {

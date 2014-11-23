@@ -19,7 +19,6 @@
 
 #include "Tile.hpp"
 #include "Player.hpp"
-#include "getter_setter.hpp" //XXX Deptrecated.
 #include "Position.hpp"
 
 #include <vector>
@@ -39,14 +38,9 @@ public:
 
 	static OthelloState initialState() noexcept;
 
-	GETTER(int, boardRows) //XXX Deptrecated
-	GETTER(int, boardColumns) //XXX Deprecated
-
 	virtual void changeTurn() noexcept;
 	virtual void flipBrick(Position position);
 	virtual bool isInsideGrid(Position position) const noexcept;
-	virtual void updateGameStatus(bool actionWasPass) noexcept; //XXX Deprecated
-	virtual bool gameOver() const noexcept; //XXX Deprecated.
 
 	virtual std::string toString() const noexcept;
 	virtual std::string gridString() const noexcept;
@@ -91,14 +85,6 @@ private:
 	int boardRows;
 	int boardColumns;
 	std::vector<std::vector<Tile>> grid;
-
-//Friends
-
-	friend bool operator==(const OthelloState& state1
-		, const OthelloState& state2);
-
-	friend std::ostream& operator<<(std::ostream& os
-		, const OthelloState& state);
 };
 
 bool operator==(const OthelloState& state1, const OthelloState& state2);

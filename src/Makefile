@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -g -std=c++11 -O2
+CFLAGS=-Wall -g -std=c++11 -O0
 LDFLAGS=
 
 MODELEX=actionstring_syntax_exception.o illegal_action_exception.o

@@ -32,12 +32,12 @@ TEST_CASE("Default values", "[OthelloState, defaultValues]")
 
 	SECTION("Board has eight rows")
 	{
-		REQUIRE(8 == state.get_boardRows());
+		REQUIRE(8 == state.getBoardRows());
 	}
 
 	SECTION("Board has eight columns")
 	{
-		REQUIRE(8 == state.get_boardColumns());
+		REQUIRE(8 == state.getBoardColumns());
 	}
 
 	SECTION("Verify that the initial state is according to game rules.")
@@ -51,36 +51,37 @@ TEST_CASE("Default values", "[OthelloState, defaultValues]")
 	}
 }
 
-TEST_CASE("Verify Game over.", "[OthelloState, gameOver]")
-{
-	OthelloState state;
-
-	SECTION("Game Over after two pass")
-	{
-		REQUIRE(! state.gameOver());
-		state.updateGameStatus(true);
-		REQUIRE(! state.gameOver());
-		state.updateGameStatus(true);
-		REQUIRE(state.gameOver());
-	}
-
-	SECTION("Not game over if placement ocurrs between two pass.")
-	{
-		state.updateGameStatus(true);
-		state.updateGameStatus(false);
-		REQUIRE(! state.gameOver());
-		state.updateGameStatus(true);
-		REQUIRE(! state.gameOver());
-	}
-
-	SECTION("Still game over if i make an (erroneus) placement after two passes")
-	{
-		state.updateGameStatus(true);
-		state.updateGameStatus(true);
-		state.updateGameStatus(false);
-		REQUIRE(state.gameOver());
-	}
-}
+//TODO Test belongs in othello action.
+//TEST_CASE("Verify Game over.", "[OthelloState, gameOver]")
+//{
+//	OthelloState state;
+//
+//	SECTION("Game Over after two pass")
+//	{
+//		REQUIRE(! state.gameOver());
+//		state.updateGameStatus(true);
+//		REQUIRE(! state.gameOver());
+//		state.updateGameStatus(true);
+//		REQUIRE(state.gameOver());
+//	}
+//
+//	SECTION("Not game over if placement ocurrs between two pass.")
+//	{
+//		state.updateGameStatus(true);
+//		state.updateGameStatus(false);
+//		REQUIRE(! state.gameOver());
+//		state.updateGameStatus(true);
+//		REQUIRE(! state.gameOver());
+//	}
+//
+//	SECTION("Still game over if i make an (erroneus) placement after two passes")
+//	{
+//		state.updateGameStatus(true);
+//		state.updateGameStatus(true);
+//		state.updateGameStatus(false);
+//		REQUIRE(state.gameOver());
+//	}
+//}
 
 TEST_CASE("Veerify that equality operator works.", "[OthelloState, operator]")
 {
@@ -114,13 +115,7 @@ TEST_CASE("Veerify that equality operator works.", "[OthelloState, operator]")
 
 	SECTION("Not equal if one game is over.")
 	{
-		const auto setGameOver = [](OthelloState& state)
-		{
-			state.updateGameStatus(true);
-			state.updateGameStatus(true);
-		};
-
-		setGameOver(state1);
+		state1.setGameOver(true);
 		REQUIRE(state1 != state2);
 	}
 
@@ -135,7 +130,7 @@ TEST_CASE("Veerify that equality operator works.", "[OthelloState, operator]")
 
 	SECTION("Not equal id passStatus changes")
 	{
-		state1.updateGameStatus(true);
+		state1.setActionWasPass(true);
 		REQUIRE(state1 != state2);
 	}
 }

@@ -34,7 +34,7 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 	using std::sort;
 
 	/* If the maximum depth is surpassed or the game is over just return. */
-	if (currentDepth >= maxDepth || game.getState().gameOver()) {
+	if (currentDepth >= maxDepth || game.getState().isGameOver()) {
 		/* The 'action is irrelevant since it will never be executed
 		 * so long as the maxDepth is valid.' */
 		return pair<OthelloAction, score_t>(OthelloAction::constructPass(), 0);

@@ -31,10 +31,6 @@ namespace othello {
 
 class OthelloAction
 {	
-private:
-	Position position = {-1,-1};
-	bool pass{false};
-
 public:
 
 	OthelloAction(Position position) noexcept;
@@ -66,6 +62,14 @@ public:
 	 * Ret: A vector of positions where the bricks where turned
 	 */ 
 	virtual std::vector<Position> searchFlips(const OthelloState& state) const;
+
+private:
+
+	void updateGameOverStaus(bool wasPass, OthelloState& state) const noexcept;
+
+	Position position = {-1,-1};
+	bool pass{false};
+
 };
 
 /* This operator is defined so that the actions can be put in a set. Passes are

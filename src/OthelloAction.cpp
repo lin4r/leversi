@@ -203,10 +203,21 @@ vector<Position> OthelloAction::execute(OthelloState& state)
 		}
 	}
 
-	state.updateGameStatus(pass);
+	updateGameOverStaus(pass, state);
 	state.changeTurn();
 
 	return flips;
+}
+
+void OthelloAction::updateGameOverStaus(bool wasPass, OthelloState& state)
+		const noexcept
+{
+	const auto previousWasPass = state.wasActionPass();
+	const auto alreadyGameOver = state.isGameOver();
+
+	/* Two (legal) passes in a row -> Game Over!
+	 */
+	state.setGameOver((wasPass && previousWasPass) || alreadyGameOver);
 }
 
 bool OthelloAction::existsLegalPlacement(const OthelloState& state) noexcept
@@ -214,10 +225,10 @@ bool OthelloAction::existsLegalPlacement(const OthelloState& state) noexcept
 	bool foundLegalPlacement{false};
 
 	for (auto row = 0; (! foundLegalPlacement)
-			&& (row < state.get_boardRows()); row++ )
+			&& (row < state.getBoardRows()); row++ )
 	{
 		for (auto col = 0; (! foundLegalPlacement)
-				&& (col < state.get_boardColumns()); col++)
+				&& (col < state.getBoardColumns()); col++)
 		{
 			OthelloAction placement(Position(row,col));
 			auto flips = placement.searchFlips(state);
@@ -233,8 +244,8 @@ vector<pair<OthelloAction,vector<Position>>>
 {
 	vector<pair<OthelloAction,vector<Position>>> placements;
 
-	for (auto row = 0; row < state.get_boardRows(); row++ ) {
-		for (auto col = 0; col < state.get_boardColumns(); col++) {
+	for (auto row = 0; row < state.getBoardRows(); row++ ) {
+		for (auto col = 0; col < state.getBoardColumns(); col++) {
 
 			OthelloAction placement(Position(row,col));
 			auto flips = placement.searchFlips(state);
