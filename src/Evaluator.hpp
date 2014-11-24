@@ -23,7 +23,7 @@ public:
 	virtual ~Evaluator() = default;
 
 	virtual score_t evaluateAction(const OthelloAction& action
-		, const flips_t& flips, const OthelloState& afterAction) = 0;
+		, const flips_t& flips, const OthelloState& beforeAction) = 0;
 };
 
 } //namespace othello

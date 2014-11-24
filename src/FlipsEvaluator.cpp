@@ -3,7 +3,7 @@
 namespace othello {
 
 score_t FlipsEvaluator::evaluateAction(const OthelloAction& action
-		, const flips_t& flips, const OthelloState& afterAction)
+		, const flips_t& flips, const OthelloState& beforeAction)
 {
 	if (action.isPass()) {
 

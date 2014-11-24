@@ -27,7 +27,19 @@ pair<OthelloAction, score_t> BestMoveFinder::getBestMove()
 	return _getBestMove(SCORE_INFIMUM, SCORE_SUPERMUM);
 }
 
+struct Effect
+{
+	OthelloAction action;
+	score_t score;
+};
 
+/* Large effects are desireable and therefore comes first. */
+static inline bool isBetter(Effect e1, Effect e2) noexcept
+{
+	return e1.score > e2.score;
+}
+
+//TODO Refactor, Too long function.
 pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 		score_t alpha, score_t beta)
 {
@@ -45,14 +57,6 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 	auto placementEffectPairs =
 		OthelloAction::findLegalPlacements(game.getState());
 
-//	/* Handle pass. */
-//	if (placementEffectPairs.empty()) {
-//		const score_t score{0}; //Evaluator pass.
-//		const auto action = OthelloAction::pass();
-//
-//		return pair<OthelloAction,score_t>(action, score);
-//	}
-
 	/* Handle pass. */
 	if (placementEffectPairs.empty()) {
 
@@ -62,38 +66,38 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 		placementEffectPairs.push_back(passPair);
 	}
 
-	/* Sort the vector according to direct effect. */
-	//FIXME Should be handled by the evaluator.
-	sort(placementEffectPairs.begin(), placementEffectPairs.end()
-		, actionEffectPairGt);
-
-//	//XXX DEBUG Largest first.
-//	for (auto derp : placementEffectPairs)
-//			cout <<  derp.second.size() << ", ";
-//	cout << endl;
-
-	auto earnedScore = SCORE_INFIMUM;
-	OthelloAction bestAction(Position(-1,-1)); //Just a dummy position.
-
+	/* Computes the score obtained by each of the actions. */
+	vector<Effect> effects;
 	for (auto placementEffectPair : placementEffectPairs) {
 
 		/* Unpack. */
 		const auto& action = placementEffectPair.first;
 		const auto& flips = placementEffectPair.second;
+		const auto score = evaluator.evaluateAction(action, flips
+			, game.refState());
+
+		const Effect effect = {action, score};
+
+		effects.push_back(effect);
+	}
+
+	/* Sort the vector so that moves with high scores comes first. */
+	sort(effects.begin(), effects.end(), isBetter);
+
+	auto bestScore = SCORE_INFIMUM;
+	OthelloAction bestAction(Position(-1,-1)); //Just a dummy position.
+
+	for (auto effect : effects) {
 
 		/* Perform the action. */
-		game.commitAction(action);
-
-		/* The value of the action. */
-		const score_t actionValue = evaluator.evaluateAction(action, flips
-			, game.refState());
+		game.commitAction(effect.action);
 
 		/* The best score the advisary can make. By swaping beta and alpha we
 		 * solve the dual problem of MIN-VALUE. */
-		const auto advisaryEarnedScore = _getBestMove(beta, alpha).second;
+		const auto advisaryScore = _getBestMove(beta, alpha).second;
 
 		/* The score if the player should choose the action. */
-		const auto actionScore = actionValue - advisaryEarnedScore;
+		const auto predictedScore = effect.score - advisaryScore;
 
 		/* Restore the original state. */
 		game.undoLastAction();
@@ -101,23 +105,23 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 		/* Analyse the result. */
 
 		/* It the score is better than any previously evaluated, choose it. */
-		if (actionScore > earnedScore) {
-			earnedScore = actionScore;
-			bestAction = action;
+		if (predictedScore > bestScore) {
+			bestScore = predictedScore;
+			bestAction = effect.action;
 		}
 
 		/* If it is also better than beta, then break the loop. */
-		if (earnedScore >= beta) {
+		if (bestScore >= beta) {
 			break;
 		}
 
-		alpha = max(alpha, earnedScore);
+		alpha = max(alpha, bestScore);
 	}
 
 	//XXX Consider a try block, to guarantee that the depth is consistent.
 	currentDepth--; //Ascend.
 
-	return pair<OthelloAction,score_t>(bestAction, earnedScore);
+	return pair<OthelloAction,score_t>(bestAction, bestScore);
 }
 
 bool BestMoveFinder::actionEffectPairGt(pair<OthelloAction,vector<Position>> p1
