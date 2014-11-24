@@ -23,7 +23,7 @@
 
 namespace othello {
 
-enum class Player
+enum class Player : char
 {
 	Black, White
 };

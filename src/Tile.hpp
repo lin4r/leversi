@@ -21,7 +21,7 @@
 
 namespace othello {
 
-enum class Tile
+enum class Tile : char
 {
 	Empty, Black, White
 };
