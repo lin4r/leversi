@@ -61,7 +61,7 @@ TEST_CASE("Default values", "[OthelloState, defaultValues]")
 	}
 }
 
-TEST_CASE("Veerify that equality operator works.", "[OthelloState, operator]")
+TEST_CASE("Verify that equality operator works.", "[OthelloState, operator]")
 {
 	auto state1 = OthelloState::initialState();
 	auto state2 = OthelloState::initialState();

@@ -125,6 +125,7 @@ string OthelloState::toString() const noexcept
 }
 
 bool operator==(const OthelloState& state1, const OthelloState& state2)
+		noexcept
 {
 	const auto rows = state1.getBoardRows();
 	const auto columns = state1.getBoardColumns();

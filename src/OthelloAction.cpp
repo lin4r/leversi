@@ -263,13 +263,13 @@ vector<pair<OthelloAction,vector<Position>>>
 	return placements;
 }
 
-bool operator==(const OthelloAction& a1, const OthelloAction& a2)
+bool operator==(const OthelloAction& a1, const OthelloAction& a2) noexcept
 {
 	return (a1.getPosition() == a2.getPosition())
 		&& (a1.isPass() == a2.isPass());
 }
 
-bool operator<(const OthelloAction& a1, const OthelloAction& a2)
+bool operator<(const OthelloAction& a1, const OthelloAction& a2) noexcept
 {
 	if (a1.isPass() && (! a2.isPass())) {
 		return true;

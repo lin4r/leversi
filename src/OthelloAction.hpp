@@ -84,11 +84,12 @@ private:
  * considered lower than non-passes. If pass is equal the position < determines
  * order.
  */
-bool operator<(const OthelloAction& a1, const OthelloAction& a2);
+bool operator<(const OthelloAction& a1, const OthelloAction& a2) noexcept;
 
-bool operator==(const OthelloAction& a1, const OthelloAction& a2);
+bool operator==(const OthelloAction& a1, const OthelloAction& a2) noexcept;
 
 inline bool operator!=(const OthelloAction& a1, const OthelloAction& a2)
+		noexcept
 	{ return !(a1 == a2); }
 
 std::ostream& operator<<(std::ostream& os, const OthelloAction& action);

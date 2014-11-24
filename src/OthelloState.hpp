@@ -87,9 +87,11 @@ private:
 	std::vector<std::vector<Tile>> grid;
 };
 
-bool operator==(const OthelloState& state1, const OthelloState& state2);
+bool operator==(const OthelloState& state1, const OthelloState& state2)
+	noexcept;
 
 inline bool operator!=(const OthelloState& state1, const OthelloState& state2)
+		noexcept
 	{ return !(state1 == state2); }
 
 inline std::ostream& operator<<(std::ostream& os, const OthelloState& state)
