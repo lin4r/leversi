@@ -11,6 +11,12 @@
 
 namespace othello {
 
+struct Effect
+{
+	OthelloAction action;
+	score_t score;
+};
+
 class BestMoveFinder {
 public:
 
@@ -27,16 +33,14 @@ public:
 
 private:
 
-	virtual std::pair<OthelloAction, score_t> _getBestMove(score_t alpha
-		, score_t beta);
+	std::vector<Effect> orderActions(
+		const std::vector<std::pair<OthelloAction, flips_t>>&
+			actionFlipsPairs);
 
-	int currentDepth{0}; //XXX Should be a argument to _getBestMove
-	int maxDepth{6};
+	std::pair<OthelloAction, score_t> _getBestMove(score_t alpha
+		, score_t beta, int depth);
 
-	/* XXX Later this should be the evaluators duty. */
-	static bool actionEffectPairGt(
-		std::pair<OthelloAction,flips_t> p1
-		, std::pair<OthelloAction,flips_t> p2);
+	int maxDepth{5};
 
 	Game game;
 

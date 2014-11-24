@@ -14,75 +14,39 @@ using std::max;
 
 namespace othello {
 
+static inline bool isBetter(Effect e1, Effect e2) noexcept;
+
 BestMoveFinder::BestMoveFinder(Game game) : game(game)
 {}
 
 pair<OthelloAction, score_t> BestMoveFinder::getBestMove()
 {
-	/* This is a safety precursion. Because the subfunction might leave the
-	 * class in an inconsistent state, if the recursion terminates due to an
-	 * unexpected exception.
-	 */
-	currentDepth = 0;
-	return _getBestMove(SCORE_INFIMUM, SCORE_SUPERMUM);
+	return _getBestMove(SCORE_INFIMUM, SCORE_SUPERMUM, 0);
 }
 
-struct Effect
-{
-	OthelloAction action;
-	score_t score;
-};
-
-/* Large effects are desireable and therefore comes first. */
-static inline bool isBetter(Effect e1, Effect e2) noexcept
-{
-	return e1.score > e2.score;
-}
-
-//TODO Refactor, Too long function.
 pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
-		score_t alpha, score_t beta)
+		score_t alpha, score_t beta, int depth)
 {
-	using std::sort;
-
 	/* If the maximum depth is surpassed or the game is over just return. */
-	if (currentDepth >= maxDepth || game.getState().isGameOver()) {
+	if (depth > maxDepth || game.getState().isGameOver()) {
 		/* The 'action is irrelevant since it will never be executed
 		 * so long as the maxDepth is valid.' */
 		return pair<OthelloAction, score_t>(OthelloAction::pass(), 0);
 	}
 
-	currentDepth++; //Decend.
-
-	auto placementEffectPairs =
+	auto actionFlipsPairs =
 		OthelloAction::findLegalPlacements(game.getState());
 
 	/* Handle pass. */
-	if (placementEffectPairs.empty()) {
+	if (actionFlipsPairs.empty()) {
 
 		const pair<OthelloAction,flips_t> passPair(OthelloAction::pass()
 			, flips_t());
 
-		placementEffectPairs.push_back(passPair);
+		actionFlipsPairs.push_back(passPair);
 	}
 
-	/* Computes the score obtained by each of the actions. */
-	vector<Effect> effects;
-	for (auto placementEffectPair : placementEffectPairs) {
-
-		/* Unpack. */
-		const auto& action = placementEffectPair.first;
-		const auto& flips = placementEffectPair.second;
-		const auto score = evaluator.evaluateAction(action, flips
-			, game.refState());
-
-		const Effect effect = {action, score};
-
-		effects.push_back(effect);
-	}
-
-	/* Sort the vector so that moves with high scores comes first. */
-	sort(effects.begin(), effects.end(), isBetter);
+	auto effects = orderActions(actionFlipsPairs);
 
 	auto bestScore = SCORE_INFIMUM;
 	OthelloAction bestAction(Position(-1,-1)); //Just a dummy position.
@@ -94,7 +58,7 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 
 		/* The best score the advisary can make. By swaping beta and alpha we
 		 * solve the dual problem of MIN-VALUE. */
-		const auto advisaryScore = _getBestMove(beta, alpha).second;
+		const auto advisaryScore = _getBestMove(beta, alpha, depth+1).second;
 
 		/* The score if the player should choose the action. */
 		const auto predictedScore = effect.score - advisaryScore;
@@ -118,16 +82,39 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 		alpha = max(alpha, bestScore);
 	}
 
-	//XXX Consider a try block, to guarantee that the depth is consistent.
-	currentDepth--; //Ascend.
-
 	return pair<OthelloAction,score_t>(bestAction, bestScore);
 }
 
-bool BestMoveFinder::actionEffectPairGt(pair<OthelloAction,vector<Position>> p1
-		, pair<OthelloAction,vector<Position>> p2)
+vector<Effect> BestMoveFinder::orderActions(
+		const vector<pair<OthelloAction, flips_t>>& actionFlipsPairs)
 {
-	return p1.second.size() > p2.second.size();
+	using std::sort;
+
+	/* Computes the score obtained by each of the actions. */
+	vector<Effect> effects;
+	for (auto actionFlipsPair : actionFlipsPairs) {
+
+		/* Unpack. */
+		const auto& action = actionFlipsPair.first;
+		const auto& flips = actionFlipsPair.second;
+		const auto score = evaluator.evaluateAction(action, flips
+			, game.refState());
+
+		const Effect effect = {action, score};
+
+		effects.push_back(effect);
+	}
+
+	/* Sort the vector so that moves with high scores comes first. */
+	sort(effects.begin(), effects.end(), isBetter);
+
+	return effects;
+}
+
+/* Large effects are desireable and therefore comes first. */
+bool isBetter(Effect e1, Effect e2) noexcept
+{
+	return e1.score > e2.score;
 }
 
 } //namespace othello
