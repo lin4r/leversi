@@ -6,10 +6,14 @@
 
 #include <memory>
 
+namespace othello {
+
 template<typename T>
 class Cloneable
 {
 	virtual std::unique_ptr<T> clone() const = 0;
 };
+
+} //namespace othello
 
 #endif //CLONEABLE_HPP_
