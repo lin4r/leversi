@@ -27,6 +27,23 @@
 
 namespace othello {
 
+class OthelloBoardIterator
+{
+public:
+
+	OthelloBoardIterator(std::vector<Tile>* grid) : grid{grid} {}
+
+	typedef std::vector<Tile>::iterator iterator;
+	typedef std::vector<Tile>::const_iterator const_iterator;
+
+	iterator begin() { return grid->begin(); }
+	iterator end() { return grid->end(); }
+
+private:
+
+	std::vector<Tile>* grid;
+};
+
 class OthelloState
 {	
 public:
@@ -75,11 +92,8 @@ public:
 	virtual int getBoardColumns() const noexcept
 		{ return boardColumns; }
 
-	typedef std::vector<Tile>::iterator iterator;
-	typedef std::vector<Tile>::const_iterator const_iterator;
-
-	iterator begin() { return grid.begin(); }
-	iterator end() { return grid.end(); }
+	virtual OthelloBoardIterator getBoardIterator() noexcept
+		{ return OthelloBoardIterator(&grid); }
 
 private:
 

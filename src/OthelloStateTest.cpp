@@ -127,7 +127,7 @@ TEST_CASE("Test board iterator.", "[OthelloState, iterator]")
 		{Tile::Black, Tile::Empty, Tile::Empty, Tile::White};
 	vector<Tile> result;
 
-	for (auto tile : state) {
+	for (auto tile : state.getBoardIterator()) {
 		result.push_back(tile);
 	}
 
