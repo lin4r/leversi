@@ -2,14 +2,14 @@ CC=g++
 CFLAGS=-Wall -g -std=c++11 -O0
 LDFLAGS=
 
-MODEL=Position.o OthelloState.o OthelloAction.o Game.o
+MODEL=Position.o OthelloState.o OthelloAction.o Game.o FlipsEvaluator.o
 MODELTEST=PositionTest.o OthelloStateTest.o OthelloActionTest.o GameTest.o
 
 GUI=Callback.o Board.o GUI.o
 
 OOTEST=ObserverObservableTest.o
 
-TEST=PositionTest OthelloStateTest OthelloActionTest GameTest ObserverObservableTest
+TEST=PositionTest OthelloStateTest OthelloActionTest GameTest ObserverObservableTest FlipsEvaluatorTest
 
 AI=BestMoveFinder.o
 
@@ -25,6 +25,7 @@ test: $(TEST)
 	./OthelloActionTest
 	./GameTest
 	./ObserverObservableTest
+	./FlipsEvaluatorTest
 
 
 # Compile Target
@@ -45,6 +46,9 @@ OthelloAction.o: OthelloAction.cpp OthelloAction.hpp Position.hpp OthelloState.h
 	$(CC) $(CFLAGS) -c $<
 
 Game.o: Game.cpp Game.hpp OthelloState.hpp OthelloAction.hpp Observable.hpp undo_initial_state_exception.hpp
+	$(CC) $(CFLAGS) -c $<
+
+FlipsEvaluator.o: FlipsEvaluator.cpp FlipsEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp
 	$(CC) $(CFLAGS) -c $<
 
 
@@ -74,6 +78,12 @@ GameTest.o: GameTest.cpp Game.hpp undo_initial_state_exception.hpp
 GameTest: GameTest.o Game.o OthelloAction.o OthelloState.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
+FlipsEvaluatorTest.o: FlipsEvaluatorTest.cpp FlipsEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Position.hpp
+	$(CC) $(CFLAGS) -c $<
+
+FlipsEvaluatorTest: FlipsEvaluatorTest.o FlipsEvaluator.o OthelloAction.o OthelloState.o Position.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
 
 # Compile gui parts.
 Callback.o: Callback.cpp Callback.hpp Game.hpp OthelloController.hpp illegal_action_exception.hpp OthelloState.hpp Observer.hpp BestMoveFinder.hpp
@@ -92,7 +102,7 @@ ObserverObservableTest.o: ObserverObservableTest.cpp Observer.hpp Observable.hpp
 
 
 # Compile AI.
-BestMoveFinder.o: BestMoveFinder.cpp BestMoveFinder.hpp Game.hpp OthelloAction.hpp
+BestMoveFinder.o: BestMoveFinder.cpp BestMoveFinder.hpp Game.hpp OthelloAction.hpp Evaluator.hpp FlipsEvaluator.hpp
 	$(CC) $(CFLAGS) -c $<
 
 ObserverObservableTest: ObserverObservableTest.o

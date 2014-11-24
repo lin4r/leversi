@@ -3,14 +3,11 @@
 
 #include "Game.hpp"
 #include "OthelloAction.hpp"
+#include "Evaluator.hpp"
 
 #include <climits>
 
 namespace othello {
-
-typedef int score_t;
-const score_t SCORE_INFIMUM{INT_MIN};
-const score_t SCORE_SUPERMUM{INT_MAX};
 
 class BestMoveFinder {
 public:
