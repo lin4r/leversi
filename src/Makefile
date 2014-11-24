@@ -9,7 +9,7 @@ GUI=Callback.o Board.o GUI.o
 
 OOTEST=ObserverObservableTest.o
 
-TEST=PositionTest OthelloStateTest OthelloActionTest GameTest ObserverObservableTest FlipsEvaluatorTest
+TEST=PositionTest OthelloStateTest OthelloActionTest GameTest ObserverObservableTest FlipsEvaluatorTest CloneableTest
 
 AI=BestMoveFinder.o
 
@@ -26,6 +26,7 @@ test: $(TEST)
 	./GameTest
 	./ObserverObservableTest
 	./FlipsEvaluatorTest
+	./CloneableTest
 
 
 # Compile Target
@@ -82,6 +83,12 @@ FlipsEvaluatorTest.o: FlipsEvaluatorTest.cpp FlipsEvaluator.hpp Evaluator.hpp Ot
 	$(CC) $(CFLAGS) -c $<
 
 FlipsEvaluatorTest: FlipsEvaluatorTest.o FlipsEvaluator.o OthelloAction.o OthelloState.o Position.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+CloneableTest.o: CloneableTest.cpp Cloneable.hpp
+	$(CC) $(CFLAGS) -c $<
+
+CloneableTest: CloneableTest.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 
