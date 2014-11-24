@@ -97,6 +97,7 @@ vector<Effect> BestMoveFinder::orderActions(
 		/* Unpack. */
 		const auto& action = actionFlipsPair.first;
 		const auto& flips = actionFlipsPair.second;
+
 		const auto score = evaluator.evaluateAction(action, flips
 			, game.refState());
 
