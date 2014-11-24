@@ -19,7 +19,10 @@
 
 #include "OthelloState.hpp"
 
+#include <vector>
+
 using namespace othello;
+using std::vector;
 
 TEST_CASE("Default values", "[OthelloState, defaultValues]")
 {
@@ -111,4 +114,22 @@ TEST_CASE("Verify that equality operator works.", "[OthelloState, operator]")
 		state1.setActionWasPass(true);
 		REQUIRE(state1 != state2);
 	}
+}
+
+TEST_CASE("Test board iterator.", "[OthelloState, iterator]")
+{
+	OthelloState state(2, 2, Player::Black);
+	state.setTile(Position(0,0), Tile::Black);
+	state.setTile(Position(1,1), Tile::White);
+
+	/* Observe column major ordering. */
+	vector<Tile> expected =
+		{Tile::Black, Tile::Empty, Tile::Empty, Tile::White};
+	vector<Tile> result;
+
+	for (auto tile : state) {
+		result.push_back(tile);
+	}
+
+	REQUIRE(expected == result);
 }

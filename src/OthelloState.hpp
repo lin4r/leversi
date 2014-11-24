@@ -75,6 +75,12 @@ public:
 	virtual int getBoardColumns() const noexcept
 		{ return boardColumns; }
 
+	typedef std::vector<Tile>::iterator iterator;
+	typedef std::vector<Tile>::const_iterator const_iterator;
+
+	iterator begin() { return grid.begin(); }
+	iterator end() { return grid.end(); }
+
 private:
 
 	/* Elements are stored in column major order. */
