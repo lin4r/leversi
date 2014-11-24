@@ -19,6 +19,8 @@ public:
 	/* Counts the flips and adds one (because the placed tile gives one point). */
 	virtual score_t evaluateAction(const OthelloAction& action
 		, const flips_t& flips, const OthelloState& beforeAction) override;
+
+	virtual std::unique_ptr<Evaluator> clone() const override;
 };
 
 } //namespace othello

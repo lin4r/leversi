@@ -1,5 +1,7 @@
 #include "FlipsEvaluator.hpp"
 
+using std::unique_ptr;
+
 namespace othello {
 
 score_t FlipsEvaluator::evaluateAction(const OthelloAction& action
@@ -19,6 +21,11 @@ score_t FlipsEvaluator::evaluateAction(const OthelloAction& action
 		 */
 		return flips.size()*2 + 1;
 	}
+}
+
+unique_ptr<Evaluator> FlipsEvaluator::clone() const
+{
+	return unique_ptr<Evaluator>(new FlipsEvaluator(*this));
 }
 
 } //namespace othello

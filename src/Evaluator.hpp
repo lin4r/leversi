@@ -7,6 +7,7 @@
 
 #include "OthelloState.hpp"
 #include "OthelloAction.hpp"
+#include "Cloneable.hpp"
 
 #include <climits>
 
@@ -16,7 +17,7 @@ typedef int score_t;
 const score_t SCORE_INFIMUM{INT_MIN};
 const score_t SCORE_SUPERMUM{INT_MAX};
 
-class Evaluator
+class Evaluator : Cloneable<Evaluator>
 {
 public:
 
@@ -24,6 +25,8 @@ public:
 
 	virtual score_t evaluateAction(const OthelloAction& action
 		, const flips_t& flips, const OthelloState& beforeAction) = 0;
+
+	virtual std::unique_ptr<Evaluator> clone() const override = 0;
 };
 
 } //namespace othello
