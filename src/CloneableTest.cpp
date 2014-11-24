@@ -41,7 +41,7 @@ public:
 		{ return unique_ptr<MyInteger>(new Successor(MyInteger::getValue())); }
 };
 
-TEST_CASE("Test cloneable", "[Cloneable, virtualConstructor]")
+TEST_CASE("Test cloneable", "[Cloneable]")
 {
 	Successor s(3);
 	std::unique_ptr<MyInteger> p = s.clone();

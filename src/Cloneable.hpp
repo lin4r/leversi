@@ -1,5 +1,6 @@
-/* The Cloneable aka. Virtual Constructor design pattern. Its useful when an
- * interface is used to hold polymorfic reference to various instances.
+/* The Cloneable design pattern
+ *
+ * Linus Narva
  */
 #ifndef CLONEABLE_HPP_
 #define CLONEABLE_HPP_
