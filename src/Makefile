@@ -38,7 +38,7 @@ $(TARGET): main.o $(MODELEX) $(MODEL) $(GUI) $(AI)
 Position.o: Position.cpp Position.hpp
 	$(CC) $(CFLAGS) -c $<
 
-OthelloState.o: OthelloState.cpp OthelloState.hpp Tile.hpp Player.hpp getter_setter.hpp Position.hpp
+OthelloState.o: OthelloState.cpp OthelloState.hpp Tile.hpp Player.hpp Position.hpp
 	$(CC) $(CFLAGS) -c $<
 
 OthelloAction.o: OthelloAction.cpp OthelloAction.hpp Position.hpp OthelloState.hpp illegal_action_exception.hpp actionstring_syntax_exception.hpp game_over_exception.hpp
