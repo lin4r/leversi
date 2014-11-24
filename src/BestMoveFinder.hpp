@@ -31,6 +31,9 @@ public:
 	virtual void setMaxDepth(int newDepth) noexcept
 			{ maxDepth = newDepth; }
 
+	virtual void setEvaluator(const Evaluator& newEvaluator)
+		{ evaluator = std::move(newEvaluator.clone()); }
+
 private:
 
 	std::vector<Effect> orderActions(
@@ -44,7 +47,7 @@ private:
 
 	Game game;
 
-	FlipsEvaluator evaluator;
+	std::unique_ptr<Evaluator> evaluator{new FlipsEvaluator()};
 };
 
 } //namespace othello

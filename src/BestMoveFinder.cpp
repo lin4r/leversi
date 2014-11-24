@@ -98,7 +98,7 @@ vector<Effect> BestMoveFinder::orderActions(
 		const auto& action = actionFlipsPair.first;
 		const auto& flips = actionFlipsPair.second;
 
-		const auto score = evaluator.evaluateAction(action, flips
+		const auto score = evaluator->evaluateAction(action, flips
 			, game.refState());
 
 		const Effect effect = {action, score};

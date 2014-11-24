@@ -49,7 +49,7 @@ OthelloAction.o: OthelloAction.cpp OthelloAction.hpp Position.hpp OthelloState.h
 Game.o: Game.cpp Game.hpp OthelloState.hpp OthelloAction.hpp Observable.hpp undo_initial_state_exception.hpp
 	$(CC) $(CFLAGS) -c $<
 
-FlipsEvaluator.o: FlipsEvaluator.cpp FlipsEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp
+FlipsEvaluator.o: FlipsEvaluator.cpp FlipsEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Cloneable.hpp
 	$(CC) $(CFLAGS) -c $<
 
 
@@ -109,7 +109,7 @@ ObserverObservableTest.o: ObserverObservableTest.cpp Observer.hpp Observable.hpp
 
 
 # Compile AI.
-BestMoveFinder.o: BestMoveFinder.cpp BestMoveFinder.hpp Game.hpp OthelloAction.hpp Evaluator.hpp FlipsEvaluator.hpp
+BestMoveFinder.o: BestMoveFinder.cpp BestMoveFinder.hpp Game.hpp OthelloAction.hpp Evaluator.hpp FlipsEvaluator.hpp Cloneable.hpp
 	$(CC) $(CFLAGS) -c $<
 
 ObserverObservableTest: ObserverObservableTest.o
