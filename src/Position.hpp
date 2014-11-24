@@ -28,26 +28,43 @@ public:
 	int row;
 	int column;
 
-	Position(int row, int column);
+	Position(int row, int column) : row{row}, column{column} {}
 
 	virtual ~Position() = default;
 
-	virtual Position north() const noexcept;
-	virtual Position east() const noexcept;
-	virtual Position south() const noexcept;
-	virtual Position west() const noexcept;
+	virtual Position north() const noexcept
+		{ return Position(row-1, column); }
 
-	virtual Position northEast() const noexcept;
-	virtual Position southEast() const noexcept;
-	virtual Position southWest() const noexcept;
-	virtual Position northWest() const noexcept;
+	virtual Position east() const noexcept
+		{ return Position(row, column+1); }
+
+	virtual Position south() const noexcept
+		{ return Position(row+1, column); }
+
+	virtual Position west() const noexcept
+		{ return Position(row, column-1); }
+
+	virtual Position northEast() const noexcept
+		{ return north().east(); }
+
+	virtual Position southEast() const noexcept
+		{ return south().east(); }
+
+	virtual Position southWest() const noexcept
+		{ return south().west(); }
+
+	virtual Position northWest() const noexcept
+		{ return north().west(); }
 };
 
-bool operator==(const Position& p1, const Position& p2);
+bool operator==(const Position& p1, const Position& p2) noexcept;
+
+inline bool operator!=(const Position& p1, const Position& p2) noexcept
+	{ return !(p1 == p2); }
 
 /* This operator is defined so that the position can be put in a set. Rows
  * first decides predecense. If the rows are equal then the columns decide.*/
-bool operator<(const Position& p1, const Position& p2);
+bool operator<(const Position& p1, const Position& p2) noexcept;
 
 std::ostream& operator<<(std::ostream& os, const Position& p);
 
