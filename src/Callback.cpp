@@ -24,6 +24,7 @@
 using std::cout;
 using std::cerr;
 using std::endl;
+using std::string;
 
 using std::shared_ptr;
 
@@ -72,7 +73,7 @@ void Callback::executePlayerAction(OthelloAction action)
 		if (model->getState().isGameOver()) {
 
 			cout << "Game Over!!!" << endl;
-			cout << "Winner> " << model->getState().whoLeads() << endl;
+			cout << "Winner> " << winnerMessage() << endl;
 
 		/* If no move is possible, then recursively execute pass. */
 		} else if (! OthelloAction::existsLegalPlacement(model->getState())) {
@@ -89,6 +90,31 @@ void Callback::addGameObserver(shared_ptr<Observer<OthelloState>> observer)
 		noexcept
 {
 	model->addObserver(observer);
+}
+
+string Callback::winnerMessage() const noexcept
+{
+	const auto state = model->getState();
+	int numWhite{0}, numBlack{0};
+	
+	for (auto row = 0; row < state.getBoardRows(); row++) {
+		for (auto col = 0; col < state.getBoardColumns(); col++) {
+			const Position pos(row,col);
+			switch (state.inspectTile(pos)) {
+			case Tile::White: numWhite++; break;
+			case Tile::Black: numBlack++; break;
+			default: ;
+			}
+		}
+	}
+
+	if (numWhite > numBlack) {
+		return "White player won!";
+	} else if (numBlack > numWhite) {
+		return "Black player won!";
+	} else {
+		return "Tie, you are both loosers.";
+	}
 }
 
 } //namespace othello

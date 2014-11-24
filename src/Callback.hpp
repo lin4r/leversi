@@ -23,6 +23,7 @@
 #include "Observer.hpp"
 
 #include <memory>
+#include <string>
 
 namespace othello {
 
@@ -38,10 +39,12 @@ public:
 	/* XXX Ugly forwarding solution, Ill fix a consistent construction logic
 	 * later.
 	 */
-	virtual void addGameObserver(std::shared_ptr<Observer<OthelloState>> observer)
-		noexcept override;
+	virtual void addGameObserver(
+		std::shared_ptr<Observer<OthelloState>> observer) noexcept override;
 
 private:
+
+	virtual std::string winnerMessage() const noexcept;
 
 	void executePlayerAction(OthelloAction action);
 
