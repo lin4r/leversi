@@ -40,6 +40,10 @@ public:
 	/* Commits an action to the game. Returns a vector of flips.
 	 */
 	virtual flips_t commitAction(OthelloAction action);
+
+	/* Only ever throws if thhere is no history, and then with strong
+	 * exception guarantee.
+	 */
 	virtual void undoLastAction();
 	virtual int numTurns() const noexcept;
 

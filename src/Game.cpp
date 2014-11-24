@@ -35,7 +35,11 @@ flips_t Game::commitAction(OthelloAction action)
 
 void Game::undoLastAction()
 {
-	if (history.size() > 0) {
+	if (history.empty()) {
+
+		throw undo_initial_state_exception();
+
+	} else {
 
 		const auto actionFlipsPair = history.back();
 		history.pop_back();
@@ -66,8 +70,6 @@ void Game::undoLastAction()
 			history.empty() ? false : history.back().first.isPass();
 		state.setActionWasPass(previousActionWasPass);
 
-	} else {
-		throw undo_initial_state_exception();
 	}
 }
 
