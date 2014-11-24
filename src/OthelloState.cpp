@@ -36,8 +36,7 @@ OthelloState::OthelloState(int boardRows, int boardColumns, Player starter)
 		noexcept
 		: playersTurn{starter}, boardRows{boardRows}
 		, boardColumns{boardColumns}
-		, grid{vector<vector<Tile>>(boardRows,vector<Tile>(boardColumns
-			,Tile::Empty))}
+		, grid{vector<Tile>(boardRows*boardColumns,Tile::Empty)}
 {
 }
 

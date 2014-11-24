@@ -58,10 +58,10 @@ public:
 		{ this->actionWasPass = actionWasPass; }
 
 	virtual Tile inspectTile(Position position) const
-		{ return grid.at(position.row).at(position.column); }
+		{ return grid.at(position2GridIndex(position)); }
 
 	virtual void setTile(Position position, Tile value)
-		{ grid.at(position.row).at(position.column) = value; }
+		{ grid.at(position2GridIndex(position)) = value; }
 
 	virtual Player whosTurn() const noexcept
 		{ return playersTurn; }
@@ -77,6 +77,10 @@ public:
 
 private:
 
+	/* Elements are stored in column major order. */
+	int position2GridIndex(Position position) const noexcept
+		{ return position.row + boardRows*position.column; }
+
 	bool gameIsOver{false};
 	bool actionWasPass{false};
 
@@ -84,7 +88,7 @@ private:
 
 	int boardRows;
 	int boardColumns;
-	std::vector<std::vector<Tile>> grid;
+	std::vector<Tile> grid;
 };
 
 bool operator==(const OthelloState& state1, const OthelloState& state2)
