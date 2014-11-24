@@ -4,8 +4,10 @@
 #include "Game.hpp"
 #include "OthelloAction.hpp"
 #include "Evaluator.hpp"
+#include "FlipsEvaluator.hpp"
 
 #include <climits>
+#include <memory>
 
 namespace othello {
 
@@ -28,15 +30,17 @@ private:
 	virtual std::pair<OthelloAction, score_t> _getBestMove(score_t alpha
 		, score_t beta);
 
-	int currentDepth{0};
+	int currentDepth{0}; //XXX Should be a argument to _getBestMove
 	int maxDepth{6};
 
 	/* XXX Later this should be the evaluators duty. */
 	static bool actionEffectPairGt(
-		std::pair<OthelloAction,std::vector<Position>> p1
-		, std::pair<OthelloAction,std::vector<Position>> p2);
+		std::pair<OthelloAction,flips_t> p1
+		, std::pair<OthelloAction,flips_t> p2);
 
 	Game game;
+
+	FlipsEvaluator evaluator;
 };
 
 } //namespace othello

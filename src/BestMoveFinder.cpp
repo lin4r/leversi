@@ -45,15 +45,25 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 	auto placementEffectPairs =
 		OthelloAction::findLegalPlacements(game.getState());
 
+//	/* Handle pass. */
+//	if (placementEffectPairs.empty()) {
+//		const score_t score{0}; //Evaluator pass.
+//		const auto action = OthelloAction::pass();
+//
+//		return pair<OthelloAction,score_t>(action, score);
+//	}
+
 	/* Handle pass. */
 	if (placementEffectPairs.empty()) {
-		const score_t score{0}; //Evaluator pass.
-		const auto action = OthelloAction::pass();
 
-		return pair<OthelloAction,score_t>(action, score);
+		const pair<OthelloAction,flips_t> passPair(OthelloAction::pass()
+			, flips_t());
+
+		placementEffectPairs.push_back(passPair);
 	}
 
 	/* Sort the vector according to direct effect. */
+	//FIXME Should be handled by the evaluator.
 	sort(placementEffectPairs.begin(), placementEffectPairs.end()
 		, actionEffectPairGt);
 
@@ -63,7 +73,7 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 //	cout << endl;
 
 	auto earnedScore = SCORE_INFIMUM;
-	OthelloAction bestAction(Position(-1,-1));
+	OthelloAction bestAction(Position(-1,-1)); //Just a dummy position.
 
 	for (auto placementEffectPair : placementEffectPairs) {
 
@@ -71,17 +81,18 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 		const auto& action = placementEffectPair.first;
 		const auto& flips = placementEffectPair.second;
 
-		/* The value of the action. */ //XXX Evaluator task.
-		const score_t actionValue = flips.size()+1; //One for the placed brick.
-
 		/* Perform the action. */
 		game.commitAction(action);
+
+		/* The value of the action. */
+		const score_t actionValue = evaluator.evaluateAction(action, flips
+			, game.refState());
 
 		/* The best score the advisary can make. By swaping beta and alpha we
 		 * solve the dual problem of MIN-VALUE. */
 		const auto advisaryEarnedScore = _getBestMove(beta, alpha).second;
 
-		/* The score if the player shoul choose the action. */
+		/* The score if the player should choose the action. */
 		const auto actionScore = actionValue - advisaryEarnedScore;
 
 		/* Restore the original state. */
@@ -95,7 +106,7 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 			bestAction = action;
 		}
 
-		/* If it is also better tham beta, then break the loop. */
+		/* If it is also better than beta, then break the loop. */
 		if (earnedScore >= beta) {
 			break;
 		}

@@ -55,6 +55,9 @@ public:
 	virtual OthelloState getState() const noexcept
 		{ return state; }
 
+	virtual const OthelloState& refState() const noexcept
+		{ return state; }
+
 private:
 
 	OthelloState state;
