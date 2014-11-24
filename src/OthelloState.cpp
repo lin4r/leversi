@@ -124,7 +124,6 @@ string OthelloState::toString() const noexcept
 }
 
 bool operator==(const OthelloState& state1, const OthelloState& state2)
-		noexcept
 {
 	const auto rows = state1.getBoardRows();
 	const auto columns = state1.getBoardColumns();
@@ -141,13 +140,14 @@ bool operator==(const OthelloState& state1, const OthelloState& state2)
 
 	bool boardEqual{true};
 
-	for (auto row = 0; boardEqual && (row < rows); row++) {
-		for (auto col = 0; boardEqual && (col < columns); col++) {
+	auto it1 = state1.constBoardIterator();
+	auto it2 = state2.constBoardIterator();
 
-			const Position pos(row,col);
-			boardEqual = boardEqual
-				&& (state1.inspectTile(pos) == state2.inspectTile(pos));
-		}
+	for (auto p1 = it1.begin(), p2 = it2.begin()
+			; boardEqual && ((p1 != it1.end()) || (p2 != it2.end()))
+			; p1++, p2++)
+	{
+		boardEqual = *p1 == *p2;
 	}
 
 	return boardEqual;

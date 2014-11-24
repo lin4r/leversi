@@ -125,11 +125,24 @@ TEST_CASE("Test board iterator.", "[OthelloState, iterator]")
 	/* Observe column major ordering. */
 	vector<Tile> expected =
 		{Tile::Black, Tile::Empty, Tile::Empty, Tile::White};
+
 	vector<Tile> result;
 
-	for (auto tile : state.getBoardIterator()) {
-		result.push_back(tile);
+	SECTION("Test normal iterator.")
+	{
+		for (const auto tile : state.boardIterator()) {
+			result.push_back(tile);
+		}
+
+		REQUIRE(expected == result);
 	}
 
-	REQUIRE(expected == result);
+	SECTION("Test const iterator.")
+	{
+		for (const auto tile : state.constBoardIterator()) {
+			result.push_back(tile);
+		}
+
+		REQUIRE(expected == result);
+	}
 }

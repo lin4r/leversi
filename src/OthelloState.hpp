@@ -31,17 +31,34 @@ class OthelloBoardIterator
 {
 public:
 
-	OthelloBoardIterator(std::vector<Tile>* grid) : grid{grid} {}
+	OthelloBoardIterator(std::vector<Tile>* grid) noexcept : grid{grid} {}
 
 	typedef std::vector<Tile>::iterator iterator;
-	typedef std::vector<Tile>::const_iterator const_iterator;
 
-	iterator begin() { return grid->begin(); }
-	iterator end() { return grid->end(); }
+	virtual iterator begin() { return grid->begin(); }
+	virtual iterator end() { return grid->end(); }
 
 private:
 
 	std::vector<Tile>* grid;
+};
+
+class ConstOthelloBoardIterator
+{
+public:
+
+	ConstOthelloBoardIterator(const std::vector<Tile>* grid) noexcept
+			: grid{grid}
+	{}
+
+	typedef std::vector<Tile>::const_iterator const_iterator;
+
+	virtual const_iterator begin() { return grid->begin(); }
+	virtual const_iterator end() { return grid->end(); }
+
+private:
+
+	const std::vector<Tile>* grid;
 };
 
 class OthelloState
@@ -92,8 +109,11 @@ public:
 	virtual int getBoardColumns() const noexcept
 		{ return boardColumns; }
 
-	virtual OthelloBoardIterator getBoardIterator() noexcept
+	virtual OthelloBoardIterator boardIterator() noexcept
 		{ return OthelloBoardIterator(&grid); }
+
+	virtual ConstOthelloBoardIterator constBoardIterator() const noexcept
+		{ return ConstOthelloBoardIterator(&grid); }
 
 private:
 
@@ -111,11 +131,9 @@ private:
 	std::vector<Tile> grid;
 };
 
-bool operator==(const OthelloState& state1, const OthelloState& state2)
-	noexcept;
+bool operator==(const OthelloState& state1, const OthelloState& state2);
 
 inline bool operator!=(const OthelloState& state1, const OthelloState& state2)
-		noexcept
 	{ return !(state1 == state2); }
 
 inline std::ostream& operator<<(std::ostream& os, const OthelloState& state)
