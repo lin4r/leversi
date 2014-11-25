@@ -94,8 +94,8 @@ string OthelloState::gridString() const noexcept
 
 			const Position pos(row,col);
 			switch (inspectTile(pos)) {
-			case Tile::White: ss << "X"; break;
-			case Tile::Black: ss << "O"; break;
+			case Tile::White: ss << "O"; break;
+			case Tile::Black: ss << "X"; break;
 			default: ss << " ";
 			}
 		}
