@@ -15,9 +15,11 @@ AI=BestMoveFinder.o
 
 TARGET=othello
 
+LAB=othello-ai
+
 .PHONY: all build clean test purge
 
-all: $(TARGET) $(MODEL) $(GUI) test
+all: $(TARGET) $(MODEL) $(GUI) $(LAB) test 
 
 test: $(TEST)
 	./PositionTest
@@ -28,6 +30,12 @@ test: $(TEST)
 	./FlipsEvaluatorTest
 	./CloneableTest
 
+#Compile lab code.
+$(LAB): main-lab.o $(MODELEX) $(MODEL) $(AI)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+main-lab.o: main-lab.cpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp
+	$(CC) $(CFLAGS) -c $<
 
 # Compile Target
 main.o: main.cpp GUI.hpp

@@ -60,41 +60,61 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 
 	auto effects = orderActions(actionFlipsPairs);
 
-	auto bestScore = SCORE_INFIMUM;
-	OthelloAction bestAction(Position(-1,-1)); //Just a dummy position.
+//	auto bestScore = SCORE_INFIMUM;
+//	OthelloAction bestAction(Position(-1,-1)); //Just a dummy position.
+//
+//	for (auto effect : effects) {
+//
+//		/* Perform the action. */
+//		game.commitAction(effect.action);
+//
+//		/* The best score the advisary can make. By swaping beta and alpha we
+//		 * solve the dual problem of MIN-VALUE. */
+//		const auto advisaryScore = _getBestMove(beta, alpha, depth+1).second;
+//
+//		/* The score if the player should choose the action. */
+//		const auto predictedScore = effect.score - advisaryScore;
+//
+//		/* Restore the original state. */
+//		game.undoLastAction();
+//
+//		/* Analyse the result. */
+//
+//		/* It the score is better than any previously evaluated, choose it. */
+//		if (predictedScore > bestScore) {
+//			bestScore = predictedScore;
+//			bestAction = effect.action;
+//		}
+//
+//		/* If it is also better than beta, then break the loop. */
+//		if (bestScore >= beta) {
+//			break;
+//		}
+//
+//		alpha = max(alpha, bestScore);
+//	}
+
+	auto predictedScore = SCORE_INFIMUM;
+	OthelloAction bestAction(Position(-1,-1)); //Dummy action.
 
 	for (auto effect : effects) {
 
-		/* Perform the action. */
 		game.commitAction(effect.action);
-
-		/* The best score the advisary can make. By swaping beta and alpha we
-		 * solve the dual problem of MIN-VALUE. */
-		const auto advisaryScore = _getBestMove(beta, alpha, depth+1).second;
-
-		/* The score if the player should choose the action. */
-		const auto predictedScore = effect.score - advisaryScore;
-
-		/* Restore the original state. */
+		const auto advisaryScore = _getBestMove(-beta, -alpha, depth+1).second;
 		game.undoLastAction();
 
-		/* Analyse the result. */
+		predictedScore = max(predictedScore, effect.score - advisaryScore);
 
-		/* It the score is better than any previously evaluated, choose it. */
-		if (predictedScore > bestScore) {
-			bestScore = predictedScore;
+		if (predictedScore > beta) {
+			bestAction = effect.action;
+			break;
+		} else if (predictedScore > alpha) {
+			alpha = max(alpha, predictedScore);
 			bestAction = effect.action;
 		}
-
-		/* If it is also better than beta, then break the loop. */
-		if (bestScore >= beta) {
-			break;
-		}
-
-		alpha = max(alpha, bestScore);
 	}
 
-	return pair<OthelloAction,score_t>(bestAction, bestScore);
+	return pair<OthelloAction,score_t>(bestAction, predictedScore);
 }
 
 vector<Effect> BestMoveFinder::orderActions(

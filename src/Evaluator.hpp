@@ -14,8 +14,8 @@
 namespace othello {
 
 typedef int score_t;
-const score_t SCORE_INFIMUM{INT_MIN};
-const score_t SCORE_SUPERMUM{INT_MAX};
+const score_t SCORE_INFIMUM{-65};
+const score_t SCORE_SUPERMUM{65};
 
 class Evaluator : Cloneable<Evaluator>
 {
