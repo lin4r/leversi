@@ -34,7 +34,7 @@ test: $(TEST)
 $(LAB): main-lab.o $(MODELEX) $(MODEL) $(AI)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-main-lab.o: main-lab.cpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp
+main-lab.o: main-lab.cpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp OthelloAction.hpp Game.hpp BestMoveFinder.hpp
 	$(CC) $(CFLAGS) -c $<
 
 # Compile Target

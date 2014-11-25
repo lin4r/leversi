@@ -6,6 +6,9 @@
 #include "OthelloState.hpp"
 #include "Player.hpp"
 #include "Tile.hpp"
+#include "OthelloAction.hpp"
+#include "Game.hpp"
+#include "BestMoveFinder.hpp"
 
 #include <string>
 #include <iostream>
@@ -22,8 +25,14 @@ public:
 		{ return "Invalid character in state string."; }
 };
 
-static void usage(const char* executableName);
+static void usage(const char* executableName) noexcept;
 static OthelloState parseStateString(string stateString);
+static OthelloAction chooseAction(OthelloState state);
+
+/* Changes the coordinate system from [0 7] (as in my code) to [1, 8]
+ * (as in the lab test code).
+ */
+static OthelloAction adaptCoordinateSystem(OthelloAction action);
 
 int main(int argc, char* args[])
 {
@@ -42,9 +51,13 @@ int main(int argc, char* args[])
 		return -1;
 	}
 
-	OthelloState state = parseStateString(stateString);
+	auto state = parseStateString(stateString);
 
-	cout << "DEBUG: The parsed state:" << endl << state << endl;
+	//cerr << "DEBUG: The parsed state:" << endl << state << endl;
+
+	auto action = adaptCoordinateSystem(chooseAction(state));
+
+	cout << action.actionString() << endl;
 
 	return 0;
 }
@@ -58,6 +71,8 @@ static OthelloState parseStateString(string stateString)
 	case 'W': state.setTurn(Player::White); break;
 	default: throw parse_exception();
 	}
+
+//	cerr << "DEBUG: is colour" << state.whosTurn() << endl;
 
 	const auto rows = state.getBoardRows();
 	const auto cols = state.getBoardColumns();
@@ -82,7 +97,19 @@ static OthelloState parseStateString(string stateString)
 	return state;
 }
 
-void usage(const char* executableName)
+static OthelloAction chooseAction(OthelloState state)
+{
+	return BestMoveFinder(Game(state)).getBestMove();
+}
+
+static OthelloAction adaptCoordinateSystem(OthelloAction action)
+{
+	auto oldCoordinates = action.getPosition();
+	Position newCoordinates(oldCoordinates.row+1, oldCoordinates.column+1);
+	return OthelloAction(newCoordinates, action.isPass());
+}
+
+void usage(const char* executableName) noexcept
 {
 	cerr << executableName << " state time" << endl
 		<< "State is the chould be 65 chars. The first is the player turn "

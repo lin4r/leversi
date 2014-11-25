@@ -30,7 +30,7 @@ public:
 	BestMoveFinder(Game game);
 	virtual ~BestMoveFinder() = default;
 
-	virtual OthelloAction getBestMove();
+	virtual OthelloAction getBestMove(); //XXX Rename getBestAction
 
 	virtual int getMaxDepth() const noexcept { return maxDepth; }
 
