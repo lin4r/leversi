@@ -99,7 +99,11 @@ static OthelloState parseStateString(string stateString)
 
 static OthelloAction chooseAction(OthelloState state)
 {
-	return BestMoveFinder(Game(state)).getBestMove();
+	Game game(state);
+	BestMoveFinder actionFinder(game);
+	actionFinder.setMaxDepth(5);
+
+	return actionFinder.getBestMove();
 }
 
 static OthelloAction adaptCoordinateSystem(OthelloAction action)

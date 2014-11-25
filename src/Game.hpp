@@ -35,7 +35,7 @@ public:
 
 	Game() noexcept : state{OthelloState::initialState()} {}
 
-	Game(OthelloState initial) noexcept : state{initial} {}
+	Game(OthelloState initial) noexcept : state(initial) {}
 
 	virtual ~Game() = default;
 
