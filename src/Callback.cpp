@@ -65,16 +65,19 @@ void Callback::executePlayerAction(OthelloAction action)
 		//Extra notify because the ai might take a while to choose.
 		model->notifyAll();
 
-		BestMoveFinder advisary(*model);
+		BestMoveFinder advisary(Player::White, *model);
+
 		auto advisaryAction = advisary.getBestMove();
-		model->commitAction(advisaryAction);
-		cout << "Computer Action> " << advisaryAction << "." << endl;
+
 		auto analysis = advisary.getAnalysis();
+		cout << "Computer Action> " << advisaryAction << "." << endl;
 		cout << "*** Analysis ***" << endl
 			<<  "nodes:            " << analysis.numNodes << endl
 			<<  "branching factor: " << analysis.branchingFactor << endl
 			<<  "score:            " << analysis.score << endl
 			<<  "****************" << endl;
+
+		model->commitAction(advisaryAction);
 
 		if (model->getState().isGameOver()) {
 

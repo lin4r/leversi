@@ -4,47 +4,64 @@
 #include <vector>
 #include <algorithm>
 
-//XXX DEBUG
-#include <iostream>
-using namespace std;
-
 using std::pair;
 using std::vector;
 using std::max;
+using std::min;
 using std::pow;
 
 namespace othello {
 
 static inline bool isBetter(Effect e1, Effect e2) noexcept;
 
-BestMoveFinder::BestMoveFinder(Game game) : game(game)
+BestMoveFinder::BestMoveFinder(Player player, Game game)
+		: player{player}
+		, game(game)
 {}
 
 OthelloAction BestMoveFinder::getBestMove()
 {
 	analysis = {0,.0,0};
 
-	auto actionAndScore = _getBestMove(SCORE_INFIMUM, SCORE_SUPERMUM, 0);
+	auto effect = _getBestMove(SCORE_INFIMUM, SCORE_SUPERMUM, 0, player);
 
 	//Approximative.
 	analysis.branchingFactor = pow(analysis.numNodes, 1.0/maxDepth);
 
-	analysis.score = actionAndScore.second;
+	analysis.score = effect.score;
 
-	return actionAndScore.first;
+	return effect.action;
 }
 
-pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
-		score_t alpha, score_t beta, int depth)
+Effect BestMoveFinder::_getBestMove(
+		score_t alpha, score_t beta, int depth, Player pl)
 {
+	analysis.numNodes++;
+
 	/* If the maximum depth is surpassed or the game is over just return. */
 	if (depth > maxDepth || game.getState().isGameOver()) {
 		/* The 'action is irrelevant since it will never be executed
 		 * so long as the maxDepth is valid.' */
-		return pair<OthelloAction, score_t>(OthelloAction::pass(), 0);
-	}
 
-	analysis.numNodes++;
+		/* XXX Utility function, Evaluators duty! */
+		score_t blackScore{0};
+		for (auto tile : game.refState().constBoardIterator()) {
+
+			switch (tile) {
+			case Tile::Black: blackScore++; break;
+			case Tile::White: blackScore--; break;
+			default: ;
+			}
+		}
+
+		/* Zero sum rule. */
+		const auto score = (player == Player::Black)
+			? blackScore : -blackScore;
+
+		/* The action is arbitrary. */
+		Effect result = {OthelloAction::pass(), score};
+		return result;
+	}
 
 	auto actionFlipsPairs =
 		OthelloAction::findLegalPlacements(game.getState());
@@ -60,27 +77,62 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 
 	auto effects = orderActions(actionFlipsPairs);
 
-	auto predictedScore = SCORE_INFIMUM;
+	Effect bestEffect = {OthelloAction::pass(), 0};
+	if (player == pl) {
+		bestEffect = maxValue(alpha, beta, depth, effects, pl);
+	} else {
+		bestEffect = minValue(alpha, beta, depth, effects, pl);
+	}
+
+	return bestEffect;
+}
+
+Effect BestMoveFinder::maxValue(score_t alpha, score_t beta, int depth
+		, const vector<Effect>& effects, Player pl)
+{
+	auto value = SCORE_INFIMUM;
 	OthelloAction bestAction(Position(-1,-1)); //Dummy action.
 
 	for (auto effect : effects) {
 
-		game.commitAction(effect.action);
-		const auto advisaryScore = _getBestMove(-beta, -alpha, depth+1).second;
-		game.undoLastAction();
+		value = max(value
+			, _getBestMove(alpha, beta, depth+1, advisary(pl)).score);
 
-		predictedScore = max(predictedScore, effect.score - advisaryScore);
-
-		if (predictedScore >= beta) {
-			//The action doesn't matter since it won't be chosen.
+		if (value >= beta) {
+			//The Action doesn't matter.
 			break;
-		} else if (predictedScore > alpha) {
-			alpha = max(alpha, predictedScore);
+		} else if (value > alpha) {
+			alpha = value;
 			bestAction = effect.action;
 		}
 	}
 
-	return pair<OthelloAction,score_t>(bestAction, predictedScore);
+	const Effect bestEffect = {bestAction, value};
+	return bestEffect;
+}
+
+Effect BestMoveFinder::minValue(score_t alpha, score_t beta, int depth
+		, const vector<Effect>& effects, Player pl)
+{
+	auto value = SCORE_SUPERMUM;
+	OthelloAction bestAction(Position(-1,-1)); //Dummy action.
+
+	for (auto effect : effects) {
+
+		value = min(value
+			, _getBestMove(alpha, beta, depth+1, advisary(pl)).score);
+
+		if (value <= alpha) {
+			//The Action doesn't matter.
+			break;
+		} else if (value < beta) {
+			beta = value;
+			bestAction = effect.action;
+		}
+	}
+
+	const Effect bestEffect = {bestAction, value};
+	return bestEffect;
 }
 
 vector<Effect> BestMoveFinder::orderActions(

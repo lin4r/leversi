@@ -37,6 +37,15 @@ inline Tile playerBrickColour(Player player)
 	}
 }
 
+inline Player advisary(Player player)
+{
+	switch (player) {
+	case Player::Black: return Player::White;
+	case Player::White:
+	default: return Player::Black;
+	}
+}
+
 inline std::ostream& operator<<(std::ostream& os, const Player& player)
 {
 	std::string playerStr;

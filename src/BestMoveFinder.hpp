@@ -27,7 +27,7 @@ struct Analysis
 class BestMoveFinder {
 public:
 
-	BestMoveFinder(Game game);
+	BestMoveFinder(Player player, Game game);
 	virtual ~BestMoveFinder() = default;
 
 	virtual OthelloAction getBestMove(); //XXX Rename getBestAction
@@ -36,7 +36,7 @@ public:
 
 	//XXX Should guard agins invalid values.
 	virtual void setMaxDepth(int newDepth) noexcept
-			{ maxDepth = newDepth; }
+		{ maxDepth = newDepth; }
 
 	virtual void setEvaluator(const Evaluator& newEvaluator)
 		{ evaluator = std::move(newEvaluator.clone()); }
@@ -50,10 +50,17 @@ private:
 		const std::vector<std::pair<OthelloAction, flips_t>>&
 			actionFlipsPairs);
 
-	std::pair<OthelloAction, score_t> _getBestMove(score_t alpha
-		, score_t beta, int depth);
+	Effect _getBestMove(score_t alpha
+		, score_t beta, int depth, Player pl);
+
+	Effect maxValue(score_t alpha, score_t beta, int depth
+		, const std::vector<Effect>& effects, Player pl);
+	Effect minValue(score_t alpha, score_t beta, int depth
+		, const std::vector<Effect>& effects, Player pl);
 
 	int maxDepth{5};
+
+	Player player;
 
 	Game game;
 

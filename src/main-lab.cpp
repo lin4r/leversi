@@ -100,8 +100,8 @@ static OthelloState parseStateString(string stateString)
 static OthelloAction chooseAction(OthelloState state)
 {
 	Game game(state);
-	BestMoveFinder actionFinder(game);
-	actionFinder.setMaxDepth(5);
+	BestMoveFinder actionFinder(state.whosTurn(), game);
+	actionFinder.setMaxDepth(7);
 
 	return actionFinder.getBestMove();
 }
