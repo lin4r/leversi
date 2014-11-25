@@ -66,9 +66,15 @@ void Callback::executePlayerAction(OthelloAction action)
 		model->notifyAll();
 
 		BestMoveFinder advisary(*model);
-		auto advisaryAction = advisary.getBestMove().first;
+		auto advisaryAction = advisary.getBestMove();
 		model->commitAction(advisaryAction);
 		cout << "Computer Action> " << advisaryAction << "." << endl;
+		auto analysis = advisary.getAnalysis();
+		cout << "*** Analysis ***" << endl
+			<<  "nodes:            " << analysis.numNodes << endl
+			<<  "branching factor: " << analysis.branchingFactor << endl
+			<<  "score:            " << analysis.score << endl
+			<<  "****************" << endl;
 
 		if (model->getState().isGameOver()) {
 

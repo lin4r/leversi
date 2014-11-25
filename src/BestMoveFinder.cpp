@@ -11,6 +11,7 @@ using namespace std;
 using std::pair;
 using std::vector;
 using std::max;
+using std::pow;
 
 namespace othello {
 
@@ -19,9 +20,18 @@ static inline bool isBetter(Effect e1, Effect e2) noexcept;
 BestMoveFinder::BestMoveFinder(Game game) : game(game)
 {}
 
-pair<OthelloAction, score_t> BestMoveFinder::getBestMove()
+OthelloAction BestMoveFinder::getBestMove()
 {
-	return _getBestMove(SCORE_INFIMUM, SCORE_SUPERMUM, 0);
+	analysis = {0,.0,0};
+
+	auto actionAndScore = _getBestMove(SCORE_INFIMUM, SCORE_SUPERMUM, 0);
+
+	//Approximative.
+	analysis.branchingFactor = pow(analysis.numNodes, 1.0/maxDepth);
+
+	analysis.score = actionAndScore.second;
+
+	return actionAndScore.first;
 }
 
 pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
@@ -33,6 +43,8 @@ pair<OthelloAction, score_t> BestMoveFinder::_getBestMove(
 		 * so long as the maxDepth is valid.' */
 		return pair<OthelloAction, score_t>(OthelloAction::pass(), 0);
 	}
+
+	analysis.numNodes++;
 
 	auto actionFlipsPairs =
 		OthelloAction::findLegalPlacements(game.getState());

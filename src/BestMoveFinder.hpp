@@ -17,13 +17,20 @@ struct Effect
 	score_t score;
 };
 
+struct Analysis
+{
+	int numNodes;
+	double branchingFactor;
+	score_t score;
+};
+
 class BestMoveFinder {
 public:
 
 	BestMoveFinder(Game game);
 	virtual ~BestMoveFinder() = default;
 
-	virtual std::pair<OthelloAction, score_t> getBestMove();
+	virtual OthelloAction getBestMove();
 
 	virtual int getMaxDepth() const noexcept { return maxDepth; }
 
@@ -33,6 +40,9 @@ public:
 
 	virtual void setEvaluator(const Evaluator& newEvaluator)
 		{ evaluator = std::move(newEvaluator.clone()); }
+
+	virtual Analysis getAnalysis() const noexcept
+		{ return analysis; }
 
 private:
 
@@ -46,6 +56,8 @@ private:
 	int maxDepth{5};
 
 	Game game;
+
+	Analysis analysis;
 
 	std::unique_ptr<Evaluator> evaluator{new FlipsEvaluator()};
 };
