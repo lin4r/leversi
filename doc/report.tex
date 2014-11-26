@@ -1,0 +1,87 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage{lastpage}
+%\setcounter{secnumdepth}{0} %To remove section numbering.
+\usepackage[margin=3cm, vmargin={100pt,100pt}]{geometry}
+\usepackage{fancyvrb}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{url}
+%\usepackage{draftwatermark} %To mark as draft.
+
+\newcommand{\footnoteremember}[2]{
+\footnote{#2}
+\newcounter{#1}
+\setcounter{#1}{\value{footnote}}
+}
+\newcommand{\footnoterecall}[1]{
+\footnotemark[\value{#1}]
+}
+
+\title{Lothello}
+\author{Linus Närvä (c10lna)}
+
+\begin{document}
+\maketitle
+
+\section{Handling time limit}
+Because Max-min search is a form Depth First traversal, it is feasible to use the method of \textit{iterative deepening}, to succesively produce better guesses until the time runs out.
+
+In normal min max search, the number of nodes is given by $N(d) = 1 + b + b^2 + ... b^d$, where $d$ is the depth and $b$ is the effective branch factor\footnote{Counting the root. In most litterature, the root node is not counted. The formula is then $N(d) +1 = 1 + b + b^2 + ... b^d$. Since the applicatoin does a first call to the recursive subfunction \_getBestMove(), I deemed it more straightforward to include it.}. This expression is equivalent to $N(d) = \frac{b^{d+1} -1}{b -1}$ (geometric sum). Using iterative deepening the total nuber of nodes is $N_i(d) = N(0) + N(1) + ... N(d)$. Rearranging the terms we get $N_i(d)(b-1) + b + 1= 1 + b + b^2 ... b^{d+1}$, which is also a gemetric sum. Hence $N_i(d) = \frac{b^{d+2} - 1}{(b - 1)^2} - \frac{d+1}{d-1}$. The dominating exponent is still $b^d$, which shows that iterative deepening will not impact time complexity, it is still $O(b^d)$. For this result to hold in practice, one assumption must be made: ``Deepening the Max-Min search does not affect the branching factor.''. This is not entirely true, since the branching factor tends to be initially low in othello and to reach a peak somewhere in the middle of the game. This will be further discussed in the analysis section below.
+
+\subsection{Practical adaptations}
+The algorithm uses a predictor to predict the time it will take to perform the next iterative call. For this the algorithm needs to keep track of the following values.
+
+\begin{tabular}{l l}
+$t_0$ & Time point, when the search started. \\
+$t_{start}$ & Time point when last iteration began. \\
+$t_{finish}$ & Time point when the last iteration finished \\
+$t_{end}$ & Time point when the algorithm must have finished \\
+$t_{predict}$ & Time point when the next iteration is expected to complete \\
+$n$ & Number of nodes in the last iteration. \\
+$n_{predict}$ & Predicted number of nodes. \\
+$b$ & The effective branching factor. \\
+$d$ & Current depth. \\
+\end{tabular}
+
+$b$ is the value from the previous iteration, because it is most likely to correspond that of the next (locality). The algorithm makes the assumption that all nodes require the same amount of time to expand. This assumption will be discussed in the analysis.
+
+\subsection{Algorithm}
+The branch factor is approximative and calculated as $b = N^{\frac{1}{d}}$.
+
+\begin{lstlisting}
+FUNCTION timeBoxedMoveFinder(maxTime, minDepth) -> OTHELLOACTION
+BEGIN
+	t0 := currentTime();
+	tEnd := t0 + maxTime;
+	d := minDepth;
+	
+	DO
+		searcher.setMaxDepth(d);
+		
+		tStart := currentTime();
+		action := searcherfindBestAction();
+		tFinish := currentTime();
+		
+		n := searcher.getNumNodes();
+		
+		nPredict := n + b^(d+1);
+		
+		b := searcher.getBranchFactor();
+		
+		tPredict := tFinish + (tFinish - tStart)*(nPredict/n);
+		
+	WHILE (tPredict < tEnd);
+	
+	RETURN action;
+END
+\end{lstlisting}
+
+
+
+\end{document}
