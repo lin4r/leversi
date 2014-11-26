@@ -102,7 +102,7 @@ static OthelloAction chooseAction(OthelloState state)
 {
 	Game game(state);
 	BestMoveFinder actionFinder(state.whosTurn(), game);
-	TimeBoxedActionFinder timedFinder(4, 500, actionFinder);
+	TimeBoxedActionFinder timedFinder(4, 5000, actionFinder);
 
 	return timedFinder.getBestMove();
 }
