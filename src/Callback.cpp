@@ -19,6 +19,7 @@
 #include "OthelloAction.hpp"
 #include "illegal_action_exception.hpp"
 #include "BestMoveFinder.hpp"
+#include "TimeBoxedActionFinder.hpp"
 
 #include <iostream>
 using std::cout;
@@ -65,7 +66,8 @@ void Callback::executePlayerAction(OthelloAction action)
 		//Extra notify because the ai might take a while to choose.
 		model->notifyAll();
 
-		BestMoveFinder advisary(Player::White, *model);
+		TimeBoxedActionFinder advisary(4, 5000
+			, BestMoveFinder(Player::White, *model));
 
 		auto advisaryAction = advisary.getBestMove();
 

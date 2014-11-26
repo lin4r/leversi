@@ -11,7 +11,7 @@ OOTEST=ObserverObservableTest.o
 
 TEST=PositionTest OthelloStateTest OthelloActionTest GameTest ObserverObservableTest FlipsEvaluatorTest CloneableTest
 
-AI=BestMoveFinder.o
+AI=BestMoveFinder.o TimeBoxedActionFinder.o
 
 TARGET=othello
 
@@ -101,7 +101,7 @@ CloneableTest: CloneableTest.o
 
 
 # Compile gui parts.
-Callback.o: Callback.cpp Callback.hpp Game.hpp OthelloController.hpp illegal_action_exception.hpp OthelloState.hpp Observer.hpp BestMoveFinder.hpp
+Callback.o: Callback.cpp Callback.hpp Game.hpp OthelloController.hpp illegal_action_exception.hpp OthelloState.hpp Observer.hpp BestMoveFinder.hpp TimeBoxedActionFinder.hpp
 	$(CC) $(CFLAGS) -c $<
 
 Board.o: Board.cpp Board.hpp OthelloView.hpp OthelloController.hpp Callback.hpp Tile.hpp Observer.hpp OthelloState.hpp Player.hpp Position.hpp
@@ -118,6 +118,9 @@ ObserverObservableTest.o: ObserverObservableTest.cpp Observer.hpp Observable.hpp
 
 # Compile AI.
 BestMoveFinder.o: BestMoveFinder.cpp BestMoveFinder.hpp Game.hpp OthelloAction.hpp Evaluator.hpp FlipsEvaluator.hpp Cloneable.hpp
+	$(CC) $(CFLAGS) -c $<
+
+TimeBoxedActionFinder.o: TimeBoxedActionFinder.cpp TimeBoxedActionFinder.hpp BestMoveFinder.hpp OthelloAction.hpp
 	$(CC) $(CFLAGS) -c $<
 
 ObserverObservableTest: ObserverObservableTest.o

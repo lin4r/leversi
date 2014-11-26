@@ -9,6 +9,7 @@
 #include "OthelloAction.hpp"
 #include "Game.hpp"
 #include "BestMoveFinder.hpp"
+#include "TimeBoxedActionFinder.hpp"
 
 #include <string>
 #include <iostream>
@@ -101,9 +102,9 @@ static OthelloAction chooseAction(OthelloState state)
 {
 	Game game(state);
 	BestMoveFinder actionFinder(state.whosTurn(), game);
-	actionFinder.setMaxDepth(7);
+	TimeBoxedActionFinder timedFinder(4, 5000, actionFinder);
 
-	return actionFinder.getBestMove();
+	return timedFinder.getBestMove();
 }
 
 static OthelloAction adaptCoordinateSystem(OthelloAction action)

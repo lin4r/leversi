@@ -47,6 +47,12 @@ public:
 	virtual Analysis getAnalysis() const noexcept
 		{ return analysis; }
 
+	virtual Player getPlayer() const noexcept
+		{ return player; }
+
+	virtual void setPlayer(Player newPlayer) noexcept
+		{ player = newPlayer; }
+
 private:
 
 	std::vector<Effect> orderActions(
