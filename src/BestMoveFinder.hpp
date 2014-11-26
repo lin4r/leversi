@@ -22,6 +22,7 @@ struct Analysis
 	int numNodes;
 	double branchingFactor;
 	score_t score;
+	int reachedDepth;
 };
 
 class BestMoveFinder {

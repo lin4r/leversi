@@ -4,11 +4,18 @@
 #include <vector>
 #include <algorithm>
 
+#include <cassert>
+
 using std::pair;
 using std::vector;
 using std::max;
 using std::min;
 using std::pow;
+
+//XXX DEBUG
+#include <iostream>
+using std::cerr;
+using std::endl;
 
 namespace othello {
 
@@ -41,7 +48,7 @@ const BestMoveFinder& BestMoveFinder::operator=(const BestMoveFinder& org)
 
 OthelloAction BestMoveFinder::getBestMove()
 {
-	analysis = {0,.0,0};
+	analysis = {0,.0,0,-1};
 
 	auto effect = _getBestMove(SCORE_INFIMUM, SCORE_SUPERMUM, 0, player);
 
@@ -56,10 +63,20 @@ OthelloAction BestMoveFinder::getBestMove()
 Effect BestMoveFinder::_getBestMove(
 		score_t alpha, score_t beta, int depth, Player pl)
 {
+//XXX DEBUG
+//	cerr << "(alpha,beta)=(" << alpha << "," << beta << ")" <<endl;
+
+	assert((SCORE_INFIMUM <= alpha) && (beta <= SCORE_SUPERMUM)
+		&& "Alpha and beta are within bounds.");
+
+	assert( ((alpha == SCORE_INFIMUM) || (beta == SCORE_SUPERMUM)
+		|| (alpha <= beta))
+		&& "Alpha and beta are both initialized, but alpha is larger.");
+
 	analysis.numNodes++;
 
 	/* If the maximum depth is surpassed or the game is over just return. */
-	if (depth >= maxDepth || game.getState().isGameOver()) {
+	if (depth >= maxDepth || game.refState().isGameOver()) {
 		/* The 'action is irrelevant since it will never be executed
 		 * so long as the maxDepth is valid.' */
 
@@ -78,10 +95,19 @@ Effect BestMoveFinder::_getBestMove(
 		const auto score = (player == Player::Black)
 			? blackScore : -blackScore;
 
+		assert((SCORE_INFIMUM <= score) && (score <= SCORE_SUPERMUM)
+			&& "The score is outside its bounds");
+
 		/* The action is arbitrary. */
 		Effect result = {OthelloAction::pass(), score};
+
+		analysis.reachedDepth = max(depth, analysis.reachedDepth);
+
 		return result;
 	}
+
+	assert(! game.refState().isGameOver()
+		&& "Game over but not a leaf node!");
 
 	auto actionFlipsPairs =
 		OthelloAction::findLegalPlacements(game.getState());
@@ -97,6 +123,9 @@ Effect BestMoveFinder::_getBestMove(
 
 	auto effects = orderActions(actionFlipsPairs);
 
+	assert(std::is_sorted(effects.begin(), effects.end(), isBetter)
+		&& "The effects are not in proper order.");
+
 	Effect bestEffect = {OthelloAction::pass(), 0};
 	if (player == pl) {
 		bestEffect = maxValue(alpha, beta, depth, effects, pl);
@@ -110,13 +139,24 @@ Effect BestMoveFinder::_getBestMove(
 Effect BestMoveFinder::maxValue(score_t alpha, score_t beta, int depth
 		, const vector<Effect>& effects, Player pl)
 {
+	assert(player == pl && "Not the max-player");
+
 	auto value = SCORE_INFIMUM;
 	OthelloAction bestAction(Position(-1,-1)); //Dummy action.
 
 	for (auto effect : effects) {
 
-		value = max(value
-			, _getBestMove(alpha, beta, depth+1, advisary(pl)).score);
+		game.commitAction(effect.action);
+
+		const auto minval =
+			_getBestMove(alpha, beta, depth+1, advisary(pl)).score;
+
+		game.undoLastAction();
+
+		value = max(value, minval);
+
+		assert((value != SCORE_SUPERMUM)
+			&& "The value was not set!");
 
 		if (value >= beta) {
 			//The Action doesn't matter.
@@ -127,6 +167,12 @@ Effect BestMoveFinder::maxValue(score_t alpha, score_t beta, int depth
 		}
 	}
 
+	assert(!((depth == 0) && (value >= beta)) 
+		&& "The root node is never truncated.");
+
+	assert(((alpha != SCORE_INFIMUM) || (value >= beta))
+		&& "Either alpha must be set or the iteration truncated.");
+
 	const Effect bestEffect = {bestAction, value};
 	return bestEffect;
 }
@@ -134,13 +180,24 @@ Effect BestMoveFinder::maxValue(score_t alpha, score_t beta, int depth
 Effect BestMoveFinder::minValue(score_t alpha, score_t beta, int depth
 		, const vector<Effect>& effects, Player pl)
 {
+	assert(player != pl && "Not the min-player");
+
 	auto value = SCORE_SUPERMUM;
 	OthelloAction bestAction(Position(-1,-1)); //Dummy action.
 
 	for (auto effect : effects) {
 
-		value = min(value
-			, _getBestMove(alpha, beta, depth+1, advisary(pl)).score);
+		game.commitAction(effect.action);
+
+		const auto maxval =
+			_getBestMove(alpha, beta, depth+1, advisary(pl)).score;
+
+		game.undoLastAction();
+
+		value = min(value, maxval);
+
+		assert((value != SCORE_SUPERMUM)
+			&& "The value was not set!");
 
 		if (value <= alpha) {
 			//The Action doesn't matter.
@@ -150,6 +207,9 @@ Effect BestMoveFinder::minValue(score_t alpha, score_t beta, int depth
 			bestAction = effect.action;
 		}
 	}
+
+	assert(((beta != SCORE_SUPERMUM) || (value <= alpha))
+		&& "Either beta must be set or the iteration truncated.");
 
 	const Effect bestEffect = {bestAction, value};
 	return bestEffect;

@@ -60,9 +60,10 @@ OthelloAction TimeBoxedActionFinder::getBestMove()
 		<<  "nodes:            " << analysis.numNodes << endl
 		<<  "branching factor: " << analysis.branchingFactor << endl
 		<<  "score:            " << analysis.score << endl
-		<<  "Time used (s): "
+		<<  "Time used (s):    "
 			<< duration_cast<milliseconds>(usedTime).count()/1000.0 << endl
-		<<  "Maximum Depth: " << getMaxDepth() << endl
+		<<  "Depth:               " << analysis.reachedDepth << endl
+		<<  "MaxDepth:            " << getMaxDepth() << endl
 		<<  "****************" << endl;
 
 	return action;
