@@ -72,16 +72,7 @@ Effect BestMoveFinder::_getBestMove(
 		/* The 'action is irrelevant since it will never be executed
 		 * so long as the maxDepth is valid.' */
 
-		/* XXX Utility function, Evaluators duty! */
-		score_t blackScore{0};
-		for (auto tile : game.refState().constBoardIterator()) {
-
-			switch (tile) {
-			case Tile::Black: blackScore++; break;
-			case Tile::White: blackScore--; break;
-			default: ;
-			}
-		}
+		const auto blackScore = evaluator->utility(game.refState());
 
 		/* Zero sum rule. */
 		const auto score = (player == Player::Black)

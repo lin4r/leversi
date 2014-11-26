@@ -23,6 +23,21 @@ score_t FlipsEvaluator::evaluateAction(const OthelloAction& action
 	}
 }
 
+score_t FlipsEvaluator::utility(const OthelloState& state)
+{
+	score_t blackScore{0};
+	for (auto tile : state.constBoardIterator()) {
+
+		switch (tile) {
+		case Tile::Black: blackScore++; break;
+		case Tile::White: blackScore--; break;
+		default: ;
+		}
+	}
+
+	return blackScore;
+}
+
 unique_ptr<Evaluator> FlipsEvaluator::clone() const
 {
 	return unique_ptr<Evaluator>(new FlipsEvaluator(*this));

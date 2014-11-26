@@ -14,8 +14,8 @@
 namespace othello {
 
 typedef int score_t;
-const score_t SCORE_INFIMUM{-65};
-const score_t SCORE_SUPERMUM{65};
+const score_t SCORE_INFIMUM{INT_MIN};
+const score_t SCORE_SUPERMUM{INT_MAX};
 
 class Evaluator : Cloneable<Evaluator>
 {
@@ -25,6 +25,8 @@ public:
 
 	virtual score_t evaluateAction(const OthelloAction& action
 		, const flips_t& flips, const OthelloState& beforeAction) = 0;
+
+	virtual score_t utility(const OthelloState& state) = 0;
 
 	virtual std::unique_ptr<Evaluator> clone() const override = 0;
 };

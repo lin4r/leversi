@@ -20,6 +20,8 @@ public:
 	virtual score_t evaluateAction(const OthelloAction& action
 		, const flips_t& flips, const OthelloState& beforeAction) override;
 
+	virtual score_t utility(const OthelloState& state) override;
+
 	virtual std::unique_ptr<Evaluator> clone() const override;
 };
 
