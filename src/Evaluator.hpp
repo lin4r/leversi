@@ -31,7 +31,8 @@ public:
 		, const flips_t& flips, const OthelloState& beforeAction) const = 0;
 
 	/**
-	 * Utility function for evaluating an othello state.
+	 * Utility function for evaluating an othello state. Specifically the score
+	 * of the black player.
 	 */
 	virtual score_t utility(const OthelloState& state) const = 0;
 

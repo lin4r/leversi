@@ -15,6 +15,7 @@
  *
  * Linus Narva.
  */
+//FIXME Replace the pair's with a struct.
 #ifndef OTHELLO_ACTION_HPP_
 #define OTHELLO_ACTION_HPP_
 

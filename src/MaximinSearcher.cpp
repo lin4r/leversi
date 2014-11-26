@@ -44,13 +44,13 @@ const MaximinSearcher& MaximinSearcher::operator=(const MaximinSearcher& org)
 
 OthelloAction MaximinSearcher::maximinAction()
 {
-	analysis = {0,.0,0,-1};
+	analysis = {0,.0,0,-1}; /* Clear the previous analysis (if any). */
 
-	auto rankedAction = _maximinAction(SCORE_INFIMUM, SCORE_SUPERMUM, 0, maxPlayer);
+	auto rankedAction = _maximinAction(SCORE_INFIMUM, SCORE_SUPERMUM, 0
+		, maxPlayer);
 
 	//Approximative.
 	analysis.branchingFactor = pow(analysis.numNodes, 1.0/maxDepth);
-
 	analysis.predictedScore = rankedAction.score;
 
 	return rankedAction.action;
@@ -59,14 +59,11 @@ OthelloAction MaximinSearcher::maximinAction()
 RankedAction MaximinSearcher::_maximinAction(
 		score_t alpha, score_t beta, int depth, Player pl)
 {
-	assert((SCORE_INFIMUM <= alpha) && (beta <= SCORE_SUPERMUM)
-		&& "Alpha and beta are within bounds.");
+	analysis.numNodes++;
 
 	assert( ((alpha == SCORE_INFIMUM) || (beta == SCORE_SUPERMUM)
 		|| (alpha <= beta))
-		&& "Alpha and beta are both initialized, but alpha is larger.");
-
-	analysis.numNodes++;
+		&& "If both are initialized then beta cant be lower than alpha.");
 
 	/* If the maximum depth is surpassed or the game is over just return. */
 	if (depth >= maxDepth || game.refState().isGameOver()) {
@@ -80,7 +77,7 @@ RankedAction MaximinSearcher::_maximinAction(
 			? blackScore : -blackScore;
 
 		assert((SCORE_INFIMUM <= score) && (score <= SCORE_SUPERMUM)
-			&& "The score is outside its bounds");
+			&& "The score must be inside its bounds");
 
 		/* The action is arbitrary. */
 		RankedAction result = {OthelloAction::pass(), score};
@@ -89,9 +86,6 @@ RankedAction MaximinSearcher::_maximinAction(
 
 		return result;
 	}
-
-	assert(! game.refState().isGameOver()
-		&& "Game over but not a leaf node!");
 
 	auto actionFlipsPairs =
 		OthelloAction::findLegalPlacements(game.getState());
