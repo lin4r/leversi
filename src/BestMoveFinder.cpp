@@ -12,11 +12,6 @@ using std::max;
 using std::min;
 using std::pow;
 
-//XXX DEBUG
-#include <iostream>
-using std::cerr;
-using std::endl;
-
 namespace othello {
 
 static inline bool isBetter(Effect e1, Effect e2) noexcept;
@@ -63,9 +58,6 @@ OthelloAction BestMoveFinder::getBestMove()
 Effect BestMoveFinder::_getBestMove(
 		score_t alpha, score_t beta, int depth, Player pl)
 {
-//XXX DEBUG
-//	cerr << "(alpha,beta)=(" << alpha << "," << beta << ")" <<endl;
-
 	assert((SCORE_INFIMUM <= alpha) && (beta <= SCORE_SUPERMUM)
 		&& "Alpha and beta are within bounds.");
 

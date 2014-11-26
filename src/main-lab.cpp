@@ -54,8 +54,6 @@ int main(int argc, char* args[])
 
 	auto state = parseStateString(stateString);
 
-	//cerr << "DEBUG: The parsed state:" << endl << state << endl;
-
 	auto action = adaptCoordinateSystem(chooseAction(state));
 
 	cout << action.actionString() << endl;
@@ -72,8 +70,6 @@ static OthelloState parseStateString(string stateString)
 	case 'W': state.setTurn(Player::White); break;
 	default: throw parse_exception();
 	}
-
-//	cerr << "DEBUG: is colour" << state.whosTurn() << endl;
 
 	const auto rows = state.getBoardRows();
 	const auto cols = state.getBoardColumns();

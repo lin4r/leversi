@@ -8,10 +8,6 @@
 #include <chrono>
 #include <cmath>
 
-//XXX DEBUG
-#include <iostream>
-using namespace std;
-
 namespace othello {
 
 OthelloAction TimeBoxedActionFinder::getBestMove()
@@ -52,19 +48,19 @@ OthelloAction TimeBoxedActionFinder::getBestMove()
 
 	} while ((tPredict < tExit) && (! action.isPass()));
 
-	//XXX DEBUG
-	const auto analysis = getAnalysis();
-	const auto usedTime = high_resolution_clock::now() - t0;
-	cerr << "*** Analysis ***" << endl
-		<<  "player:           " << getPlayer() << endl
-		<<  "nodes:            " << analysis.numNodes << endl
-		<<  "branching factor: " << analysis.branchingFactor << endl
-		<<  "score:            " << analysis.score << endl
-		<<  "Time used (s):    "
-			<< duration_cast<milliseconds>(usedTime).count()/1000.0 << endl
-		<<  "Depth:               " << analysis.reachedDepth << endl
-		<<  "MaxDepth:            " << getMaxDepth() << endl
-		<<  "****************" << endl;
+// Useful code for debugging.
+//	const auto analysis = getAnalysis();
+//	const auto usedTime = high_resolution_clock::now() - t0;
+//	cerr << "*** Analysis ***" << endl
+//		<<  "player:           " << getPlayer() << endl
+//		<<  "nodes:            " << analysis.numNodes << endl
+//		<<  "branching factor: " << analysis.branchingFactor << endl
+//		<<  "score:            " << analysis.score << endl
+//		<<  "Time used (s):    "
+//			<< duration_cast<milliseconds>(usedTime).count()/1000.0 << endl
+//		<<  "Depth:               " << analysis.reachedDepth << endl
+//		<<  "MaxDepth:            " << getMaxDepth() << endl
+//		<<  "****************" << endl;
 
 	return action;
 }
