@@ -19,6 +19,26 @@ BestMoveFinder::BestMoveFinder(Player player, Game game)
 		, game(game)
 {}
 
+BestMoveFinder::BestMoveFinder(const BestMoveFinder& org)
+		: maxDepth{org.maxDepth}
+		, player{org.player}
+		, game(org.game)
+		, analysis(org.analysis)
+{
+	setEvaluator(*(org.evaluator.get()));
+}
+
+const BestMoveFinder& BestMoveFinder::operator=(const BestMoveFinder& org)
+{
+	maxDepth = org.maxDepth;
+	player = org.player;
+	game = org.game;
+	analysis = org.analysis;
+	setEvaluator(*(org.evaluator.get()));
+
+	return *this;
+}
+
 OthelloAction BestMoveFinder::getBestMove()
 {
 	analysis = {0,.0,0};
@@ -39,7 +59,7 @@ Effect BestMoveFinder::_getBestMove(
 	analysis.numNodes++;
 
 	/* If the maximum depth is surpassed or the game is over just return. */
-	if (depth > maxDepth || game.getState().isGameOver()) {
+	if (depth >= maxDepth || game.getState().isGameOver()) {
 		/* The 'action is irrelevant since it will never be executed
 		 * so long as the maxDepth is valid.' */
 

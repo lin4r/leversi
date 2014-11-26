@@ -30,6 +30,9 @@ public:
 	BestMoveFinder(Player player, Game game);
 	virtual ~BestMoveFinder() = default;
 
+	BestMoveFinder(const BestMoveFinder& org);
+	virtual const BestMoveFinder& operator=(const BestMoveFinder& org);
+
 	virtual OthelloAction getBestMove(); //XXX Rename getBestAction
 
 	virtual int getMaxDepth() const noexcept { return maxDepth; }
