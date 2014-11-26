@@ -5,25 +5,24 @@
 #ifndef TIME_BOXED_ACTION_FINDER_HPP_
 #define TIME_BOXED_ACTION_FINDER_HPP_
 
-#include "BestMoveFinder.hpp"
+#include "MaximinSearcher.hpp"
 #include "OthelloAction.hpp"
 
 namespace othello {
 
-class TimeBoxedActionFinder : public BestMoveFinder
+class TimeBoxedActionFinder : public MaximinSearcher
 {
 public:
 
-	TimeBoxedActionFinder(int minDepth, int maxTime_ms, BestMoveFinder finder)
-			: BestMoveFinder(finder)
+	TimeBoxedActionFinder(int minDepth, int maxTime_ms, MaximinSearcher finder)
+			: MaximinSearcher(finder)
 			, minDepth{minDepth}
 			, maxTime_ms{maxTime_ms}
 	{}
 
 	virtual ~TimeBoxedActionFinder() = default;
 
-	//XXX Rename getBestAction.
-	virtual OthelloAction getBestMove() override;
+	virtual OthelloAction maximinAction() override;
 
 private:
 

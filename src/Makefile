@@ -2,16 +2,16 @@ CC=g++
 CFLAGS=-Wall -g -std=c++11 -O0
 LDFLAGS=
 
-MODEL=Position.o OthelloState.o OthelloAction.o Game.o FlipsEvaluator.o
+MODEL=Position.o OthelloState.o OthelloAction.o Game.o SimpleEvaluator.o
 MODELTEST=PositionTest.o OthelloStateTest.o OthelloActionTest.o GameTest.o
 
 GUI=Callback.o Board.o GUI.o
 
 OOTEST=ObserverObservableTest.o
 
-TEST=PositionTest OthelloStateTest OthelloActionTest GameTest ObserverObservableTest FlipsEvaluatorTest CloneableTest
+TEST=PositionTest OthelloStateTest OthelloActionTest GameTest ObserverObservableTest SimpleEvaluatorTest CloneableTest
 
-AI=BestMoveFinder.o TimeBoxedActionFinder.o
+AI=MaximinSearcher.o TimeBoxedActionFinder.o
 
 TARGET=othello
 
@@ -27,14 +27,14 @@ test: $(TEST)
 	./OthelloActionTest
 	./GameTest
 	./ObserverObservableTest
-	./FlipsEvaluatorTest
+	./SimpleEvaluatorTest
 	./CloneableTest
 
 #Compile lab code.
 $(LAB): main-lab.o $(MODELEX) $(MODEL) $(AI)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-main-lab.o: main-lab.cpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp OthelloAction.hpp Game.hpp BestMoveFinder.hpp
+main-lab.o: main-lab.cpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp OthelloAction.hpp Game.hpp MaximinSearcher.hpp
 	$(CC) $(CFLAGS) -c $<
 
 # Compile Target
@@ -57,7 +57,7 @@ OthelloAction.o: OthelloAction.cpp OthelloAction.hpp Position.hpp OthelloState.h
 Game.o: Game.cpp Game.hpp OthelloState.hpp OthelloAction.hpp Observable.hpp undo_initial_state_exception.hpp
 	$(CC) $(CFLAGS) -c $<
 
-FlipsEvaluator.o: FlipsEvaluator.cpp FlipsEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Cloneable.hpp
+SimpleEvaluator.o: SimpleEvaluator.cpp SimpleEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Cloneable.hpp
 	$(CC) $(CFLAGS) -c $<
 
 
@@ -87,10 +87,10 @@ GameTest.o: GameTest.cpp Game.hpp undo_initial_state_exception.hpp
 GameTest: GameTest.o Game.o OthelloAction.o OthelloState.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-FlipsEvaluatorTest.o: FlipsEvaluatorTest.cpp FlipsEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Position.hpp
+SimpleEvaluatorTest.o: SimpleEvaluatorTest.cpp SimpleEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Position.hpp
 	$(CC) $(CFLAGS) -c $<
 
-FlipsEvaluatorTest: FlipsEvaluatorTest.o FlipsEvaluator.o OthelloAction.o OthelloState.o Position.o
+SimpleEvaluatorTest: SimpleEvaluatorTest.o SimpleEvaluator.o OthelloAction.o OthelloState.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 CloneableTest.o: CloneableTest.cpp Cloneable.hpp
@@ -101,7 +101,7 @@ CloneableTest: CloneableTest.o
 
 
 # Compile gui parts.
-Callback.o: Callback.cpp Callback.hpp Game.hpp OthelloController.hpp illegal_action_exception.hpp OthelloState.hpp Observer.hpp BestMoveFinder.hpp TimeBoxedActionFinder.hpp
+Callback.o: Callback.cpp Callback.hpp Game.hpp OthelloController.hpp illegal_action_exception.hpp OthelloState.hpp Observer.hpp MaximinSearcher.hpp TimeBoxedActionFinder.hpp
 	$(CC) $(CFLAGS) -c $<
 
 Board.o: Board.cpp Board.hpp OthelloView.hpp OthelloController.hpp Callback.hpp Tile.hpp Observer.hpp OthelloState.hpp Player.hpp Position.hpp
@@ -117,10 +117,10 @@ ObserverObservableTest.o: ObserverObservableTest.cpp Observer.hpp Observable.hpp
 
 
 # Compile AI.
-BestMoveFinder.o: BestMoveFinder.cpp BestMoveFinder.hpp Game.hpp OthelloAction.hpp Evaluator.hpp FlipsEvaluator.hpp Cloneable.hpp
+MaximinSearcher.o: MaximinSearcher.cpp MaximinSearcher.hpp Game.hpp OthelloAction.hpp Evaluator.hpp SimpleEvaluator.hpp Cloneable.hpp
 	$(CC) $(CFLAGS) -c $<
 
-TimeBoxedActionFinder.o: TimeBoxedActionFinder.cpp TimeBoxedActionFinder.hpp BestMoveFinder.hpp OthelloAction.hpp
+TimeBoxedActionFinder.o: TimeBoxedActionFinder.cpp TimeBoxedActionFinder.hpp MaximinSearcher.hpp OthelloAction.hpp
 	$(CC) $(CFLAGS) -c $<
 
 ObserverObservableTest: ObserverObservableTest.o

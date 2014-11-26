@@ -1,4 +1,4 @@
-#include "BestMoveFinder.hpp"
+#include "MaximinSearcher.hpp"
 
 #include <utility>
 #include <vector>
@@ -14,26 +14,27 @@ using std::pow;
 
 namespace othello {
 
-static inline bool isBetter(Effect e1, Effect e2) noexcept;
+static inline bool isBetter(RankedAction e1, RankedAction e2) noexcept;
 
-BestMoveFinder::BestMoveFinder(Player player, Game game)
-		: player{player}
-		, game(game)
-{}
+MaximinSearcher::MaximinSearcher(Game game)
+		: game(game)
+{
+	maxPlayer = game.refState().whosTurn();
+}
 
-BestMoveFinder::BestMoveFinder(const BestMoveFinder& org)
+MaximinSearcher::MaximinSearcher(const MaximinSearcher& org)
 		: maxDepth{org.maxDepth}
-		, player{org.player}
+		, maxPlayer{org.maxPlayer}
 		, game(org.game)
 		, analysis(org.analysis)
 {
 	setEvaluator(*(org.evaluator.get()));
 }
 
-const BestMoveFinder& BestMoveFinder::operator=(const BestMoveFinder& org)
+const MaximinSearcher& MaximinSearcher::operator=(const MaximinSearcher& org)
 {
 	maxDepth = org.maxDepth;
-	player = org.player;
+	maxPlayer = org.maxPlayer;
 	game = org.game;
 	analysis = org.analysis;
 	setEvaluator(*(org.evaluator.get()));
@@ -41,21 +42,21 @@ const BestMoveFinder& BestMoveFinder::operator=(const BestMoveFinder& org)
 	return *this;
 }
 
-OthelloAction BestMoveFinder::getBestMove()
+OthelloAction MaximinSearcher::maximinAction()
 {
 	analysis = {0,.0,0,-1};
 
-	auto effect = _getBestMove(SCORE_INFIMUM, SCORE_SUPERMUM, 0, player);
+	auto rankedAction = _maximinAction(SCORE_INFIMUM, SCORE_SUPERMUM, 0, maxPlayer);
 
 	//Approximative.
 	analysis.branchingFactor = pow(analysis.numNodes, 1.0/maxDepth);
 
-	analysis.score = effect.score;
+	analysis.predictedScore = rankedAction.score;
 
-	return effect.action;
+	return rankedAction.action;
 }
 
-Effect BestMoveFinder::_getBestMove(
+RankedAction MaximinSearcher::_maximinAction(
 		score_t alpha, score_t beta, int depth, Player pl)
 {
 	assert((SCORE_INFIMUM <= alpha) && (beta <= SCORE_SUPERMUM)
@@ -75,14 +76,14 @@ Effect BestMoveFinder::_getBestMove(
 		const auto blackScore = evaluator->utility(game.refState());
 
 		/* Zero sum rule. */
-		const auto score = (player == Player::Black)
+		const auto score = (maxPlayer == Player::Black)
 			? blackScore : -blackScore;
 
 		assert((SCORE_INFIMUM <= score) && (score <= SCORE_SUPERMUM)
 			&& "The score is outside its bounds");
 
 		/* The action is arbitrary. */
-		Effect result = {OthelloAction::pass(), score};
+		RankedAction result = {OthelloAction::pass(), score};
 
 		analysis.reachedDepth = max(depth, analysis.reachedDepth);
 
@@ -104,35 +105,35 @@ Effect BestMoveFinder::_getBestMove(
 		actionFlipsPairs.push_back(passPair);
 	}
 
-	auto effects = orderActions(actionFlipsPairs);
+	auto rankedActions = orderActions(actionFlipsPairs);
 
-	assert(std::is_sorted(effects.begin(), effects.end(), isBetter)
-		&& "The effects are not in proper order.");
+	assert(std::is_sorted(rankedActions.begin(), rankedActions.end(), isBetter)
+		&& "The rankedActions are not in proper order.");
 
-	Effect bestEffect = {OthelloAction::pass(), 0};
-	if (player == pl) {
-		bestEffect = maxValue(alpha, beta, depth, effects, pl);
+	RankedAction bestRankedAction = {OthelloAction::pass(), 0};
+	if (maxPlayer == pl) {
+		bestRankedAction = maxValue(alpha, beta, depth, rankedActions, pl);
 	} else {
-		bestEffect = minValue(alpha, beta, depth, effects, pl);
+		bestRankedAction = minValue(alpha, beta, depth, rankedActions, pl);
 	}
 
-	return bestEffect;
+	return bestRankedAction;
 }
 
-Effect BestMoveFinder::maxValue(score_t alpha, score_t beta, int depth
-		, const vector<Effect>& effects, Player pl)
+RankedAction MaximinSearcher::maxValue(score_t alpha, score_t beta, int depth
+		, const vector<RankedAction>& rankedActions, Player pl)
 {
-	assert(player == pl && "Not the max-player");
+	assert(maxPlayer == pl && "Not the max-maxPlayer");
 
 	auto value = SCORE_INFIMUM;
 	OthelloAction bestAction(Position(-1,-1)); //Dummy action.
 
-	for (auto effect : effects) {
+	for (auto rankedAction : rankedActions) {
 
-		game.commitAction(effect.action);
+		game.commitAction(rankedAction.action);
 
 		const auto minval =
-			_getBestMove(alpha, beta, depth+1, advisary(pl)).score;
+			_maximinAction(alpha, beta, depth+1, advisary(pl)).score;
 
 		game.undoLastAction();
 
@@ -146,7 +147,7 @@ Effect BestMoveFinder::maxValue(score_t alpha, score_t beta, int depth
 			break;
 		} else if (value > alpha) {
 			alpha = value;
-			bestAction = effect.action;
+			bestAction = rankedAction.action;
 		}
 	}
 
@@ -156,24 +157,24 @@ Effect BestMoveFinder::maxValue(score_t alpha, score_t beta, int depth
 	assert(((alpha != SCORE_INFIMUM) || (value >= beta))
 		&& "Either alpha must be set or the iteration truncated.");
 
-	const Effect bestEffect = {bestAction, value};
-	return bestEffect;
+	const RankedAction bestRankedAction = {bestAction, value};
+	return bestRankedAction;
 }
 
-Effect BestMoveFinder::minValue(score_t alpha, score_t beta, int depth
-		, const vector<Effect>& effects, Player pl)
+RankedAction MaximinSearcher::minValue(score_t alpha, score_t beta, int depth
+		, const vector<RankedAction>& rankedActions, Player pl)
 {
-	assert(player != pl && "Not the min-player");
+	assert(maxPlayer != pl && "Not the min-maxPlayer");
 
 	auto value = SCORE_SUPERMUM;
 	OthelloAction bestAction(Position(-1,-1)); //Dummy action.
 
-	for (auto effect : effects) {
+	for (auto rankedAction : rankedActions) {
 
-		game.commitAction(effect.action);
+		game.commitAction(rankedAction.action);
 
 		const auto maxval =
-			_getBestMove(alpha, beta, depth+1, advisary(pl)).score;
+			_maximinAction(alpha, beta, depth+1, advisary(pl)).score;
 
 		game.undoLastAction();
 
@@ -187,46 +188,46 @@ Effect BestMoveFinder::minValue(score_t alpha, score_t beta, int depth
 			break;
 		} else if (value < beta) {
 			beta = value;
-			bestAction = effect.action;
+			bestAction = rankedAction.action;
 		}
 	}
 
 	assert(((beta != SCORE_SUPERMUM) || (value <= alpha))
 		&& "Either beta must be set or the iteration truncated.");
 
-	const Effect bestEffect = {bestAction, value};
-	return bestEffect;
+	const RankedAction bestRankedAction = {bestAction, value};
+	return bestRankedAction;
 }
 
-vector<Effect> BestMoveFinder::orderActions(
+vector<RankedAction> MaximinSearcher::orderActions(
 		const vector<pair<OthelloAction, flips_t>>& actionFlipsPairs)
 {
 	using std::sort;
 
 	/* Computes the score obtained by each of the actions. */
-	vector<Effect> effects;
+	vector<RankedAction> rankedActions;
 	for (auto actionFlipsPair : actionFlipsPairs) {
 
 		/* Unpack. */
 		const auto& action = actionFlipsPair.first;
 		const auto& flips = actionFlipsPair.second;
 
-		const auto score = evaluator->evaluateAction(action, flips
+		const auto score = evaluator->moveUtility(action, flips
 			, game.refState());
 
-		const Effect effect = {action, score};
+		const RankedAction rankedAction = {action, score};
 
-		effects.push_back(effect);
+		rankedActions.push_back(rankedAction);
 	}
 
 	/* Sort the vector so that moves with high scores comes first. */
-	sort(effects.begin(), effects.end(), isBetter);
+	sort(rankedActions.begin(), rankedActions.end(), isBetter);
 
-	return effects;
+	return rankedActions;
 }
 
-/* Large effects are desireable and therefore comes first. */
-bool isBetter(Effect e1, Effect e2) noexcept
+/* Large rankedActions are desireable and therefore comes first. */
+bool isBetter(RankedAction e1, RankedAction e2) noexcept
 {
 	return e1.score > e2.score;
 }

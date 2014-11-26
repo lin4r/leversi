@@ -10,7 +10,7 @@
 
 namespace othello {
 
-OthelloAction TimeBoxedActionFinder::getBestMove()
+OthelloAction TimeBoxedActionFinder::maximinAction()
 {
 	using std::pow;
 	using namespace std::chrono;
@@ -30,7 +30,7 @@ OthelloAction TimeBoxedActionFinder::getBestMove()
 		setMaxDepth(depth);
 
 		const auto tStart = high_resolution_clock::now();
-		action = BestMoveFinder::getBestMove();
+		action = MaximinSearcher::maximinAction();
 		const auto tFinish = high_resolution_clock::now();
 		const auto execTime = tFinish - tStart;
 

@@ -8,7 +8,7 @@
 #include "Tile.hpp"
 #include "OthelloAction.hpp"
 #include "Game.hpp"
-#include "BestMoveFinder.hpp"
+#include "MaximinSearcher.hpp"
 #include "TimeBoxedActionFinder.hpp"
 
 #include <string>
@@ -99,10 +99,10 @@ static OthelloState parseStateString(string stateString)
 static OthelloAction chooseAction(OthelloState state, int timeout_ms)
 {
 	Game game(state);
-	BestMoveFinder actionFinder(state.whosTurn(), game);
+	MaximinSearcher actionFinder(game);
 	TimeBoxedActionFinder timedFinder(5, timeout_ms, actionFinder);
 
-	return timedFinder.getBestMove();
+	return timedFinder.maximinAction();
 }
 
 static OthelloAction adaptCoordinateSystem(OthelloAction action)

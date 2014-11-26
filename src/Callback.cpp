@@ -18,7 +18,7 @@
 #include "Position.hpp"
 #include "OthelloAction.hpp"
 #include "illegal_action_exception.hpp"
-#include "BestMoveFinder.hpp"
+#include "MaximinSearcher.hpp"
 #include "TimeBoxedActionFinder.hpp"
 
 #include <iostream>
@@ -67,16 +67,16 @@ void Callback::executePlayerAction(OthelloAction action)
 		model->notifyAll();
 
 		TimeBoxedActionFinder advisary(4, 5000
-			, BestMoveFinder(Player::White, *model));
+			, MaximinSearcher(*model));
 
-		auto advisaryAction = advisary.getBestMove();
+		auto advisaryAction = advisary.maximinAction();
 
 		auto analysis = advisary.getAnalysis();
 		cout << "Computer Action> " << advisaryAction << "." << endl;
 		cout << "*** Analysis ***" << endl
 			<<  "nodes:            " << analysis.numNodes << endl
 			<<  "branching factor: " << analysis.branchingFactor << endl
-			<<  "score:            " << analysis.score << endl
+			<<  "score:            " << analysis.predictedScore << endl
 			<<  "****************" << endl;
 
 		model->commitAction(advisaryAction);
