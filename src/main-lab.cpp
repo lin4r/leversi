@@ -28,7 +28,7 @@ public:
 
 static void usage(const char* executableName) noexcept;
 static OthelloState parseStateString(string stateString);
-static OthelloAction chooseAction(OthelloState state);
+static OthelloAction chooseAction(OthelloState state, int timeout_ms);
 
 /* Changes the coordinate system from [0 7] (as in my code) to [1, 8]
  * (as in the lab test code).
@@ -54,7 +54,9 @@ int main(int argc, char* args[])
 
 	auto state = parseStateString(stateString);
 
-	auto action = adaptCoordinateSystem(chooseAction(state));
+	const auto timeout_s = atoi(args[2]);
+
+	auto action = adaptCoordinateSystem(chooseAction(state, 1000*timeout_s));
 
 	cout << action.actionString() << endl;
 
@@ -94,11 +96,11 @@ static OthelloState parseStateString(string stateString)
 	return state;
 }
 
-static OthelloAction chooseAction(OthelloState state)
+static OthelloAction chooseAction(OthelloState state, int timeout_ms)
 {
 	Game game(state);
 	BestMoveFinder actionFinder(state.whosTurn(), game);
-	TimeBoxedActionFinder timedFinder(4, 5000, actionFinder);
+	TimeBoxedActionFinder timedFinder(5, timeout_ms, actionFinder);
 
 	return timedFinder.getBestMove();
 }
