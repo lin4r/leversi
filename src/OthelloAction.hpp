@@ -36,18 +36,33 @@ class OthelloAction
 {
 public:
 
+	/**
+	 * param:	Position for placement.
+	 */
 	OthelloAction(Position position) noexcept
 		: OthelloAction(position, false)
 	{}
 
+	/**
+	 * params:
+	 *	position - Position of placement. Doesn't matter if ispass==true.
+	 *	ispass - Flags if the action is pass.
+	 */
 	OthelloAction(Position position, bool ispass) noexcept
 		: position(position), ispass{ispass}
 	{}
 
 	virtual ~OthelloAction() = default;
 
+	/**
+	 * Creates a pass action.
+	 * return:	A pass action.
+	 */
 	static OthelloAction pass() noexcept;
 
+	/**
+	 * Parses an action string ... TODO rremeber throws.
+	 */
 	static OthelloAction parse(std::string actionstring);
 
 	virtual std::string actionString() const noexcept;
