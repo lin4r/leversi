@@ -36,7 +36,7 @@ OthelloState::OthelloState(int boardRows, int boardColumns, Player starter)
 		noexcept
 		: playersTurn{starter}, boardRows{boardRows}
 		, boardColumns{boardColumns}
-		, grid{vector<Tile>(boardRows*boardColumns,Tile::Empty)}
+		, board{vector<Tile>(boardRows*boardColumns,Tile::Empty)}
 {
 }
 
@@ -76,7 +76,7 @@ void OthelloState::changeTurn() noexcept
 	}
 }
 
-string OthelloState::gridString() const noexcept
+string OthelloState::boardString() const noexcept
 {
 	stringstream ss;
 
@@ -115,8 +115,8 @@ string OthelloState::toString() const noexcept
 
 	ss << "othello::OthelloState[" << PVAR(gameIsOver) << ", "
 		<< PVAR(actionWasPass) << ", " << PVAR(playersTurn) << ", "
-		<< PVAR(boardRows) << ", " << PVAR(boardColumns) << ", grid{ ..."
-		<< endl << gridString() << "}]";
+		<< PVAR(boardRows) << ", " << PVAR(boardColumns) << ", board{ ..."
+		<< endl << boardString() << "}]";
 
 	#undef PVAR
 
