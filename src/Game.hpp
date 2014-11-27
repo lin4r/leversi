@@ -25,11 +25,9 @@
 
 #include <vector>
 #include <exception>
-#include <utility>
 
 namespace othello {
 
-//XXX Refacor, repllace the action flip pairs with outcomes.
 class Game : public Observable<OthelloState>
 {	
 public:
@@ -67,7 +65,7 @@ private:
 
 	/* The history: all actions and flips so far.
 	 */
-	std::vector<std::pair<OthelloAction,flips_t>> history;
+	std::vector<Outcome> history;
 };
 
 } //namespace othello

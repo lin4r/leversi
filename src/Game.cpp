@@ -18,17 +18,17 @@
 #include "undo_initial_state_exception.hpp"
 
 #include <vector>
-#include <utility>
 
 using std::vector;
-using std::pair;
 
 namespace othello {
 
 flips_t Game::commitAction(OthelloAction action)
 {
 	auto flips = action.execute(state);
-	history.push_back(pair<OthelloAction,flips_t>(action,flips));
+
+	Outcome outcome = {action, flips};
+	history.push_back(outcome);
 
 	return flips;
 }
@@ -41,19 +41,16 @@ void Game::undoLastAction()
 
 	} else {
 
-		const auto actionFlipsPair = history.back();
+		const auto outcome = history.back();
 		history.pop_back();
 
-		const auto action = actionFlipsPair.first;
-		const auto flips = actionFlipsPair.second;
-
-		if (! action.isPass()) {
+		if (! outcome.action.isPass()) {
 
 			/* Remove the placed brick. */
-			state.setTile(action.getPosition(), Tile::Empty);
+			state.setTile(outcome.action.getPosition(), Tile::Empty);
 
 			/* Unflip flipped bricks. */
-			for (auto flip : flips) {
+			for (auto flip : outcome.flips) {
 				state.flipBrick(flip);
 			}
 		}
@@ -67,9 +64,8 @@ void Game::undoLastAction()
 		 * first action.
 		 */
 		const auto previousActionWasPass =
-			history.empty() ? false : history.back().first.isPass();
+			history.empty() ? false : history.back().action.isPass();
 		state.setActionWasPass(previousActionWasPass);
-
 	}
 }
 
