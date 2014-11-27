@@ -24,10 +24,11 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <stdexcept>
 
 namespace othello {
 
-// XXX Make generic iterator classes instead.
+// XXX Make generic iterator classes.
 class OthelloBoardIterator
 {
 public:
@@ -99,7 +100,7 @@ public:
 	 * black and vice versa. If the position has no brick (Tile::Empty), then
 	 * nothing will happen.
 	 * param:	Position to flip prick on.
-	 * throws:	out_of_bound_exception if the position is outside the board.
+	 * throws:	out_of_range if the position is outside the board.
 	 */
 	virtual void flipBrick(Position position);
 
@@ -152,20 +153,18 @@ public:
 	/**
 	 * Gets the tile value at the specific position.
 	 * param:	Position to inspect tile at.
-	 * throws:	out_of_bound_exception if the position is outside the board. XXX No it doesn't
+	 * throws:	out_of_range if the position is outside the board.
 	 */
-	virtual Tile inspectTile(Position position) const
-		{ return board.at(position2GridIndex(position)); }
+	virtual Tile inspectTile(Position position) const;
 
 	/**
 	 * Sets the tile value at the specified position.
 	 * params:
 	 *	position - Position to set value at.
 	 *	value - new tile value.
-	 * throws:	out_of_bound_exception if the position is outside the board. XXX No id doesn't.
+	 * throws:	out_of_range if the position is outside the board.
 	 */
-	virtual void setTile(Position position, Tile value)
-		{ board.at(position2GridIndex(position)) = value; }
+	virtual void setTile(Position position, Tile value);
 
 	/**
 	 * Checks whos turn it is.

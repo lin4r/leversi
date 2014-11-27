@@ -52,6 +52,29 @@ OthelloState OthelloState::initialState() noexcept
 	return initial;
 }
 
+#define CHECK_RANGE(position) \
+	if (! isInsideGrid(position)) { \
+		stringstream message; \
+		message << "The position " << position << " is outside the board."; \
+		throw std::out_of_range(message.str()); \
+	}
+
+Tile OthelloState::inspectTile(Position position) const
+{
+	CHECK_RANGE(position);
+
+	return board.at(position2GridIndex(position));
+}
+
+void OthelloState::setTile(Position position, Tile value)
+{
+	CHECK_RANGE(position)
+
+	board.at(position2GridIndex(position)) = value;
+}
+
+#undef CHECK_RANGE
+
 bool OthelloState::isInsideGrid(Position position) const noexcept
 {
 	return (0 <= position.row) && (position.row < boardRows)
