@@ -29,6 +29,7 @@
 
 namespace othello {
 
+//XXX Refacor, repllace the action flip pairs with outcomes.
 class Game : public Observable<OthelloState>
 {	
 public:

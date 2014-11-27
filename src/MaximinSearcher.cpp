@@ -14,7 +14,8 @@ using std::pow;
 
 namespace othello {
 
-static inline bool isBetter(RankedAction e1, RankedAction e2) noexcept;
+static bool rankedActionOrder(const RankedAction& action1
+	, const RankedAction& action2) noexcept;
 
 MaximinSearcher::MaximinSearcher(Game game)
 		: game(game)
@@ -87,21 +88,23 @@ RankedAction MaximinSearcher::_maximinAction(
 		return result;
 	}
 
-	auto actionFlipsPairs =
-		OthelloAction::findLegalPlacements(game.getState());
+	auto outcomes = OthelloAction::findLegalPlacements(game.getState());
 
 	/* Handle pass. */
-	if (actionFlipsPairs.empty()) {
+	if (outcomes.empty()) {
 
-		const pair<OthelloAction,flips_t> passPair(OthelloAction::pass()
-			, flips_t());
+		const auto pass = OthelloAction::pass();
+		const flips_t noFlips;
 
-		actionFlipsPairs.push_back(passPair);
+		const Outcome outcome = {pass, noFlips};
+
+		outcomes.push_back(outcome);
 	}
 
-	auto rankedActions = orderActions(actionFlipsPairs);
+	auto rankedActions = orderActions(outcomes);
 
-	assert(std::is_sorted(rankedActions.begin(), rankedActions.end(), isBetter)
+	assert(std::is_sorted(rankedActions.begin(), rankedActions.end()
+		, rankedActionOrder)
 		&& "The rankedActions are not in proper order.");
 
 	RankedAction bestRankedAction = {OthelloAction::pass(), 0};
@@ -194,36 +197,33 @@ RankedAction MaximinSearcher::minValue(score_t alpha, score_t beta, int depth
 }
 
 vector<RankedAction> MaximinSearcher::orderActions(
-		const vector<pair<OthelloAction, flips_t>>& actionFlipsPairs)
+		const vector<Outcome>& outcomes)
 {
 	using std::sort;
 
 	/* Computes the score obtained by each of the actions. */
 	vector<RankedAction> rankedActions;
-	for (auto actionFlipsPair : actionFlipsPairs) {
+	for (auto outcome : outcomes) {
 
-		/* Unpack. */
-		const auto& action = actionFlipsPair.first;
-		const auto& flips = actionFlipsPair.second;
-
-		const auto score = evaluator->moveUtility(action, flips
+		const auto score = evaluator->moveUtility(outcome.action, outcome.flips
 			, game.refState());
 
-		const RankedAction rankedAction = {action, score};
+		const RankedAction rankedAction = {outcome.action, score};
 
 		rankedActions.push_back(rankedAction);
 	}
 
 	/* Sort the vector so that moves with high scores comes first. */
-	sort(rankedActions.begin(), rankedActions.end(), isBetter);
+	sort(rankedActions.begin(), rankedActions.end(), rankedActionOrder);
 
 	return rankedActions;
 }
 
 /* Large rankedActions are desireable and therefore comes first. */
-bool isBetter(RankedAction e1, RankedAction e2) noexcept
+bool rankedActionOrder(const RankedAction& action1
+		, const RankedAction& action2) noexcept
 {
-	return e1.score > e2.score;
+	return action1.score > action2.score;
 }
 
 } //namespace othello

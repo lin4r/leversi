@@ -97,12 +97,11 @@ private:
 	/**
 	 * Performs move ordering. The evaluator will assign each action a score
 	 * used for the ordering.
-	 * param:	Pairs of actions and their corresponding flips.
+	 * param:	Outcomes of the actions (the action itself and flips).
 	 * return:	The actions along eith their assigned score.
 	 */
 	std::vector<RankedAction> orderActions(
-		const std::vector<std::pair<OthelloAction, flips_t>>&
-			actionFlipsPairs);
+		const std::vector<Outcome>& outcomes);
 
 	/**
 	 * Subfunction of maximinAction(). It takes care of termination and move

@@ -378,17 +378,17 @@ TEST_CASE("Test placement search.", "[OthelloAction, placementSearch]")
 
 	SECTION("Finds exactly the legal placements.")
 	{
-		auto placementsAndEffectPairs
+		auto outcomes
 			= OthelloAction::findLegalPlacements(state);
 
-		REQUIRE(4 == placementsAndEffectPairs.size());
+		REQUIRE(4 == outcomes.size());
 
 		/* Insert to set so that we easily can test membership. */
 //		set<OthelloAction> placementsSet(
 //			placementsVector.begin(), placementsVector.end());
 		set<OthelloAction> placements;
-		for (auto placementsAndEffectPair : placementsAndEffectPairs) {
-			placements.insert(placementsAndEffectPair.first);
+		for (auto outcome : outcomes) {
+			placements.insert(outcome.action);
 		}
 		
 

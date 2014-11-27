@@ -25,11 +25,13 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include <utility>
 
 namespace othello {
 
 typedef std::vector<Position> flips_t;
+
+/* The action and the flips it causes. */
+struct Outcome;
 
 class OthelloAction
 {
@@ -58,7 +60,7 @@ public:
 	/* Searches for legal placements. Also returns the corresponding flips
 	 * since the algorithm basically gets them for free.
 	 */
-	static std::vector<std::pair<OthelloAction,flips_t>> findLegalPlacements(
+	static std::vector<Outcome> findLegalPlacements(
 		const OthelloState& state) noexcept;
 
 	/* Lists which bricks are turned by the action.
@@ -80,6 +82,13 @@ private:
 	bool ispass{false};
 
 };
+
+struct Outcome
+{
+	OthelloAction action; // The action.
+	flips_t flips; //Flips caused by the action in context of the state.
+};
+
 
 /* This operator is defined so that the actions can be put in a set. Passes are
  * considered lower than non-passes. If pass is equal the position < determines
