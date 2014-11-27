@@ -79,18 +79,11 @@ public:
 		{ return analysis; }
 
 	/**
-	 * Gets the max maxPlayer.
+	 * Gets the max maxPlayer. The player is whoever's tur it is in the game.
 	 * return:	The maxPlayer.
 	 */
 	virtual Player getPlayer() const noexcept
 		{ return maxPlayer; }
-
-	/**
-	 * Sets the max maxPlayer.
-	 * param:	The maxPlayer.
-	 */
-	virtual void setPlayer(Player newPlayer) noexcept
-		{ maxPlayer = newPlayer; }
 
 private:
 
@@ -110,12 +103,9 @@ private:
 	 *	alpha -	Alpha value in alpha-beta pruning.
 	 *	beta - Beta value in alpha-beta pruning.
 	 *	depth - Recursive depth.
-	 *	maxPlayer - Determins if a max or min node will be expanded
-	 *		(max iff maxPlayer == pl).
 	 * return:	The maximin action along with it's predicted score.
 	 */
-	RankedAction _maximinAction(score_t alpha
-		, score_t beta, int depth, Player pl);
+	RankedAction _maximinAction(score_t alpha, score_t beta, int depth);
 
 	/**
 	 * Expands a max node.
@@ -124,11 +114,9 @@ private:
 	 *	beta - Beta value in alpha-beta pruning.
 	 *	depth - Recursive depth.
 	 *	rankedActions - actions search in along with an arbitrary score.
-	 *	maxPlayer - Determins if a max or min node will be expanded
-	 *		(max iff maxPlayer == pl).
 	 */
 	RankedAction maxValue(score_t alpha, score_t beta, int depth
-		, const std::vector<RankedAction>& rankedActions, Player pl);
+		, const std::vector<RankedAction>& rankedActions);
 
 
 	/**
@@ -138,11 +126,9 @@ private:
 	 *	beta - Beta value in alpha-beta pruning.
 	 *	depth - Recursive depth.
 	 *	rankedActions - actions search in along with an arbitrary score.
-	 *	maxPlayer - Determins if a max or min node will be expanded
-	 *		(max iff maxPlayer == pl).
 	 */
 	RankedAction minValue(score_t alpha, score_t beta, int depth
-		, const std::vector<RankedAction>& rankedActions, Player pl);
+		, const std::vector<RankedAction>& rankedActions);
 
 	/**
 	 * Maximum recursive depth.

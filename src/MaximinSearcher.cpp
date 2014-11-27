@@ -47,8 +47,7 @@ OthelloAction MaximinSearcher::maximinAction()
 {
 	analysis = {0,.0,0,-1}; /* Clear the previous analysis (if any). */
 
-	auto rankedAction = _maximinAction(SCORE_INFIMUM, SCORE_SUPERMUM, 0
-		, maxPlayer);
+	auto rankedAction = _maximinAction(SCORE_INFIMUM, SCORE_SUPERMUM, 0);
 
 	//Approximative.
 	analysis.branchingFactor = pow(analysis.numNodes, 1.0/maxDepth);
@@ -57,8 +56,8 @@ OthelloAction MaximinSearcher::maximinAction()
 	return rankedAction.action;
 }
 
-RankedAction MaximinSearcher::_maximinAction(
-		score_t alpha, score_t beta, int depth, Player pl)
+RankedAction MaximinSearcher::_maximinAction(score_t alpha, score_t beta
+		, int depth)
 {
 	analysis.numNodes++;
 
@@ -108,19 +107,20 @@ RankedAction MaximinSearcher::_maximinAction(
 		&& "The rankedActions are not in proper order.");
 
 	RankedAction bestRankedAction = {OthelloAction::pass(), 0};
-	if (maxPlayer == pl) {
-		bestRankedAction = maxValue(alpha, beta, depth, rankedActions, pl);
+	if (maxPlayer == game.refState().whosTurn()) {
+		bestRankedAction = maxValue(alpha, beta, depth, rankedActions);
 	} else {
-		bestRankedAction = minValue(alpha, beta, depth, rankedActions, pl);
+		bestRankedAction = minValue(alpha, beta, depth, rankedActions);
 	}
 
 	return bestRankedAction;
 }
 
 RankedAction MaximinSearcher::maxValue(score_t alpha, score_t beta, int depth
-		, const vector<RankedAction>& rankedActions, Player pl)
+		, const vector<RankedAction>& rankedActions)
 {
-	assert(maxPlayer == pl && "Not the max-maxPlayer");
+	assert(maxPlayer == game.refState().whosTurn()
+		&& "Must be the max players turn in a max node.");
 
 	auto value = SCORE_INFIMUM;
 	OthelloAction bestAction(Position(-1,-1)); //Dummy action.
@@ -129,8 +129,7 @@ RankedAction MaximinSearcher::maxValue(score_t alpha, score_t beta, int depth
 
 		game.commitAction(rankedAction.action);
 
-		const auto minval =
-			_maximinAction(alpha, beta, depth+1, advisary(pl)).score;
+		const auto minval = _maximinAction(alpha, beta, depth+1).score;
 
 		game.undoLastAction();
 
@@ -159,9 +158,10 @@ RankedAction MaximinSearcher::maxValue(score_t alpha, score_t beta, int depth
 }
 
 RankedAction MaximinSearcher::minValue(score_t alpha, score_t beta, int depth
-		, const vector<RankedAction>& rankedActions, Player pl)
+		, const vector<RankedAction>& rankedActions)
 {
-	assert(maxPlayer != pl && "Not the min-maxPlayer");
+	assert(maxPlayer != game.refState().whosTurn()
+		&& "Must be the minplayers turn in a min node.");
 
 	auto value = SCORE_SUPERMUM;
 	OthelloAction bestAction(Position(-1,-1)); //Dummy action.
@@ -170,8 +170,7 @@ RankedAction MaximinSearcher::minValue(score_t alpha, score_t beta, int depth
 
 		game.commitAction(rankedAction.action);
 
-		const auto maxval =
-			_maximinAction(alpha, beta, depth+1, advisary(pl)).score;
+		const auto maxval = _maximinAction(alpha, beta, depth+1).score;
 
 		game.undoLastAction();
 
