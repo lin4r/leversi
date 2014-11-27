@@ -19,7 +19,7 @@
 #include "OthelloAction.hpp"
 #include "illegal_action_exception.hpp"
 #include "MaximinSearcher.hpp"
-#include "TimeBoxedActionFinder.hpp"
+#include "TimeboxedMaximinSearcher.hpp"
 
 #include <iostream>
 using std::cout;
@@ -66,7 +66,7 @@ void Callback::executePlayerAction(OthelloAction action)
 		//Extra notify because the ai might take a while to choose.
 		model->notifyAll();
 
-		TimeBoxedActionFinder advisary(4, 5000
+		TimeboxedMaximinSearcher advisary(4, 5000
 			, MaximinSearcher(*model));
 
 		auto advisaryAction = advisary.maximinAction();

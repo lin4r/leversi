@@ -9,7 +9,7 @@
 #include "OthelloAction.hpp"
 #include "Game.hpp"
 #include "MaximinSearcher.hpp"
-#include "TimeBoxedActionFinder.hpp"
+#include "TimeboxedMaximinSearcher.hpp"
 
 #include <string>
 #include <iostream>
@@ -100,7 +100,7 @@ static OthelloAction chooseAction(OthelloState state, int timeout_ms)
 {
 	Game game(state);
 	MaximinSearcher actionFinder(game);
-	TimeBoxedActionFinder timedFinder(5, timeout_ms, actionFinder);
+	TimeboxedMaximinSearcher timedFinder(5, timeout_ms, actionFinder);
 
 	return timedFinder.maximinAction();
 }

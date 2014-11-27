@@ -3,14 +3,14 @@
  *
  * Linus Narva
  */
-#include "TimeBoxedActionFinder.hpp"
+#include "TimeboxedMaximinSearcher.hpp"
 
 #include <chrono>
 #include <cmath>
 
 namespace othello {
 
-OthelloAction TimeBoxedActionFinder::maximinAction()
+OthelloAction TimeboxedMaximinSearcher::maximinAction()
 {
 	using std::pow;
 	using namespace std::chrono;
