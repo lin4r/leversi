@@ -1,4 +1,6 @@
-/* Main method for running the program as specified in the lab description.
+
+/**
+ *  Main method for running the program as specified in the lab description.
  *
  * Linus Narva.
  */
@@ -18,6 +20,9 @@
 using namespace othello;
 using namespace std;
 
+/**
+ * Exception thhrown if the state string is invalid.
+ */
 class parse_exception : public exception
 {
 public:
@@ -26,8 +31,25 @@ public:
 		{ return "Invalid character in state string."; }
 };
 
+/**
+ * Prints usage information.
+ * param:	Name of the executable.
+ */
 static void usage(const char* executableName) noexcept;
+
+/**
+ * Parses the state string.
+ * param:	String containing the othello state.
+ * return:	The parsed othello state.
+ */
 static OthelloState parseStateString(string stateString);
+
+/**
+ * Uses timaboxed maximin search to find an action.
+ * params:
+ *	state - The current state of the game.
+ *	timeout_ms - The time it has to find choose the move in milliseconds.
+ */
 static OthelloAction chooseAction(OthelloState state, int timeout_ms);
 
 /* Changes the coordinate system from [0 7] (as in my code) to [1, 8]
@@ -67,15 +89,20 @@ static OthelloState parseStateString(string stateString)
 {
 	OthelloState state;
 
+	/* The first char indicates whos turn it is. */
+	Player turn;
 	switch (stateString.at(0)) {
-	case 'B': state.setTurn(Player::Black); break;
-	case 'W': state.setTurn(Player::White); break;
+	case 'B': turn = Player::Black; break;
+	case 'W': turn = Player::White; break;
 	default: throw parse_exception();
 	}
+
+	state.setTurn(turn);
 
 	const auto rows = state.getBoardRows();
 	const auto cols = state.getBoardColumns();
 
+	/* The chars remaining specifies the board in row major order. */
 	for (auto col = 0; col < cols; col++) {
 		for (auto row = 0; row < rows; row++) {
 			/* Row major index of string plus one for the first char. */

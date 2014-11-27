@@ -1,6 +1,6 @@
 *.o
 *~
-*Test
+*.test
 *.swp
-othello
-othello-ai
+lothello
+lothello-bot
