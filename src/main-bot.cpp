@@ -99,8 +99,8 @@ static OthelloState parseStateString(string stateString)
 
 	state.setTurn(turn);
 
-	const auto rows = state.getBoardRows();
-	const auto cols = state.getBoardColumns();
+	const auto rows = state.numBoardRows();
+	const auto cols = state.numBoardColumns();
 
 	/* The chars remaining specifies the board in row major order. */
 	for (auto col = 0; col < cols; col++) {

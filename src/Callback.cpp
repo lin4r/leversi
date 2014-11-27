@@ -108,8 +108,8 @@ string Callback::winnerMessage() const noexcept
 	const auto state = model->getState();
 	int numWhite{0}, numBlack{0};
 	
-	for (auto row = 0; row < state.getBoardRows(); row++) {
-		for (auto col = 0; col < state.getBoardColumns(); col++) {
+	for (auto row = 0; row < state.numBoardRows(); row++) {
+		for (auto col = 0; col < state.numBoardColumns(); col++) {
 			const Position pos(row,col);
 			switch (state.inspectTile(pos)) {
 			case Tile::White: numWhite++; break;

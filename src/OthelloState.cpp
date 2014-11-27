@@ -125,12 +125,12 @@ string OthelloState::toString() const noexcept
 
 bool operator==(const OthelloState& state1, const OthelloState& state2)
 {
-	const auto rows = state1.getBoardRows();
-	const auto columns = state1.getBoardColumns();
+	const auto rows = state1.numBoardRows();
+	const auto columns = state1.numBoardColumns();
 
 	/* Check the 'simple components before the board.' */
-	if ( (rows != state2.getBoardRows())
-			|| (columns != state2.getBoardColumns())
+	if ( (rows != state2.numBoardRows())
+			|| (columns != state2.numBoardColumns())
 			|| (state1.whosTurn() != state2.whosTurn())
 			|| (state1.wasActionPass() != state2.wasActionPass())
 			|| (state1.isGameOver() != state2.isGameOver()) )

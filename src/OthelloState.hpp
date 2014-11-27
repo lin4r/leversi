@@ -185,14 +185,14 @@ public:
 	 * Gets the number of rows of the board.
 	 * return:	The number of rows.
 	 */
-	virtual int getBoardRows() const noexcept
+	virtual int numBoardRows() const noexcept
 		{ return boardRows; }
 
 	/**
 	 * Gets the number of board columns.
 	 * return:	The number of columns.
 	 */
-	virtual int getBoardColumns() const noexcept
+	virtual int numBoardColumns() const noexcept
 		{ return boardColumns; }
 
 	/**

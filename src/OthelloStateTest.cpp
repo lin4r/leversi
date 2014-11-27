@@ -35,12 +35,12 @@ TEST_CASE("Default values", "[OthelloState, defaultValues]")
 
 	SECTION("Board has eight rows")
 	{
-		REQUIRE(8 == state.getBoardRows());
+		REQUIRE(8 == state.numBoardRows());
 	}
 
 	SECTION("Board has eight columns")
 	{
-		REQUIRE(8 == state.getBoardColumns());
+		REQUIRE(8 == state.numBoardColumns());
 	}
 
 	SECTION("Not game over")

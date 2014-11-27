@@ -226,10 +226,10 @@ bool OthelloAction::existsLegalPlacement(const OthelloState& state) noexcept
 	bool foundLegalPlacement{false};
 
 	for (auto row = 0; (! foundLegalPlacement)
-			&& (row < state.getBoardRows()); row++ )
+			&& (row < state.numBoardRows()); row++ )
 	{
 		for (auto col = 0; (! foundLegalPlacement)
-				&& (col < state.getBoardColumns()); col++)
+				&& (col < state.numBoardColumns()); col++)
 		{
 			OthelloAction placement(Position(row,col));
 			auto flips = placement.searchFlips(state);
@@ -245,8 +245,8 @@ vector<Outcome> OthelloAction::findLegalPlacements(const OthelloState& state)
 {
 	vector<Outcome> placements;
 
-	for (auto row = 0; row < state.getBoardRows(); row++ ) {
-		for (auto col = 0; col < state.getBoardColumns(); col++) {
+	for (auto row = 0; row < state.numBoardRows(); row++ ) {
+		for (auto col = 0; col < state.numBoardColumns(); col++) {
 
 			OthelloAction placement(Position(row,col));
 			auto flips = placement.searchFlips(state);
