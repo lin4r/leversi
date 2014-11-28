@@ -1,4 +1,4 @@
-/*
+/**
  * Interface for evaluating othello actions.
  * Linus Narva
  */
@@ -26,15 +26,25 @@ public:
 
 	/**
 	 * Used for move-ordering. Should be cheap compared to utility().
+	 * params:
+	 *	outcome - containing an action and its flips.
+	 *	beforeAction - The state before the action was applied.
+	 * return:	An utility score used to order the actions (not the same score
+	 *			that is returned bu utility()).
 	 */
-	virtual score_t moveUtility(const OthelloAction& action
-		, const flips_t& flips, const OthelloState& beforeAction) const = 0;
+	virtual score_t moveUtility(const Outcome& outcome
+		, const OthelloState& beforeAction) const = 0;
 
 	/**
-	 * Utility function for evaluating an othello state. Specifically the score
-	 * of the black player.
+	 * Utility function for evaluating an othello state.
+	 * params:
+	 *	player - The player to calculate the score for.
+	 *	state - The state to evaluate.
+	 * Return:	The utility score determinig how desireable the state is for
+	 *			the player.
 	 */
-	virtual score_t utility(const OthelloState& state) const = 0;
+	virtual score_t utility(Player player
+		, const OthelloState& state) const = 0;
 
 	/**
 	 * Clone can be used to implement polymorphic set functions. e.g:

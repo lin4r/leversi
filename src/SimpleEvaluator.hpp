@@ -1,5 +1,5 @@
-/*
- * Evaluator based on hom many flips are caused.
+/**
+ * Evaluator conunting how many more bricks the player has than the adviary.
  *
  * Linus Narva
  */
@@ -19,14 +19,15 @@ public:
 	/**
 	 * Counts the increase in tiles of the colour (1 + 2*#flips).
 	 */
-	virtual score_t moveUtility(const OthelloAction& action
-			, const flips_t& flips, const OthelloState& beforeAction)
+	virtual score_t moveUtility(const Outcome& outcome
+			, const OthelloState& beforeAction)
 			const override;
 
 	/**
-	 * Simply calculates #black bricks - #white bricks.
+	 * Simply calculates #player bricks - #adisary bricks.
 	 */
-	virtual score_t utility(const OthelloState& state) const override;
+	virtual score_t utility(Player player, const OthelloState& state)
+			const override;
 
 	virtual std::unique_ptr<Evaluator> clone() const override;
 };

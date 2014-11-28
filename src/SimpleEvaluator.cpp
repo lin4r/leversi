@@ -4,21 +4,23 @@ using std::unique_ptr;
 
 namespace othello {
 
-score_t SimpleEvaluator::moveUtility(const OthelloAction& action
-		, const flips_t& flips, const OthelloState& beforeAction) const
+score_t SimpleEvaluator::moveUtility(const Outcome& outcome
+		, const OthelloState& beforeAction) const
 {
-	if (action.isPass()) {
+	if (outcome.action.isPass()) {
 
 		/* A pass gives zero points because no brick is flipped. */
 		return 0;
 
 	} else {
 
-		return flips.size()*2 + 1;
+		/* The direct increase in bricks if tha action is chosen. */
+		return outcome.flips.size()*2 + 1;
 	}
 }
 
-score_t SimpleEvaluator::utility(const OthelloState& state) const
+score_t SimpleEvaluator::utility(Player player
+		, const OthelloState& state) const
 {
 	score_t blackScore{0};
 	for (auto tile : state.constBoardIterator()) {
@@ -30,7 +32,8 @@ score_t SimpleEvaluator::utility(const OthelloState& state) const
 		}
 	}
 
-	return blackScore;
+	/* Use the zero sum rule. */
+	return (player == Player::Black) ? blackScore : -blackScore;
 }
 
 unique_ptr<Evaluator> SimpleEvaluator::clone() const

@@ -1,12 +1,10 @@
 #include "MaximinSearcher.hpp"
 
-#include <utility>
 #include <vector>
 #include <algorithm>
 
 #include <cassert>
 
-using std::pair;
 using std::vector;
 using std::max;
 using std::min;
@@ -67,20 +65,11 @@ RankedAction MaximinSearcher::_maximinAction(score_t alpha, score_t beta
 
 	/* If the maximum depth is surpassed or the game is over just return. */
 	if (depth >= maxDepth || game.refState().isGameOver()) {
-		/* The 'action is irrelevant since it will never be executed
-		 * so long as the maxDepth is valid.' */
 
-		const auto blackScore = evaluator->utility(game.refState());
+		const auto score = evaluator->utility(maxPlayer, game.refState());
 
-		/* Zero sum rule. */
-		const auto score = (maxPlayer == Player::Black)
-			? blackScore : -blackScore;
-
-		assert((SCORE_INFIMUM <= score) && (score <= SCORE_SUPERMUM)
-			&& "The score must be inside its bounds");
-
-		/* The action is arbitrary. */
-		RankedAction result = {OthelloAction::pass(), score};
+		OthelloAction arbitraryAction(Position(-1,-1));
+		RankedAction result = {arbitraryAction, score};
 
 		analysis.reachedDepth = max(depth, analysis.reachedDepth);
 
@@ -204,8 +193,7 @@ vector<RankedAction> MaximinSearcher::orderActions(
 	vector<RankedAction> rankedActions;
 	for (auto outcome : outcomes) {
 
-		const auto score = evaluator->moveUtility(outcome.action, outcome.flips
-			, game.refState());
+		const auto score = evaluator->moveUtility(outcome, game.refState());
 
 		const RankedAction rankedAction = {outcome.action, score};
 
