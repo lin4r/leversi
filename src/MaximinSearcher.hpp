@@ -19,8 +19,8 @@ namespace othello {
 
 struct RankedAction
 {
-	OthelloAction action;
-	score_t score;
+	OthelloAction action; /* An action. */
+	score_t score;	/* A score assoceiated with the action */
 };
 
 /* Analysis data for a run of the algorithm. */
