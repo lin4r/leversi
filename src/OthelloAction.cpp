@@ -18,7 +18,6 @@
 #include "OthelloAction.hpp"
 #include "illegal_action_exception.hpp"
 #include "actionstring_syntax_exception.hpp"
-#include "game_over_exception.hpp"
 
 //#include <regex>
 #include <cctype> //FIXME Not needed with regex.
@@ -169,7 +168,7 @@ vector<Position> OthelloAction::searchFlips(const OthelloState& state) const
 vector<Position> OthelloAction::execute(OthelloState& state) const
 {
 	if (state.isGameOver()) {
-		throw game_over_exception();
+		throw illegal_action_exception("The game is over.");
 	}
 
 	vector<Position> flips;
@@ -203,13 +202,13 @@ vector<Position> OthelloAction::execute(OthelloState& state) const
 		}
 	}
 
-	updateGameOverStaus(ispass, state);
+	updateGameOverStaus(state);
 	state.changeTurn();
 
 	return flips;
 }
 
-void OthelloAction::updateGameOverStaus(bool wasPass, OthelloState& state)
+void OthelloAction::updateGameOverStaus(OthelloState& state)
 		const noexcept
 {
 	const auto previousWasPass = state.wasActionPass();
@@ -217,8 +216,8 @@ void OthelloAction::updateGameOverStaus(bool wasPass, OthelloState& state)
 
 	/* Two (legal) passes in a row -> Game Over!
 	 */
-	state.setGameOver((wasPass && previousWasPass) || alreadyGameOver);
-	state.setActionWasPass(wasPass);
+	state.setGameOver((ispass && previousWasPass) || alreadyGameOver);
+	state.setActionWasPass(ispass);
 }
 
 bool OthelloAction::existsLegalPlacement(const OthelloState& state) noexcept

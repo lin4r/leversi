@@ -9,7 +9,7 @@
  * Narva.
  *******************************************************/
 
-/*
+/**
  * A othello action i.e. putting the othello brick on some position on the
  * board.
  *
@@ -29,7 +29,6 @@ namespace othello {
 
 typedef std::vector<Position> flips_t;
 
-/* The action and the flips it causes. */
 struct Outcome;
 
 class OthelloAction
@@ -61,42 +60,88 @@ public:
 	static OthelloAction pass() noexcept;
 
 	/**
-	 * Parses an action string ... TODO rremeber throws.
+	 * Parses an action string.
+	 * param:	String representation of action.
+	 * return:	Action corresponding to the string.
+	 * throws:	actionstring_syntax_exception, if the string is ill formed.
 	 */
 	static OthelloAction parse(std::string actionstring);
 
+	/**
+	 * Creates a string representation of the action.
+	 * return:	String representation.
+	 */
 	virtual std::string actionString() const noexcept;
 
+	/**
+	 * Executes the action on the state.
+	 * param:	State to apply action to.
+	 * throws:	illegal_action_exception, if the action breakes othello rules.
+	 */
 	virtual flips_t execute(OthelloState& state) const;
 
+	/**
+	 * Checks if non-pass actions are avalible for the player at the given
+	 * state. It is more efficient than findLegalPlacements() because the serch
+	 * is terminated as soon as a legal placement is found.
+	 * param:	State te search for actions in.
+	 * return:	True iff a legal action exists.
+	 */
 	static bool existsLegalPlacement(const OthelloState& state) noexcept;
 
-	/* Searches for legal placements. Also returns the corresponding flips
-	 * since the algorithm basically gets them for free.
+	/**
+	 * Searches for legal placements.
+	 * param:	State te search for actions in.
+	 * return:	Outcomes of the legal actions i.e. the action and the flips it
+	 *			will cause.
 	 */
 	static std::vector<Outcome> findLegalPlacements(
 		const OthelloState& state) noexcept;
 
-	/* Lists which bricks are turned by the action.
-	 * Ret: A vector of positions where the bricks where turned
+	/**
+	 * Lists which bricks are fliped by the action.
+	 * param:	State to check for flips in.
+	 * return:	A vector of positions where the bricks where turned
 	 */ 
-	virtual flips_t searchFlips(const OthelloState& state) const;
+	virtual flips_t searchFlips(const OthelloState& state) const; //XXX Should be noexcept.
 
+	/**
+	 * Gets the position of placement.
+	 * return:	position.
+	 */
 	virtual Position getPosition() const noexcept
 		{ return position; }
 
+	/**
+	 * Checks if pass.
+	 * return true iff the action is pass.
+	 */
 	virtual bool isPass() const noexcept
 		{ return ispass; }
 
 private:
 
-	void updateGameOverStaus(bool wasPass, OthelloState& state) const noexcept;
+	/**
+	 * Updates the game over status of state (true after two passes in a row).
+	 * param:	State to update.
+	 */
+	void updateGameOverStaus(OthelloState& state) const noexcept;
 
+	/**
+	 * Position of the placement.
+	 */
 	Position position = {-1,-1};
+
+	/**
+	 * Flag indicating if pass.
+	 */
 	bool ispass{false};
 
 };
 
+/**
+ * The action and the flips it causes.
+ */
 struct Outcome
 {
 	OthelloAction action; // The action.

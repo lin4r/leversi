@@ -20,7 +20,6 @@
 #include "OthelloAction.hpp"
 #include "illegal_action_exception.hpp"
 #include "actionstring_syntax_exception.hpp"
-#include "game_over_exception.hpp"
 
 #include <set>
 using std::set;
@@ -341,7 +340,7 @@ TEST_CASE("Verify Game over.", "[OthelloAction, gameOver]")
 	SECTION("Throws game_over_exception if the game is over.")
 	{
 		state.setGameOver(true);
-		REQUIRE_THROWS_AS(pass.execute(state), game_over_exception);
+		REQUIRE_THROWS_AS(pass.execute(state), illegal_action_exception);
 	}
 }
 
