@@ -96,7 +96,8 @@ string OthelloAction::actionString() const noexcept
 	return actionStr;
 }
 
-vector<Position> OthelloAction::searchFlips(const OthelloState& state) const
+vector<Position> OthelloAction::searchFlips(const OthelloState& state)
+		const noexcept
 {
 	using std::mem_fn;
 

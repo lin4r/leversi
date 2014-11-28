@@ -103,7 +103,7 @@ public:
 	 * param:	State to check for flips in.
 	 * return:	A vector of positions where the bricks where turned
 	 */ 
-	virtual flips_t searchFlips(const OthelloState& state) const; //XXX Should be noexcept.
+	virtual flips_t searchFlips(const OthelloState& state) const noexcept;
 
 	/**
 	 * Gets the position of placement.
