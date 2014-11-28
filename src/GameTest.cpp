@@ -61,7 +61,8 @@ TEST_CASE("Comitting and undoing placements.", "[Game, placement]")
 
 TEST_CASE("Comitting and undoing pass actions.", "[Game]")
 {
-	auto game = Game::testEmptyBoard();
+	OthelloState state;
+	Game game(state); //Empty game.
 	auto initial = game.getState();
 	OthelloAction pass(Position(-1,-1), true);
 

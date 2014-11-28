@@ -25,7 +25,7 @@ namespace othello {
 
 flips_t Game::commitAction(OthelloAction action)
 {
-	auto flips = action.execute(state);
+	auto flips = action.execute(currentState);
 
 	Outcome outcome = {action, flips};
 	history.push_back(outcome);
@@ -41,31 +41,33 @@ void Game::undoLastAction()
 
 	} else {
 
-		const auto outcome = history.back();
+		const auto lastOutcome = history.back();
 		history.pop_back();
 
-		if (! outcome.action.isPass()) {
+
+		if (! lastOutcome.action.isPass()) {
 
 			/* Remove the placed brick. */
-			state.setTile(outcome.action.getPosition(), Tile::Empty);
+			currentState.setTile(lastOutcome.action.getPosition()
+				, Tile::Empty);
 
 			/* Unflip flipped bricks. */
-			for (auto flip : outcome.flips) {
-				state.flipBrick(flip);
+			for (auto flip : lastOutcome.flips) {
+				currentState.flipBrick(flip);
 			}
 		}
 
-		state.changeTurn();
+		currentState.changeTurn();
 
 		/* Nothin can have happened after game over. */
-		state.setGameOver(false);
+		currentState.setGameOver(false);
 
 		/* Set the action was pass flag in the state. Its false if i was the
 		 * first action.
 		 */
 		const auto previousActionWasPass =
 			history.empty() ? false : history.back().action.isPass();
-		state.setActionWasPass(previousActionWasPass);
+		currentState.setActionWasPass(previousActionWasPass);
 	}
 }
 
@@ -76,15 +78,7 @@ int Game::numTurns() const noexcept
 
 const OthelloState* Game::getNotifyData() const
 {
-	return &state;
-}
-
-Game Game::testEmptyBoard()
-{
-	Game game;
-	game.state = OthelloState();
-
-	return game;
+	return &currentState;
 }
 
 } //namespace othello
