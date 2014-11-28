@@ -9,7 +9,7 @@
  * Narva.
  *******************************************************/
 
-/*
+/**
  * A state of the othello game.
  *
  * Linus Narva.
