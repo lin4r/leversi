@@ -9,8 +9,8 @@
  * Narva.
  *******************************************************/
 
-/*
- * Enum class specifying a player.
+/**
+ * Enum representation of an othello player.
  *
  * Linus Narva.
  */
@@ -28,7 +28,12 @@ enum class Player : char
 	Black, White
 };
 
-inline Tile playerBrickColour(Player player)
+/**
+ * Gets the coin colour associated with the player.
+ * param:	A player.
+ * return:	Coin colour of player.
+ */
+inline Tile playerBrickColour(Player player) noexcept
 {
 	switch (player) {
 	case Player::Black: return Tile::Black;
@@ -37,7 +42,12 @@ inline Tile playerBrickColour(Player player)
 	}
 }
 
-inline Player advisary(Player player)
+/**
+ * Gets the advisary of player.
+ * param:	A player.
+ * return:	The advisary of player.
+ */
+inline Player advisary(Player player) noexcept
 {
 	switch (player) {
 	case Player::Black: return Player::White;

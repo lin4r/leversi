@@ -1,9 +1,8 @@
 CC=g++
-CFLAGS=-Wall -g -std=c++11 -O0
+CFLAGS=-Wall -std=c++11 -O0 -g
 LDFLAGS=
 
 MODEL=Position.o OthelloState.o OthelloAction.o Game.o SimpleEvaluator.o WashingtonEvaluator.o
-#MODELTEST=PositionTest.o OthelloStateTest.o OthelloActionTest.o GameTest.o
 
 GUI=Callback.o Board.o GUI.o
 

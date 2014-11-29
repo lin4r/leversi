@@ -90,15 +90,6 @@ void OthelloState::flipBrick(Position position)
 	}
 }
 
-void OthelloState::changeTurn() noexcept
-{
-	switch(playersTurn) {
-	case Player::Black: playersTurn = Player::White; break;
-	case Player::White:
-	default: playersTurn = Player::Black;
-	}
-}
-
 string OthelloState::boardString() const noexcept
 {
 	stringstream ss;

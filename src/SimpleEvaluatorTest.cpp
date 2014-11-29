@@ -11,7 +11,7 @@
 
 using namespace othello;
 
-TEST_CASE("The mov score is the gain in bricks."
+TEST_CASE("The move score is the gain in bricks."
 		, "[SimpleEvaluator, moveOrdering]")
 {
 	SimpleEvaluator evaluator;

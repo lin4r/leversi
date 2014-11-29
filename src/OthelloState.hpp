@@ -93,7 +93,8 @@ public:
 	/**
 	 * Changes the player turn.
 	 */
-	virtual void changeTurn() noexcept;
+	virtual void changeTurn() noexcept
+		{ playersTurn = advisary(playersTurn); }
 
 	/**
 	 * Flips the brick at the specified position, i.e. white bricjs will be

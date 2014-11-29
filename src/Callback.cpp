@@ -20,6 +20,7 @@
 #include "illegal_action_exception.hpp"
 #include "MaximinSearcher.hpp"
 #include "TimeboxedMaximinSearcher.hpp"
+#include "WashingtonEvaluator.hpp"
 
 #include <iostream>
 using std::cout;
@@ -66,8 +67,11 @@ void Callback::executePlayerAction(OthelloAction action)
 		//Extra notify because the ai might take a while to choose.
 		model->notifyAll();
 
+		MaximinSearcher maxminser(*model);
+		WashingtonEvaluator evaluator;
+		maxminser.setEvaluator(evaluator);
 		TimeboxedMaximinSearcher advisary(4, 5000
-			, MaximinSearcher(*model));
+			, maxminser);
 
 		auto advisaryAction = advisary.maximinAction();
 
@@ -76,6 +80,7 @@ void Callback::executePlayerAction(OthelloAction action)
 		cout << "*** Analysis ***" << endl
 			<<  "nodes:            " << analysis.numNodes << endl
 			<<  "branching factor: " << analysis.branchingFactor << endl
+			<<  "depth:            " << analysis.reachedDepth << endl
 			<<  "score:            " << analysis.predictedScore << endl
 			<<  "****************" << endl;
 

@@ -26,7 +26,10 @@ enum class Tile : char
 	Empty, Black, White
 };
 
-/* Returns the opposite colour of t, or Empty if t=Empty.
+/**
+ * Returns the opposite colour of t.
+ * param:	A tile.
+ * return:	The opposite colour or Empty if t=Empty.
  */
 inline Tile oppositeColor(Tile t)
 {

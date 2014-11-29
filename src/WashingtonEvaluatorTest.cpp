@@ -1,6 +1,9 @@
 /*
  * Unit test for WashingtonEvaluator.
  *
+ * The test are not sufficient. More-sophisticated-than-unit-tests are needed
+ * to properly evaluate the utility function.
+ *
  * Linus Narva
  */
 #define CATCH_CONFIG_MAIN
@@ -11,7 +14,7 @@
 
 using namespace othello;
 
-TEST_CASE("The mov score is the gain in bricks."
+TEST_CASE("The move score is the gain in bricks."
 		, "[WashingtonEvaluator, moveOrdering]")
 {
 	WashingtonEvaluator evaluator;
@@ -40,7 +43,7 @@ TEST_CASE("Pass gives 0 move score", "[WashingtonEvaluator, moveOrdering]")
 	REQUIRE(0 == score);
 }
 
-TEST_CASE("The utility is the advantage in # of bricks."
+TEST_CASE("Some trivial property test."
 		, "[WashingtonEvaluator, utility]")
 {
 	WashingtonEvaluator evaluator;
@@ -59,14 +62,12 @@ TEST_CASE("The utility is the advantage in # of bricks."
 	auto flips = legal.execute(state);
 	Outcome outcome = {legal, flips};
 
-	//Three, because one blick is placed, one is flipped so that black gains
-	//one and white looses one.
-	SECTION("Black gains three bricks, white looses what black gains.")
+	SECTION("Taking a brick increases score, white looses what black gains.")
 	{
 		auto blackScore = evaluator.utility(Player::Black, state);
-		REQUIRE(3 == blackScore);
+		REQUIRE(0 < blackScore);
 
 		auto whiteScore = evaluator.utility(Player::White, state);
-		REQUIRE(-blackScore == whiteScore);
+		REQUIRE(0 > whiteScore);
 	}
 }
