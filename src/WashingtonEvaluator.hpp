@@ -118,7 +118,8 @@ public:
 
 	virtual ~WashingtonEvaluator() = default;
 
-	/* XXX The current impleemntation is quite stupid. It should be improved.
+	/* XXX The current impleemntation is to simple (it is the same as in
+	 * SimpleEvaluator.)
 	 */
 	virtual score_t moveUtility(const Outcome& outcome
 			, const OthelloState& beforeAction)
