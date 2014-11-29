@@ -2,14 +2,14 @@ CC=g++
 CFLAGS=-Wall -g -std=c++11 -O0
 LDFLAGS=
 
-MODEL=Position.o OthelloState.o OthelloAction.o Game.o SimpleEvaluator.o
-MODELTEST=PositionTest.o OthelloStateTest.o OthelloActionTest.o GameTest.o
+MODEL=Position.o OthelloState.o OthelloAction.o Game.o SimpleEvaluator.o WashingtonEvaluator.o
+#MODELTEST=PositionTest.o OthelloStateTest.o OthelloActionTest.o GameTest.o
 
 GUI=Callback.o Board.o GUI.o
 
 OOTEST=ObserverObservableTest.o
 
-TEST=Position.test OthelloState.test OthelloAction.test Game.test ObserverObservable.test SimpleEvaluator.test Cloneable.test
+TEST=Position.test OthelloState.test OthelloAction.test Game.test ObserverObservable.test SimpleEvaluator.test Cloneable.test WashingtonEvaluator.test
 
 AI=MaximinSearcher.o TimeboxedMaximinSearcher.o
 
@@ -29,6 +29,7 @@ test: $(TEST)
 	./ObserverObservable.test
 	./SimpleEvaluator.test
 	./Cloneable.test
+	./WashingtonEvaluator.test
 
 #Compile lab code.
 $(LAB): main-bot.o $(MODELEX) $(MODEL) $(AI)
@@ -86,10 +87,19 @@ GameTest.o: GameTest.cpp Game.hpp undo_initial_state_exception.hpp
 Game.test: GameTest.o Game.o OthelloAction.o OthelloState.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-SimpleEvaluatorTest.o: SimpleEvaluatorTest.cpp SimpleEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Position.hpp
+SimpleEvaluatorTest.o: SimpleEvaluatorTest.cpp SimpleEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp
 	$(CC) $(CFLAGS) -c $<
 
 SimpleEvaluator.test: SimpleEvaluatorTest.o SimpleEvaluator.o OthelloAction.o OthelloState.o Position.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+WashingtonEvaluator.o: WashingtonEvaluator.cpp WashingtonEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp
+	$(CC) $(CFLAGS) -c $<
+
+WashingtonEvaluatorTest.o: WashingtonEvaluatorTest.cpp WashingtonEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp
+	$(CC) $(CFLAGS) -c $<
+
+WashingtonEvaluator.test: WashingtonEvaluatorTest.o WashingtonEvaluator.o OthelloAction.o OthelloState.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 

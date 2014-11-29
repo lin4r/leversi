@@ -1,4 +1,3 @@
-
 /**
  *  Main method for running the program as specified in the lab description.
  *
@@ -12,6 +11,7 @@
 #include "Game.hpp"
 #include "MaximinSearcher.hpp"
 #include "TimeboxedMaximinSearcher.hpp"
+#include "WashingtonEvaluator.hpp"
 
 #include <string>
 #include <iostream>
@@ -125,8 +125,10 @@ static OthelloState parseStateString(string stateString)
 
 static OthelloAction chooseAction(OthelloState state, int timeout_ms)
 {
+	WashingtonEvaluator evaluator;
 	Game game(state);
 	MaximinSearcher actionFinder(game);
+	actionFinder.setEvaluator(evaluator);
 	TimeboxedMaximinSearcher timedFinder(5, timeout_ms, actionFinder);
 
 	return timedFinder.maximinAction();
