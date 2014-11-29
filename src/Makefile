@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -std=c++11 -O0 -g
+CFLAGS=-Wall -std=c++11 -O4 -DNDEBUG
 LDFLAGS=
 
 MODEL=Position.o OthelloState.o OthelloAction.o Game.o SimpleEvaluator.o WashingtonEvaluator.o
