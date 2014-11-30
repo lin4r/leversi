@@ -13,11 +13,23 @@
 
 #include "Evaluator.hpp"
 
+#include <set>
 #include <vector>
-
 #include <iostream>
 
 namespace othello {
+
+/**
+ * Weights for combining the utility values. The default values where
+ * discovered by the authors of the article.
+ */
+struct WashingtonWeights
+{
+	double corner{30.0};		/* Corner utility weight. */
+	double mobility{5.0};		/* Mobility utility weight. */
+	double stability{25.0};		/* Stability utility weight. */
+	double coinParity{25.0};	/* Coin parity utility weight. */
+};
 
 /**
  * To calculate the exact stability of each position would be to expensive for
@@ -112,9 +124,7 @@ public:
 	 * board).
 	 * param:	Stability lookup table to use.
 	 */
-	WashingtonEvaluator(StabilityLookupTable stabilityTable)
-		: stabilityTable{stabilityTable}
-	{}
+	WashingtonEvaluator(StabilityLookupTable stabilityTable);
 
 	virtual ~WashingtonEvaluator() = default;
 
@@ -181,12 +191,36 @@ public:
 
 	virtual std::unique_ptr<Evaluator> clone() const override;
 
+	/**
+	 * Sets the utility value weights.
+	 * param:	New weights.
+	 */
+	virtual void setWeights(WashingtonWeights newWeights) noexcept
+		{ weights = newWeights; }
+
+	/**
+	 * Gets the utility value weights.
+	 * return:	The weights.
+	 */
+	virtual WashingtonWeights getWeights() const noexcept
+		{ return weights; }
+
 private:
+
+	/**
+	 * The weights used to linearly combine the utility functions.
+	 */
+	WashingtonWeights weights;
 
 	/**
 	 * Lookuptable for calculating stability utility.
 	 */
 	StabilityLookupTable stabilityTable;
+
+	/**
+	 * Set containing the corner positions.
+	 */
+	std::set<Position> corners;
 };
 
 } //namespace othello

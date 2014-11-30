@@ -14,6 +14,17 @@
 
 using namespace othello;
 
+TEST_CASE("The deffault values are set", "[WashingtonEvaluator, default]")
+{
+	WashingtonEvaluator evaluator;
+	auto weights = evaluator.getWeights();
+
+	REQUIRE(30.0 == weights.corner);
+	REQUIRE(5.0 == weights.mobility);
+	REQUIRE(25.0 == weights.stability);
+	REQUIRE(25.0 == weights.coinParity);
+}
+
 TEST_CASE("The move score is the gain in bricks."
 		, "[WashingtonEvaluator, moveOrdering]")
 {

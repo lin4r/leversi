@@ -2,8 +2,8 @@
 
 #include <iomanip>
 #include <cmath>
-#include <cassert>
 #include <stdexcept>
+#include <cassert>
 
 using std::unique_ptr;
 using std::vector;
@@ -57,6 +57,23 @@ ostream& operator<<(ostream& os, const StabilityLookupTable& table)
 	return os;
 }
 
+WashingtonEvaluator::WashingtonEvaluator(StabilityLookupTable stabilityTable)
+		: stabilityTable{stabilityTable}
+{
+	const auto rows = stabilityTable.numRows();
+	const auto cols = stabilityTable.numColumns();
+
+	const Position northWestCorner(0, 0);
+	const Position northEastCorner(0, cols-1);
+	const Position southEastCorner(rows-1, cols-1);
+	const Position southWestCorner(rows-1, 0);
+
+	corners.insert(northWestCorner);
+	corners.insert(northEastCorner);
+	corners.insert(southEastCorner);
+	corners.insert(southWestCorner);
+}
+
 score_t WashingtonEvaluator::moveUtility(const Outcome& outcome
 		, const OthelloState& beforeAction) const
 {
@@ -91,7 +108,12 @@ score_t WashingtonEvaluator::utility(Player player
 //	//DEBUG <<
 
 	/* Weights from the article (see header file). */
-	return round(30*corner + 5*mobility + 25*stability + 25*coinpar);
+	return round(
+		weights.corner*corner
+		+ weights.mobility*mobility
+		+ weights.stability*stability
+		+ weights.coinParity*coinpar
+	);
 }
 
 double WashingtonEvaluator::coinParityUtility(Player player
@@ -158,18 +180,12 @@ double WashingtonEvaluator::cornerUtility(Player player
 	const auto maxPlayerCoinColour = playerBrickColour(player);
 	const auto minPlayerCoinColour = playerBrickColour(advisary(player));
 
-	const auto rows = state.numBoardRows();
-	const auto cols = state.numBoardColumns();
-
-	const Position northWestCorner(0, 0);
-	const Position northEastCorner(0, cols-1);
-	const Position southEastCorner(rows-1, cols-1);
-	const Position southWestCorner(rows-1, 0);
+	assert((4 == corners.size())
+		&& "All corners must have been added.");
 
 	auto numMaxPlayerCorners = 0;
 	auto numMinPlayerCorners = 0;
-	for (auto position : {northWestCorner, northEastCorner, southEastCorner
-			, southWestCorner})
+	for (auto position : corners)
 	{
 		const auto tile = state.inspectTile(position);
 		if (tile == maxPlayerCoinColour) {
@@ -200,10 +216,6 @@ double WashingtonEvaluator::stabilityUtility(Player player
 
 	const auto rows = state.numBoardRows();
 	const auto cols = state.numBoardColumns();
-
-	assert((state.numBoardRows() == stabilityTable.numRows())
-		&& (state.numBoardColumns() == stabilityTable.numColumns())
-		&& "Dimensions mus match for the board and the lookup table.");
 
 	if ((state.numBoardRows() != stabilityTable.numRows())
 			|| (state.numBoardColumns() != stabilityTable.numColumns()))
@@ -236,7 +248,8 @@ double WashingtonEvaluator::stabilityUtility(Player player
 
 unique_ptr<Evaluator> WashingtonEvaluator::clone() const
 {
-	return unique_ptr<Evaluator>(new WashingtonEvaluator(*this));
+	auto* clone_p = new WashingtonEvaluator(*this);
+	return unique_ptr<Evaluator>(clone_p);
 }
 
 } //namespace othello
