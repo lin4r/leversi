@@ -130,8 +130,26 @@ static OthelloAction chooseAction(OthelloState state, int timeout_ms)
 	MaximinSearcher actionFinder(game);
 	actionFinder.setEvaluator(evaluator);
 	TimeboxedMaximinSearcher timedFinder(5, timeout_ms, actionFinder);
+	const auto action = timedFinder.maximinAction();
+	
 
-	return timedFinder.maximinAction();
+	/* Print analysis data to standard error. */
+	const auto analysis = timedFinder.getAnalysis();
+	const auto exectime = timedFinder.getLastRuntime_ms();
+	const auto maxDepth = timedFinder.getMaxDepth();
+	const auto player = timedFinder.getPlayer();
+
+	cerr << "*** Analysis ***" << endl
+		<<  "player:           " << player << endl
+		<<  "nodes:            " << analysis.numNodes << endl
+		<<  "branching factor: " << analysis.branchingFactor << endl
+		<<  "predicted score:  " << analysis.predictedScore << endl
+		<<  "Time used (s):    " << exectime << endl
+		<<  "Depth:            " << analysis.reachedDepth << endl
+		<<  "MaxDepth:         " << maxDepth << endl
+		<<  "****************" << endl;
+
+	return action;
 }
 
 static OthelloAction adaptCoordinateSystem(OthelloAction action)

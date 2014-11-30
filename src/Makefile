@@ -34,7 +34,7 @@ test: $(TEST)
 $(LAB): main-bot.o $(MODELEX) $(MODEL) $(AI)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-main-bot.o: main-bot.cpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp OthelloAction.hpp Game.hpp MaximinSearcher.hpp
+main-bot.o: main-bot.cpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp OthelloAction.hpp Game.hpp MaximinSearcher.hpp TimeboxedMaximinSearcher.hpp WashingtonEvaluator.hpp
 	$(CC) $(CFLAGS) -c $<
 
 # Compile Target

@@ -25,13 +25,19 @@ public:
 
 	virtual OthelloAction maximinAction() override;
 
-private:
+	/**
+	 * Gets the execution time of last run.
+	 * return:	The execution time of the last run in millisecounds or -1
+	 *			no run has been executed by this evaluator yet.
+	 */
+	virtual int getLastRuntime_ms() const noexcept
+		{ return lastRuntime_ms; };
 
-	bool predictTime(int ellapsed_ms, int depth, int branchingFactor)
-		const noexcept;
+private:
 
 	int minDepth;
 	int maxTime_ms;
+	int lastRuntime_ms{-1};
 };
 
 } //namespace othello
