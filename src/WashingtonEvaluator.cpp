@@ -74,20 +74,50 @@ WashingtonEvaluator::WashingtonEvaluator(StabilityLookupTable stabilityTable)
 	corners.insert(southWestCorner);
 }
 
+#ifdef USE_WASHINGTON_MOVE_UTILITY
 score_t WashingtonEvaluator::moveUtility(const Outcome& outcome
 		, const OthelloState& beforeAction) const
 {
+	#define isCorner(position) (corners.find((position)) != corners.end())
+
 	if (outcome.action.isPass()) {
 
 		/* A pass gives zero points because no brick is flipped. */
 		return 0;
 
-	} else {
-
-		/* The direct increase in bricks if tha action is chosen. */
-		return outcome.flips.size()*2 + 1;
 	}
+
+	const auto position = outcome.action.getPosition();
+	const double cornerUtility = isCorner(position)
+		? 25.0 : 0.0;
+
+	/* Truncation of may ocurr here, but the size of flips */
+	const double coinUtility = 1.0 + 2.0*outcome.flips.size();
+
+	double stabilityUtility{0};
+	for (auto flip : outcome.flips) {
+		stabilityUtility += stabilityTable.lookupStability(flip);
+	}
+
+	/* Double the stability increase due to flips, because the oponent looses
+	 * as much in stability.
+	 */
+	stabilityUtility *= 2.0;
+
+	/* Add stability for the placement. */
+	stabilityUtility += stabilityTable.lookupStability(position);
+
+	/* The move utility is skipped, because it costs too much to compute. */
+	const auto utilityValue =
+		weights.corner*cornerUtility
+		+ weights.stability*stabilityUtility
+		+ weights.coinParity*coinUtility;
+
+	return utilityValue;
+
+	#undef isCorner
 }
+#endif //USE_WASHINGTON_MOVE_UTILITY
 
 score_t WashingtonEvaluator::utility(Player player
 		, const OthelloState& state) const

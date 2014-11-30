@@ -11,7 +11,7 @@
 #ifndef WASHINGTON_EVALUATOR_HPP_
 #define WASHINGTON_EVALUATOR_HPP_
 
-#include "Evaluator.hpp"
+#include "SimpleEvaluator.hpp"
 
 #include <set>
 #include <vector>
@@ -107,7 +107,7 @@ private:
 
 std::ostream& operator<<(std::ostream& os, const StabilityLookupTable& table);
 
-class WashingtonEvaluator : public Evaluator
+class WashingtonEvaluator : public SimpleEvaluator
 {
 public:
 
@@ -128,12 +128,17 @@ public:
 
 	virtual ~WashingtonEvaluator() = default;
 
-	/* XXX The current impleemntation is to simple (it is the same as in
-	 * SimpleEvaluator.)
+	/**
+	 * A more sophisticated utility function than the one used by
+	 * SimpleEvaluator. However no significant decrease in branchingfactor
+	 * could be measured and the reached depth increased, so the performance
+	 * is worse than for the simple version.
 	 */
+	#ifdef USE_WASHINGTON_MOVE_UTILITY
 	virtual score_t moveUtility(const Outcome& outcome
 			, const OthelloState& beforeAction)
 			const override;
+	#endif //USE_WASHINGTON_MOVE_UTILITY
 
 	/**
 	 * Calculates a weighted sum of the utility values compuded by the utility

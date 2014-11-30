@@ -92,13 +92,13 @@ SimpleEvaluatorTest.o: SimpleEvaluatorTest.cpp SimpleEvaluator.hpp Evaluator.hpp
 SimpleEvaluator.test: SimpleEvaluatorTest.o SimpleEvaluator.o OthelloAction.o OthelloState.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-WashingtonEvaluator.o: WashingtonEvaluator.cpp WashingtonEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp
+WashingtonEvaluator.o: WashingtonEvaluator.cpp WashingtonEvaluator.hpp SimpleEvaluator.hpp OthelloAction.hpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp
 	$(CC) $(CFLAGS) -c $<
 
 WashingtonEvaluatorTest.o: WashingtonEvaluatorTest.cpp WashingtonEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp
 	$(CC) $(CFLAGS) -c $<
 
-WashingtonEvaluator.test: WashingtonEvaluatorTest.o WashingtonEvaluator.o OthelloAction.o OthelloState.o Position.o
+WashingtonEvaluator.test: WashingtonEvaluatorTest.o WashingtonEvaluator.o OthelloAction.o OthelloState.o Position.o SimpleEvaluator.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 
