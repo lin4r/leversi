@@ -29,13 +29,97 @@
 \begin{document}
 \maketitle
 
-\section{Handling time limit}
+\section{Game representation}
+\begin{tabular}{|l|p{12 cm}|}
+\hline
+\textbf{class} & \textbf{description}
+\\ \hline
+OthelloState & State representation with getters and setters for all values. It is not responsible for keeping itself legal, and does not implement any portion of the transition model.
+\\ \hline
+OthelloAction & Defines the transition model i.e. moving from one state to another, by applying an action and without breaking any rules.
+\\ \hline
+Outcome & Trivial but important class specifying the outcome of an action after it has been applied (sufficient information to undo the action to restore the state). It is implemented as a struct containing the action and the flips it caused.
+\\ \hline
+Game & The full game is all events that happened during the play. It is implemented as a \textit{current state} and a list of outcomes of actions. Actions can be \textit{committed} to the game, modifying the state and adding the outcome to the list. Actions can also be undone, restoring an earlier state of the game.
+\\ \hline
+\end{tabular}
+The most significant part of of this implementation is the implementation of game. Using game in the maximin search means that, during recursion we don't need to store all the intermediate states in memory. Instead we just keep one state representation in memory and undo any effect that it might have. Intuitively this should yield better performance than storing each state, however to investigate this is outside the scope of this article.
+
+\section{Decision procedure}
+The desicion procedure for choosing the move is divided over three logical components. The \textit{move searcher} (MaximinSearcher.hpp) searches for a move that is in some sense optimal. The \textit{evaluator} (WashingtonEvaluator.hpp) evaluates a state to and defines what is considered optimal by the move searcher. Finally the \textit{time manager} ensures that maximum performance is obtained, given a tolerated \textit{latency}.
+
+\subsection{Searching for the best move}
+The \textit{move searcher} uses \textit{maximin search}, with \textit{alpha-beta pruning} and \textit{move ordering}. The original Maximin adversial search algorithm is used (as described in TODO REF RnN), with one minor modification. $Max-Value$ and $Min-Value$ are not responsible for termination detection. Instead an intermediate recursive call handles termination detection and also move ordering. Below the name of the involved functions in the implementation are described (implemented in MaximinSearcher.cpp).
+
+\begin{tabular}{|l|p{12 cm}|}
+\hline
+$maximinAction()$ & A user friendly interface omitting the recursion stuff. Just calls $\_maximinAction()$ with initial parameters.
+\\ \hline
+$\_maximinAction()$ & Recursive subfunction. Performs termination detection and move ordering. Calls $maxValue()$ or $minValue()$ depending on if the max or minplayer are currently playing in the state.
+\\ \hline
+$maxValue()$ & Expands a max node. Calls $\_maximinAction()$.
+\\ \hline
+$minValue()$ & Expands a min node. Calls $\_maximinAction()$.
+\\ \hline
+\end{tabular}
+
+\subsection{State evaluation}
+Two evaluators are have been implemented. SimpleEvaluator is the simplest evaluator possible. Its utility function just computes \# max coins - \# min coins. The more sophisticated utility is implemented is implemented as the WashingtonEvaluator class TODO(reference) (it is called WashingtonEvaluator because it was invented at Wahington university). Basically it does four things.
+\begin{enumerate}
+\item Tries to maximise the number of coins.
+\item Tries to minimize the mobility of the opponent.
+\item Tries to grab the corners.
+\item Tries to grab 'stable' positions, which are less likely to be taken later in the game.
+\end{enumerate}
+For a detaild description see the article.
+
+The evaluator is also responsible for computing a moveUtility score used for move ordering. This score does not take into account if the min or max player is playing (The zero-sum rule sais that what the min player gains the maxplayer looses). The implementation is trivial and just computes the gain of advantage in number of coins by the player compared to the advisary. The formula is $moveUtility := 1 + 2*numFlips$ or just $moveUtility := 0$ if the action was \textit{pass}.
+
+%\subsubsection{Algorithm descriptions}
+%\begin{lstlisting}
+%FUNCTION maximinAction(alpha, beta, depth) -> <OhelloAction, Score>
+%BEGIN
+%
+%	IF depth => maxDepth OR gameOverCriteria() THEN
+%	
+%		score := utility(state)
+%		action := createDummyAction()
+%
+%		RETURN <action, score>
+%		
+%	ENDIF
+%	
+%	% Placements only, not pass. Outcomes are typles of actions and
+%	% flips they cause.
+%	outcomes := findLegalPlacements(state)
+%
+%	IF outcomes.isEmpy() THEN
+%		passAction = OthelloAction::pass()
+%		passScore := evaluator.evaluate(passAction)
+%		outcomes.insert(<passAction, passScore>)
+%	ENDIF
+%	
+%	% Ranked actions contains an ordered set of actions.
+%	rankedActions := moveOrder(outcomes)
+%	
+%	%Recursive calls
+%	IF state.getPlayer() = maxPlayer THEN
+%		maxValue(alpha, beta, depth)
+%	ELSE
+%		minValue(alpha, beta, depth)
+%	ENDIF
+%	
+%END
+%\end{lstlisting}
+%'game' is the global game state.
+
+\subsection{Handling time limit}
 Because Max-min search is a form Depth First traversal, it is feasible to use the method of \textit{iterative deepening}, to succesively produce better guesses until the time runs out.
 
 In normal min max search, the number of nodes is given by $N(d) = 1 + b + b^2 + ... b^d$, where $d$ is the depth and $b$ is the effective branch factor\footnote{Counting the root. In most litterature, the root node is not counted. The formula is then $N(d) +1 = 1 + b + b^2 + ... b^d$. Since the applicatoin does a first call to the recursive subfunction \_getBestMove(), I deemed it more straightforward to include it.}. This expression is equivalent to $N(d) = \frac{b^{d+1} -1}{b -1}$ (geometric sum). Using iterative deepening the total nuber of nodes is $N_i(d) = N(0) + N(1) + ... N(d)$. Rearranging the terms we get $N_i(d)(b-1) + b + 1= 1 + b + b^2 ... b^{d+1}$, which is also a gemetric sum. Hence $N_i(d) = \frac{b^{d+2} - 1}{(b - 1)^2} - \frac{d+1}{d-1}$. The dominating exponent is still $b^d$, which shows that iterative deepening will not impact time complexity, it is still $O(b^d)$. For this result to hold in practice, one assumption must be made: ``Deepening the Max-Min search does not affect the branching factor.''. This is not entirely true, since the branching factor tends to be initially low in othello and to reach a peak somewhere in the middle of the game. This will be further discussed in the analysis section below.
 
-\subsection{Practical adaptations}
-The algorithm uses a predictor to predict the time it will take to perform the next iterative call. For this the algorithm needs to keep track of the following values.
+\subsubsection{Practical adaptations}
+The algorithm uses a predictor to predict the time it will take to perform the next iterative call. It then executes the next step if it completion ocurrs before an secific end time point in the future. For this the algorithm needs to keep track of the following values.
 
 \begin{tabular}{l l}
 $t_0$ & Time point, when the search started. \\
@@ -51,7 +135,7 @@ $d$ & Current depth. \\
 
 $b$ is the value from the previous iteration, because it is most likely to correspond that of the next (locality). The algorithm makes the assumption that all nodes require the same amount of time to expand. This assumption will be discussed in the analysis.
 
-\subsection{Algorithm}
+\subsubsection{Algorithm}
 The branch factor is approximative and calculated as $b = N^{\frac{1}{d}}$.
 
 \begin{lstlisting}
@@ -82,6 +166,19 @@ BEGIN
 END
 \end{lstlisting}
 
+\section{Results}
+Unless otherwise mentioned values below where optainened by letting the implementation go two rounds against the implementation provided by the institution (TODO REF). In one my ai starts, and in the other the the institutions ai starts.
+
+Data was benchmarked on a DELL XPS L322 computer using a 3'd gen i7 processor. The system was build using O4 optimization and the NODEBUG macro enabled. The full list of CFLAGS in the Makefile was:
+
+-Wall -std=c++11 -O4 -DNODEBUG
+
+The implementation had 5 secoundsto choose move.
+
+\subsection{Score}
+\subsection{Performance, depth, branching factor}
+\subsection{Time limit}
+\subsection{A more sophisticated move utility}
 
 
 \end{document}
