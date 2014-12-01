@@ -145,7 +145,7 @@ static OthelloAction chooseAction(OthelloState state, int timeout_ms)
 		<<  "branching factor: " << analysis.branchingFactor << endl
 		<<  "predicted score:  " << analysis.predictedScore << endl
 		<<  "Time used (s):    " << exectime << endl
-		<<  "Depth:            " << analysis.reachedDepth << endl
+		<<  "ReachedDepth:     " << analysis.reachedDepth << endl
 		<<  "MaxDepth:         " << maxDepth << endl
 		<<  "****************" << endl;
 

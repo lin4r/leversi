@@ -26,6 +26,7 @@ TEST_CASE("The deffault values are set", "[WashingtonEvaluator, default]")
 }
 
 // The new utility are to complex for it to be possible to predict the value.
+// If the inherited utility is used, it is already tested in SimpleEvaluator.
 //
 //TEST_CASE("The move score is the gain in bricks."
 //		, "[WashingtonEvaluator, moveOrdering]")
