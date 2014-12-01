@@ -28,12 +28,11 @@ using std::endl;
 
 namespace othello {
 
-OthelloState::OthelloState() noexcept : OthelloState(8,8,Player::Black)
+OthelloState::OthelloState() : OthelloState(8,8,Player::Black)
 {
 }
 
 OthelloState::OthelloState(int boardRows, int boardColumns, Player starter)
-		noexcept
 		: playersTurn{starter}, boardRows{boardRows}
 		, boardColumns{boardColumns}
 		, board{vector<Tile>(boardRows*boardColumns,Tile::Empty)}

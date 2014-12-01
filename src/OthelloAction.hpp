@@ -38,7 +38,7 @@ public:
 	/**
 	 * param:	Position for placement.
 	 */
-	OthelloAction(Position position) noexcept
+	OthelloAction(Position position)
 		: OthelloAction(position, false)
 	{}
 
@@ -47,7 +47,7 @@ public:
 	 *	position - Position of placement. Doesn't matter if ispass==true.
 	 *	ispass - Flags if the action is pass.
 	 */
-	OthelloAction(Position position, bool ispass) noexcept
+	OthelloAction(Position position, bool ispass)
 		: position(position), ispass{ispass}
 	{}
 

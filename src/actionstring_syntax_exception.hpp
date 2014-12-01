@@ -26,7 +26,7 @@ class actionstring_syntax_exception : public std::exception
 {
 public:
 
-	actionstring_syntax_exception(std::string action) noexcept : action{action}
+	actionstring_syntax_exception(std::string action) : action{action}
 		{}
 
 	virtual ~actionstring_syntax_exception() = default;

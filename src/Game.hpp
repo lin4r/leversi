@@ -35,7 +35,7 @@ public:
 	/**
 	 * Construct a standard rule game.
 	 */
-	Game() noexcept : currentState{OthelloState::initialState()} {}
+	Game() : currentState{OthelloState::initialState()} {}
 
 	/**
 	 * Specify the initial state of the game.

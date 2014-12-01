@@ -28,7 +28,7 @@ class illegal_action_exception : public std::exception
 {
 public:
 
-	illegal_action_exception(std::string message) noexcept : message{message} {}
+	illegal_action_exception(std::string message) : message{message} {}
 	virtual ~illegal_action_exception() = default;
 
 	virtual const char* what() const noexcept override

@@ -70,7 +70,7 @@ public:
 	/**
 	 * Creates an empty othello state. 8*8 board an black player starts.
 	 */
-	OthelloState() noexcept;
+	OthelloState();
 
 	/**
 	 * params:
@@ -78,7 +78,7 @@ public:
 	 *	boardColumns - The number of columns on the board.
 	 *	starter - The palyer who starts.
 	 */
-	OthelloState(int boardRows, int boardColumns, Player starter) noexcept;
+	OthelloState(int boardRows, int boardColumns, Player starter);
 
 	virtual ~OthelloState() = default;
 

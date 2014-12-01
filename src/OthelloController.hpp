@@ -33,8 +33,8 @@ public:
 	/* XXX Ugly forwarding solution, Ill fix a consistent construction logic
 	 * later.
 	 */
-	virtual void addGameObserver(std::shared_ptr<Observer<OthelloState>> observer)
-		noexcept = 0;
+	virtual void addGameObserver(std::shared_ptr<Observer<OthelloState>>
+		observer) noexcept = 0;
 };
 
 } //namespace othello
