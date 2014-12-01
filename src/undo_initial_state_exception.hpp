@@ -7,7 +7,7 @@
 
 #include <exception>
 
-namespace othello {
+namespace reversi {
 
 class undo_initial_state_exception : std::exception
 {
@@ -19,6 +19,6 @@ public:
 		{ return "The initial state of the game can not be undone."; }
 };
 
-} //namespace othello
+} //namespace reversi
 
 #endif //UNDO_INITIAL_STATE_EXCEPTION_HPP_

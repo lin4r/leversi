@@ -11,7 +11,7 @@ using std::ostream;
 using std::endl;
 using std::setw;
 
-namespace othello {
+namespace reversi {
 
 StabilityLookupTable StabilityLookupTable::defaultTable() noexcept
 {
@@ -76,7 +76,7 @@ WashingtonEvaluator::WashingtonEvaluator(StabilityLookupTable stabilityTable)
 
 #ifdef USE_WASHINGTON_MOVE_UTILITY
 score_t WashingtonEvaluator::moveUtility(const Outcome& outcome
-		, const OthelloState& beforeAction) const
+		, const ReversiState& beforeAction) const
 {
 	#define isCorner(position) (corners.find((position)) != corners.end())
 
@@ -120,7 +120,7 @@ score_t WashingtonEvaluator::moveUtility(const Outcome& outcome
 #endif //USE_WASHINGTON_MOVE_UTILITY
 
 score_t WashingtonEvaluator::utility(Player player
-		, const OthelloState& state) const
+		, const ReversiState& state) const
 {
 	using std::round;
 
@@ -147,7 +147,7 @@ score_t WashingtonEvaluator::utility(Player player
 }
 
 double WashingtonEvaluator::coinParityUtility(Player player
-		, const OthelloState& state) const noexcept
+		, const ReversiState& state) const noexcept
 {
 	const auto maxPlayerCoinColour = playerBrickColour(player);
 	const auto minPlayerCoinColour = playerBrickColour(advisary(player));
@@ -175,7 +175,7 @@ double WashingtonEvaluator::coinParityUtility(Player player
 	return 100.0*numerator/denominator;
 }
 
-double WashingtonEvaluator::mobilityUtility(Player player, OthelloState state)
+double WashingtonEvaluator::mobilityUtility(Player player, ReversiState state)
 		const noexcept
 {
 	state.setTurn(player);
@@ -184,13 +184,13 @@ double WashingtonEvaluator::mobilityUtility(Player player, OthelloState state)
 	 * possibly be to long.
 	 */
 	const double numMaxPlayerMoves =
-		OthelloAction::findLegalPlacements(state).size();
+		ReversiAction::findLegalPlacements(state).size();
 
 	state.changeTurn();
 
 	/* Truncation, see above. */
 	const double numMinPlayerMoves =
-		OthelloAction::findLegalPlacements(state).size();
+		ReversiAction::findLegalPlacements(state).size();
 
 	const auto denominator =
 		static_cast<double>(numMaxPlayerMoves + numMinPlayerMoves);
@@ -205,7 +205,7 @@ double WashingtonEvaluator::mobilityUtility(Player player, OthelloState state)
 }
 
 double WashingtonEvaluator::cornerUtility(Player player
-		, const OthelloState& state) const noexcept
+		, const ReversiState& state) const noexcept
 {
 	const auto maxPlayerCoinColour = playerBrickColour(player);
 	const auto minPlayerCoinColour = playerBrickColour(advisary(player));
@@ -239,7 +239,7 @@ double WashingtonEvaluator::cornerUtility(Player player
 }
 
 double WashingtonEvaluator::stabilityUtility(Player player
-		, const OthelloState& state) const
+		, const ReversiState& state) const
 {
 	const auto maxPlayerCoinColour = playerBrickColour(player);
 	const auto minPlayerCoinColour = playerBrickColour(advisary(player));
@@ -251,7 +251,7 @@ double WashingtonEvaluator::stabilityUtility(Player player
 			|| (state.numBoardColumns() != stabilityTable.numColumns()))
 	{
 		throw std::length_error(
-			"StabilityLookupTable and othello board dimensions mismatch");
+			"StabilityLookupTable and reversi board dimensions mismatch");
 	}
 
 	auto maxPlayerStabilityScore = 0;
@@ -282,4 +282,4 @@ unique_ptr<Evaluator> WashingtonEvaluator::clone() const
 	return unique_ptr<Evaluator>(clone_p);
 }
 
-} //namespace othello
+} //namespace reversi

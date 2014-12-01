@@ -2,20 +2,20 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /*
- * Implements OthelloAction.hpp
+ * Implements ReversiAction.hpp
  *
  * Linus Narva.
  */
 
-#include "OthelloAction.hpp"
+#include "ReversiAction.hpp"
 #include "illegal_action_exception.hpp"
 #include "actionstring_syntax_exception.hpp"
 
@@ -28,17 +28,17 @@ using std::vector;
 using std::string;
 using std::ostream;
 
-namespace othello {
+namespace reversi {
 
-OthelloAction OthelloAction::pass() noexcept
+ReversiAction ReversiAction::pass() noexcept
 {
-	return OthelloAction(Position(-1,-1),true);
+	return ReversiAction(Position(-1,-1),true);
 }
 
 /* FIXME Use regular expressions. However it turns out these don't exist until
  *gcc 4.9 :(
  */
-OthelloAction OthelloAction::parse(string actionstring)
+ReversiAction ReversiAction::parse(string actionstring)
 {
 //	using std::regex;
 //	using std::regex_match;
@@ -59,7 +59,7 @@ OthelloAction OthelloAction::parse(string actionstring)
 	using std::isdigit;
 	using std::stoi;
 
-	OthelloAction action(Position(-1,-1));
+	ReversiAction action(Position(-1,-1));
 
 	if (actionstring.compare("pass") == 0) {
 
@@ -71,7 +71,7 @@ OthelloAction OthelloAction::parse(string actionstring)
 		const auto row = stoi(actionstring.substr(1,1));
 		const auto column = stoi(actionstring.substr(3,1));
 
-		action = OthelloAction(Position(row, column));
+		action = ReversiAction(Position(row, column));
 
 	} else {
 		throw actionstring_syntax_exception(actionstring);
@@ -80,7 +80,7 @@ OthelloAction OthelloAction::parse(string actionstring)
 	return action;
 }
 
-string OthelloAction::actionString() const noexcept
+string ReversiAction::actionString() const noexcept
 {
 	using std::to_string;
 
@@ -96,7 +96,7 @@ string OthelloAction::actionString() const noexcept
 	return actionStr;
 }
 
-vector<Position> OthelloAction::searchFlips(const OthelloState& state)
+vector<Position> ReversiAction::searchFlips(const ReversiState& state)
 		const noexcept
 {
 	using std::mem_fn;
@@ -166,7 +166,7 @@ vector<Position> OthelloAction::searchFlips(const OthelloState& state)
 	return flips;
 }
 
-vector<Position> OthelloAction::execute(OthelloState& state) const
+vector<Position> ReversiAction::execute(ReversiState& state) const
 {
 	if (state.isGameOver()) {
 		throw illegal_action_exception("The game is over.");
@@ -209,7 +209,7 @@ vector<Position> OthelloAction::execute(OthelloState& state) const
 	return flips;
 }
 
-void OthelloAction::updateGameOverStaus(OthelloState& state)
+void ReversiAction::updateGameOverStaus(ReversiState& state)
 		const noexcept
 {
 	const auto previousWasPass = state.wasActionPass();
@@ -221,7 +221,7 @@ void OthelloAction::updateGameOverStaus(OthelloState& state)
 	state.setActionWasPass(ispass);
 }
 
-bool OthelloAction::existsLegalPlacement(const OthelloState& state) noexcept
+bool ReversiAction::existsLegalPlacement(const ReversiState& state) noexcept
 {
 	bool foundLegalPlacement{false};
 
@@ -231,7 +231,7 @@ bool OthelloAction::existsLegalPlacement(const OthelloState& state) noexcept
 		for (auto col = 0; (! foundLegalPlacement)
 				&& (col < state.numBoardColumns()); col++)
 		{
-			OthelloAction placement(Position(row,col));
+			ReversiAction placement(Position(row,col));
 			auto flips = placement.searchFlips(state);
 			foundLegalPlacement = foundLegalPlacement || (flips.size() != 0);
 		}
@@ -240,7 +240,7 @@ bool OthelloAction::existsLegalPlacement(const OthelloState& state) noexcept
 	return foundLegalPlacement;
 }
 
-vector<Outcome> OthelloAction::findLegalPlacements(const OthelloState& state)
+vector<Outcome> ReversiAction::findLegalPlacements(const ReversiState& state)
 		noexcept
 {
 	vector<Outcome> placements;
@@ -248,7 +248,7 @@ vector<Outcome> OthelloAction::findLegalPlacements(const OthelloState& state)
 	for (auto row = 0; row < state.numBoardRows(); row++ ) {
 		for (auto col = 0; col < state.numBoardColumns(); col++) {
 
-			OthelloAction placement(Position(row,col));
+			ReversiAction placement(Position(row,col));
 			auto flips = placement.searchFlips(state);
 
 			if (flips.size() > 0) {
@@ -262,13 +262,13 @@ vector<Outcome> OthelloAction::findLegalPlacements(const OthelloState& state)
 	return placements;
 }
 
-bool operator==(const OthelloAction& a1, const OthelloAction& a2) noexcept
+bool operator==(const ReversiAction& a1, const ReversiAction& a2) noexcept
 {
 	return (a1.getPosition() == a2.getPosition())
 		&& (a1.isPass() == a2.isPass());
 }
 
-bool operator<(const OthelloAction& a1, const OthelloAction& a2) noexcept
+bool operator<(const ReversiAction& a1, const ReversiAction& a2) noexcept
 {
 	if (a1.isPass() && (! a2.isPass())) {
 		return true;
@@ -279,9 +279,9 @@ bool operator<(const OthelloAction& a1, const OthelloAction& a2) noexcept
 	}
 }
 
-std::ostream& operator<<(std::ostream& os, const OthelloAction& action)
+std::ostream& operator<<(std::ostream& os, const ReversiAction& action)
 {
-	return os << "OthelloAction[" << action.actionString() << "]";
+	return os << "ReversiAction[" << action.actionString() << "]";
 }
 
-} //namespace othello
+} //namespace reversi

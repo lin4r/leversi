@@ -7,7 +7,7 @@
 
 #include <memory>
 
-namespace othello {
+namespace reversi {
 
 template<typename T>
 class Cloneable
@@ -15,6 +15,6 @@ class Cloneable
 	virtual std::unique_ptr<T> clone() const = 0;
 };
 
-} //namespace othello
+} //namespace reversi
 
 #endif //CLONEABLE_HPP_

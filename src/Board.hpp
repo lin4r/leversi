@@ -2,24 +2,24 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /*
- * Othello board widget.
+ * Reversi board widget.
  *
  * Linus Narva.
  */
 #ifndef BOARD_HPP_
 #define BOARD_HPP_
 
-#include "OthelloView.hpp"
-#include "OthelloController.hpp"
-#include "OthelloState.hpp"
+#include "ReversiView.hpp"
+#include "ReversiController.hpp"
+#include "ReversiState.hpp"
 #include "Observer.hpp"
 
 #include <gtkmm/drawingarea.h>
@@ -29,18 +29,18 @@
 #include <utility>
 #include <memory>
 
-namespace othello {
+namespace reversi {
 
 class Board;
 
-class NotificationReceiver : public Observer<OthelloState>
+class NotificationReceiver : public Observer<ReversiState>
 {
 public:
 
 	NotificationReceiver(Board* updateObject);
 	virtual ~NotificationReceiver() = default;
 
-	virtual void notify(const OthelloState* state) override;
+	virtual void notify(const ReversiState* state) override;
 
 private:
 
@@ -66,7 +66,7 @@ struct BoardGraphics
 	virtual bool isInitialized() const noexcept;
 };
 
-class Board : public Gtk::DrawingArea, public OthelloView
+class Board : public Gtk::DrawingArea, public ReversiView
 {
 public:
 
@@ -76,7 +76,7 @@ public:
 
 	virtual void placePiece(Tile colour, int gridX, int gridY) override;
 
-	virtual void update(OthelloState state);
+	virtual void update(ReversiState state);
 
 	virtual void setGraphics(BorderSize bgImageBorderSize
 		, BoardGraphics graphics) noexcept;
@@ -108,9 +108,9 @@ private:
 
 	std::shared_ptr<NotificationReceiver> notifyReceiver;
 
-	std::unique_ptr<OthelloController> controller;
+	std::unique_ptr<ReversiController> controller;
 };
 
-} //namespace othello
+} //namespace reversi
 
 #endif //BOARD_HPP_

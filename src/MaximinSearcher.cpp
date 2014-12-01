@@ -10,7 +10,7 @@ using std::max;
 using std::min;
 using std::pow;
 
-namespace othello {
+namespace reversi {
 
 static bool rankedActionOrder(const RankedAction& action1
 	, const RankedAction& action2) noexcept;
@@ -41,7 +41,7 @@ const MaximinSearcher& MaximinSearcher::operator=(const MaximinSearcher& org)
 	return *this;
 }
 
-OthelloAction MaximinSearcher::maximinAction()
+ReversiAction MaximinSearcher::maximinAction()
 {
 	analysis = {0,.0,0,-1}; /* Clear the previous analysis (if any). */
 
@@ -68,7 +68,7 @@ RankedAction MaximinSearcher::_maximinAction(score_t alpha, score_t beta
 
 		const auto score = evaluator->utility(maxPlayer, game.refState());
 
-		OthelloAction arbitraryAction(Position(-1,-1));
+		ReversiAction arbitraryAction(Position(-1,-1));
 		RankedAction result = {arbitraryAction, score};
 
 		analysis.reachedDepth = max(depth, analysis.reachedDepth);
@@ -76,12 +76,12 @@ RankedAction MaximinSearcher::_maximinAction(score_t alpha, score_t beta
 		return result;
 	}
 
-	auto outcomes = OthelloAction::findLegalPlacements(game.getState());
+	auto outcomes = ReversiAction::findLegalPlacements(game.getState());
 
 	/* Handle pass. */
 	if (outcomes.empty()) {
 
-		const auto pass = OthelloAction::pass();
+		const auto pass = ReversiAction::pass();
 		const flips_t noFlips;
 
 		const Outcome outcome = {pass, noFlips};
@@ -95,7 +95,7 @@ RankedAction MaximinSearcher::_maximinAction(score_t alpha, score_t beta
 		, rankedActionOrder)
 		&& "The rankedActions are not in proper order.");
 
-	RankedAction bestRankedAction = {OthelloAction::pass(), 0};
+	RankedAction bestRankedAction = {ReversiAction::pass(), 0};
 	if (maxPlayer == game.refState().whosTurn()) {
 		bestRankedAction = maxValue(alpha, beta, depth, rankedActions);
 	} else {
@@ -112,7 +112,7 @@ RankedAction MaximinSearcher::maxValue(score_t alpha, score_t beta, int depth
 		&& "Must be the max players turn in a max node.");
 
 	auto value = SCORE_INFIMUM;
-	OthelloAction bestAction(Position(-1,-1)); //Dummy action.
+	ReversiAction bestAction(Position(-1,-1)); //Dummy action.
 
 	for (auto rankedAction : rankedActions) {
 
@@ -153,7 +153,7 @@ RankedAction MaximinSearcher::minValue(score_t alpha, score_t beta, int depth
 		&& "Must be the minplayers turn in a min node.");
 
 	auto value = SCORE_SUPERMUM;
-	OthelloAction bestAction(Position(-1,-1)); //Dummy action.
+	ReversiAction bestAction(Position(-1,-1)); //Dummy action.
 
 	for (auto rankedAction : rankedActions) {
 
@@ -213,4 +213,4 @@ bool rankedActionOrder(const RankedAction& action1
 	return action1.score > action2.score;
 }
 
-} //namespace othello
+} //namespace reversi

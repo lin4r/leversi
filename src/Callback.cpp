@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -16,7 +16,7 @@
  */
 #include "Callback.hpp"
 #include "Position.hpp"
-#include "OthelloAction.hpp"
+#include "ReversiAction.hpp"
 #include "illegal_action_exception.hpp"
 #include "MaximinSearcher.hpp"
 #include "TimeboxedMaximinSearcher.hpp"
@@ -30,7 +30,7 @@ using std::string;
 
 using std::shared_ptr;
 
-namespace othello {
+namespace reversi {
 
 Callback::Callback() : model{new Game()}
 {
@@ -42,13 +42,13 @@ void Callback::pressedTile(int indexX, int indexY)
 	 * which effectively inverts x,y.
 	 */
 	Position pos(indexY, indexX);
-	OthelloAction action(pos);
+	ReversiAction action(pos);
 
 	executePlayerAction(action);
 }
 
 /* TODO handle player pass and game over.*/
-void Callback::executePlayerAction(OthelloAction action)
+void Callback::executePlayerAction(ReversiAction action)
 {
 	/* The coordinates are reversed because the model uses row-col coordinates
 	 * which effectively inverts x,y.
@@ -92,8 +92,8 @@ void Callback::executePlayerAction(OthelloAction action)
 			cout << "Winner> " << winnerMessage() << endl;
 
 		/* If no move is possible, then recursively execute pass. */
-		} else if (! OthelloAction::existsLegalPlacement(model->getState())) {
-			executePlayerAction(OthelloAction::pass());
+		} else if (! ReversiAction::existsLegalPlacement(model->getState())) {
+			executePlayerAction(ReversiAction::pass());
 		}
 
 		model->notifyAll();
@@ -102,7 +102,7 @@ void Callback::executePlayerAction(OthelloAction action)
 	}
 }
 
-void Callback::addGameObserver(shared_ptr<Observer<OthelloState>> observer)
+void Callback::addGameObserver(shared_ptr<Observer<ReversiState>> observer)
 		noexcept
 {
 	model->addObserver(observer);
@@ -133,4 +133,4 @@ string Callback::winnerMessage() const noexcept
 	}
 }
 
-} //namespace othello
+} //namespace reversi

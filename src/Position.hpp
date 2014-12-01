@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -19,7 +19,7 @@
 
 #include <iostream>
 
-namespace othello {
+namespace reversi {
 
 struct Position
 {
@@ -68,6 +68,6 @@ bool operator<(const Position& p1, const Position& p2) noexcept;
 
 std::ostream& operator<<(std::ostream& os, const Position& p);
 
-} //namespace othello
+} //namespace reversi
 
 #endif //POSITION_HPP_

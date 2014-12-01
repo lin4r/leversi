@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -17,17 +17,17 @@
 #ifndef CALLBACK_HPP_
 #define CALLBACK_HPP_
 
-#include "OthelloController.hpp"
+#include "ReversiController.hpp"
 #include "Game.hpp"
-#include "OthelloState.hpp"
+#include "ReversiState.hpp"
 #include "Observer.hpp"
 
 #include <memory>
 #include <string>
 
-namespace othello {
+namespace reversi {
 
-class Callback : public OthelloController
+class Callback : public ReversiController
 {
 public:
 
@@ -40,17 +40,17 @@ public:
 	 * later.
 	 */
 	virtual void addGameObserver(
-		std::shared_ptr<Observer<OthelloState>> observer) noexcept override;
+		std::shared_ptr<Observer<ReversiState>> observer) noexcept override;
 
 private:
 
 	virtual std::string winnerMessage() const noexcept;
 
-	void executePlayerAction(OthelloAction action);
+	void executePlayerAction(ReversiAction action);
 
 	std::unique_ptr<Game> model;
 };
 
-} //namespace othello
+} //namespace reversi
 
 #endif //CALLBACK_HPP_

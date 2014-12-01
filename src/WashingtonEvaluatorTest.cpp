@@ -12,7 +12,7 @@
 #include "WashingtonEvaluator.hpp"
 #include "Position.hpp"
 
-using namespace othello;
+using namespace reversi;
 
 TEST_CASE("The deffault values are set", "[WashingtonEvaluator, default]")
 {
@@ -32,8 +32,8 @@ TEST_CASE("The deffault values are set", "[WashingtonEvaluator, default]")
 //		, "[WashingtonEvaluator, moveOrdering]")
 //{
 //	WashingtonEvaluator evaluator;
-//	auto state = OthelloState::initialState();
-//	OthelloAction legal(Position(3,2));
+//	auto state = ReversiState::initialState();
+//	ReversiAction legal(Position(3,2));
 //
 //	auto flips = legal.execute(state);
 //	Outcome outcome = {legal, flips};
@@ -46,8 +46,8 @@ TEST_CASE("The deffault values are set", "[WashingtonEvaluator, default]")
 TEST_CASE("Pass gives 0 move score", "[WashingtonEvaluator, moveOrdering]")
 {
 	WashingtonEvaluator evaluator;
-	OthelloState empty;
-	auto pass = OthelloAction::pass();
+	ReversiState empty;
+	auto pass = ReversiAction::pass();
 
 	auto flips = pass.execute(empty);
 	Outcome outcome = {pass, flips};
@@ -61,8 +61,8 @@ TEST_CASE("Some trivial property test."
 		, "[WashingtonEvaluator, utility]")
 {
 	WashingtonEvaluator evaluator;
-	auto state = OthelloState::initialState();
-	OthelloAction legal(Position(3,2));
+	auto state = ReversiState::initialState();
+	ReversiAction legal(Position(3,2));
 
 	SECTION("Initally both players have score 0")
 	{

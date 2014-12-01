@@ -9,17 +9,17 @@
 #define MAXIMIN_SEARCHER_HPP_
 
 #include "Game.hpp"
-#include "OthelloAction.hpp"
+#include "ReversiAction.hpp"
 #include "Evaluator.hpp"
 #include "SimpleEvaluator.hpp"
 
 #include <memory>
 
-namespace othello {
+namespace reversi {
 
 struct RankedAction
 {
-	OthelloAction action; /* An action. */
+	ReversiAction action; /* An action. */
 	score_t score;	/* A score assoceiated with the action */
 };
 
@@ -49,7 +49,7 @@ public:
 	 * Computes the maximin action.
 	 * Return:	The maximin action.
 	 */
-	virtual OthelloAction maximinAction(); //XXX Rename getBestAction
+	virtual ReversiAction maximinAction(); //XXX Rename getBestAction
 
 	/**
 	 * Gets the maximum recursive depth.
@@ -156,6 +156,6 @@ private:
 	std::unique_ptr<Evaluator> evaluator{new SimpleEvaluator()};
 };
 
-} //namespace othello
+} //namespace reversi
 
 #endif //MAXIMIN_SEARCHER_HPP_

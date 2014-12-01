@@ -2,19 +2,19 @@ CC=g++
 CFLAGS=-Wall -std=c++11 -O4 -DNDEBUG
 LDFLAGS=
 
-MODEL=Position.o OthelloState.o OthelloAction.o Game.o SimpleEvaluator.o WashingtonEvaluator.o
+MODEL=Position.o ReversiState.o ReversiAction.o Game.o SimpleEvaluator.o WashingtonEvaluator.o
 
 GUI=Callback.o Board.o GUI.o
 
 OOTEST=ObserverObservableTest.o
 
-TEST=Position.test OthelloState.test OthelloAction.test Game.test ObserverObservable.test SimpleEvaluator.test Cloneable.test WashingtonEvaluator.test
+TEST=Position.test ReversiState.test ReversiAction.test Game.test ObserverObservable.test SimpleEvaluator.test Cloneable.test WashingtonEvaluator.test
 
 AI=MaximinSearcher.o TimeboxedMaximinSearcher.o
 
-TARGET=lothello
+TARGET=leversi
 
-LAB=lothello-bot
+LAB=leversi-bot
 
 .PHONY: all build clean test purge
 
@@ -22,8 +22,8 @@ all: $(TARGET) $(MODEL) $(GUI) $(LAB) test
 
 test: $(TEST)
 	./Position.test
-	./OthelloState.test
-	./OthelloAction.test
+	./ReversiState.test
+	./ReversiAction.test
 	./Game.test
 	./ObserverObservable.test
 	./SimpleEvaluator.test
@@ -34,7 +34,7 @@ test: $(TEST)
 $(LAB): main-bot.o $(MODELEX) $(MODEL) $(AI)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-main-bot.o: main-bot.cpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp OthelloAction.hpp Game.hpp MaximinSearcher.hpp TimeboxedMaximinSearcher.hpp WashingtonEvaluator.hpp
+main-bot.o: main-bot.cpp ReversiState.hpp Position.hpp Player.hpp Tile.hpp ReversiAction.hpp Game.hpp MaximinSearcher.hpp TimeboxedMaximinSearcher.hpp WashingtonEvaluator.hpp
 	$(CC) $(CFLAGS) -c $<
 
 # Compile Target
@@ -48,16 +48,16 @@ $(TARGET): main-gui.o $(MODELEX) $(MODEL) $(GUI) $(AI)
 Position.o: Position.cpp Position.hpp
 	$(CC) $(CFLAGS) -c $<
 
-OthelloState.o: OthelloState.cpp OthelloState.hpp Tile.hpp Player.hpp Position.hpp
+ReversiState.o: ReversiState.cpp ReversiState.hpp Tile.hpp Player.hpp Position.hpp
 	$(CC) $(CFLAGS) -c $<
 
-OthelloAction.o: OthelloAction.cpp OthelloAction.hpp Position.hpp OthelloState.hpp illegal_action_exception.hpp actionstring_syntax_exception.hpp
+ReversiAction.o: ReversiAction.cpp ReversiAction.hpp Position.hpp ReversiState.hpp illegal_action_exception.hpp actionstring_syntax_exception.hpp
 	$(CC) $(CFLAGS) -c $<
 
-Game.o: Game.cpp Game.hpp OthelloState.hpp OthelloAction.hpp Observable.hpp undo_initial_state_exception.hpp
+Game.o: Game.cpp Game.hpp ReversiState.hpp ReversiAction.hpp Observable.hpp undo_initial_state_exception.hpp
 	$(CC) $(CFLAGS) -c $<
 
-SimpleEvaluator.o: SimpleEvaluator.cpp SimpleEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Cloneable.hpp
+SimpleEvaluator.o: SimpleEvaluator.cpp SimpleEvaluator.hpp Evaluator.hpp ReversiAction.hpp ReversiState.hpp Cloneable.hpp
 	$(CC) $(CFLAGS) -c $<
 
 
@@ -68,45 +68,45 @@ PositionTest.o: PositionTest.cpp Position.hpp
 Position.test: PositionTest.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-OthelloStateTest.o: OthelloStateTest.cpp
+ReversiStateTest.o: ReversiStateTest.cpp
 	$(CC) $(CFLAGS) -c $<
 
-OthelloState.test: OthelloStateTest.o OthelloState.o Position.o
+ReversiState.test: ReversiStateTest.o ReversiState.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-OthelloActionTest.o: OthelloActionTest.cpp illegal_action_exception.hpp actionstring_syntax_exception.hpp
+ReversiActionTest.o: ReversiActionTest.cpp illegal_action_exception.hpp actionstring_syntax_exception.hpp
 	$(CC) $(CFLAGS) -c $<
 
-OthelloAction.test: OthelloActionTest.o OthelloAction.o OthelloState.o Position.o
+ReversiAction.test: ReversiActionTest.o ReversiAction.o ReversiState.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 GameTest.o: GameTest.cpp Game.hpp undo_initial_state_exception.hpp
 	$(CC) $(CFLAGS) -c $<
 
-Game.test: GameTest.o Game.o OthelloAction.o OthelloState.o Position.o
+Game.test: GameTest.o Game.o ReversiAction.o ReversiState.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-SimpleEvaluatorTest.o: SimpleEvaluatorTest.cpp SimpleEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp
+SimpleEvaluatorTest.o: SimpleEvaluatorTest.cpp SimpleEvaluator.hpp Evaluator.hpp ReversiAction.hpp ReversiState.hpp Position.hpp Player.hpp Tile.hpp
 	$(CC) $(CFLAGS) -c $<
 
-SimpleEvaluator.test: SimpleEvaluatorTest.o SimpleEvaluator.o OthelloAction.o OthelloState.o Position.o
+SimpleEvaluator.test: SimpleEvaluatorTest.o SimpleEvaluator.o ReversiAction.o ReversiState.o Position.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-WashingtonEvaluator.o: WashingtonEvaluator.cpp WashingtonEvaluator.hpp SimpleEvaluator.hpp OthelloAction.hpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp
+WashingtonEvaluator.o: WashingtonEvaluator.cpp WashingtonEvaluator.hpp SimpleEvaluator.hpp ReversiAction.hpp ReversiState.hpp Position.hpp Player.hpp Tile.hpp
 	$(CC) $(CFLAGS) -c $<
 
-WashingtonEvaluatorTest.o: WashingtonEvaluatorTest.cpp WashingtonEvaluator.hpp Evaluator.hpp OthelloAction.hpp OthelloState.hpp Position.hpp Player.hpp Tile.hpp
+WashingtonEvaluatorTest.o: WashingtonEvaluatorTest.cpp WashingtonEvaluator.hpp Evaluator.hpp ReversiAction.hpp ReversiState.hpp Position.hpp Player.hpp Tile.hpp
 	$(CC) $(CFLAGS) -c $<
 
-WashingtonEvaluator.test: WashingtonEvaluatorTest.o WashingtonEvaluator.o OthelloAction.o OthelloState.o Position.o SimpleEvaluator.o
+WashingtonEvaluator.test: WashingtonEvaluatorTest.o WashingtonEvaluator.o ReversiAction.o ReversiState.o Position.o SimpleEvaluator.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 
 # Compile gui parts.
-Callback.o: Callback.cpp Callback.hpp Game.hpp OthelloController.hpp illegal_action_exception.hpp OthelloState.hpp Observer.hpp MaximinSearcher.hpp TimeboxedMaximinSearcher.hpp
+Callback.o: Callback.cpp Callback.hpp Game.hpp ReversiController.hpp illegal_action_exception.hpp ReversiState.hpp Observer.hpp MaximinSearcher.hpp TimeboxedMaximinSearcher.hpp
 	$(CC) $(CFLAGS) -c $<
 
-Board.o: Board.cpp Board.hpp OthelloView.hpp OthelloController.hpp Callback.hpp Tile.hpp Observer.hpp OthelloState.hpp Player.hpp Position.hpp
+Board.o: Board.cpp Board.hpp ReversiView.hpp ReversiController.hpp Callback.hpp Tile.hpp Observer.hpp ReversiState.hpp Player.hpp Position.hpp
 	$(CC) $(CFLAGS) `pkg-config --cflags gtkmm-3.0` -c $<
 
 GUI.o: GUI.cpp GUI.hpp Board.hpp
@@ -129,10 +129,10 @@ Cloneable.test: CloneableTest.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 # Compile AI.
-MaximinSearcher.o: MaximinSearcher.cpp MaximinSearcher.hpp Game.hpp OthelloAction.hpp Evaluator.hpp SimpleEvaluator.hpp Cloneable.hpp
+MaximinSearcher.o: MaximinSearcher.cpp MaximinSearcher.hpp Game.hpp ReversiAction.hpp Evaluator.hpp SimpleEvaluator.hpp Cloneable.hpp
 	$(CC) $(CFLAGS) -c $<
 
-TimeboxedMaximinSearcher.o: TimeboxedMaximinSearcher.cpp TimeboxedMaximinSearcher.hpp MaximinSearcher.hpp OthelloAction.hpp
+TimeboxedMaximinSearcher.o: TimeboxedMaximinSearcher.cpp TimeboxedMaximinSearcher.hpp MaximinSearcher.hpp ReversiAction.hpp
 	$(CC) $(CFLAGS) -c $<
 
 clean:

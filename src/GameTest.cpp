@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -20,7 +20,7 @@
 #include "Game.hpp"
 #include "undo_initial_state_exception.hpp"
 
-using namespace othello;
+using namespace reversi;
 
 TEST_CASE("Comitting and undoing placements.", "[Game, placement]")
 {
@@ -28,7 +28,7 @@ TEST_CASE("Comitting and undoing placements.", "[Game, placement]")
 	auto initial = game.getState();
 
 	Position pos1(3,2), pos2(2,2);
-	OthelloAction legal1(pos1), legal2(pos2);
+	ReversiAction legal1(pos1), legal2(pos2);
 
 	game.commitAction(legal1);
 
@@ -61,10 +61,10 @@ TEST_CASE("Comitting and undoing placements.", "[Game, placement]")
 
 TEST_CASE("Comitting and undoing pass actions.", "[Game]")
 {
-	OthelloState state;
+	ReversiState state;
 	Game game(state); //Empty game.
 	auto initial = game.getState();
-	OthelloAction pass(Position(-1,-1), true);
+	ReversiAction pass(Position(-1,-1), true);
 
 	game.commitAction(pass);
 

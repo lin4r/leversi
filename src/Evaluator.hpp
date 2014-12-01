@@ -1,17 +1,17 @@
 /**
- * Interface for evaluating othello actions.
+ * Interface for evaluating reversi actions.
  * Linus Narva
  */
 #ifndef EVALUATOR_HPP_
 #define EVALUATOR_HPP_
 
-#include "OthelloState.hpp"
-#include "OthelloAction.hpp"
+#include "ReversiState.hpp"
+#include "ReversiAction.hpp"
 #include "Cloneable.hpp"
 
 #include <climits>
 
-namespace othello {
+namespace reversi {
 
 /* Score type along with bound definitions. */
 typedef int score_t;
@@ -33,10 +33,10 @@ public:
 	 *			that is returned bu utility()).
 	 */
 	virtual score_t moveUtility(const Outcome& outcome
-		, const OthelloState& beforeAction) const = 0;
+		, const ReversiState& beforeAction) const = 0;
 
 	/**
-	 * Utility function for evaluating an othello state.
+	 * Utility function for evaluating an reversi state.
 	 * params:
 	 *	player - The player to calculate the score for.
 	 *	state - The state to evaluate.
@@ -44,7 +44,7 @@ public:
 	 *			the player.
 	 */
 	virtual score_t utility(Player player
-		, const OthelloState& state) const = 0;
+		, const ReversiState& state) const = 0;
 
 	/**
 	 * Clone can be used to implement polymorphic set functions. e.g:
@@ -59,6 +59,6 @@ public:
 	virtual std::unique_ptr<Evaluator> clone() const override = 0;
 };
 
-} //namespace othello
+} //namespace reversi
 
 #endif //EVALUATOR_HPP_

@@ -2,27 +2,27 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /*
- * The requested move is illegal in othello rules.
+ * The requested move is illegal in reversi rules.
  *
  * Linus Narva.
  */
 #ifndef ILLEGAL_ACTION_EXCEPTION_HPP_
 #define ILLEGAL_ACTION_EXCEPTION_HPP_
 
-#include "OthelloAction.hpp"
+#include "ReversiAction.hpp"
 
 #include <exception>
 #include <string>
 
-namespace othello {
+namespace reversi {
 
 class illegal_action_exception : public std::exception
 {
@@ -39,6 +39,6 @@ private:
 	std::string message;
 };
 
-} //namespace othello
+} //namespace reversi
 
 #endif //ILLEGAL_ACTION_EXCEPTION_HPP_

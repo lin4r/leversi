@@ -8,9 +8,9 @@
 #include <chrono>
 #include <cmath>
 
-namespace othello {
+namespace reversi {
 
-OthelloAction TimeboxedMaximinSearcher::maximinAction()
+ReversiAction TimeboxedMaximinSearcher::maximinAction()
 {
 	using std::pow;
 	using namespace std::chrono;
@@ -22,7 +22,7 @@ OthelloAction TimeboxedMaximinSearcher::maximinAction()
 	const auto tExit = t0 + maxDuration;
 
 	auto depth = minDepth;
-	auto action = OthelloAction::pass(); //Dummy action.
+	auto action = ReversiAction::pass(); //Dummy action.
 	time_point<high_resolution_clock> tPredict;
 
 	do {
@@ -56,4 +56,4 @@ OthelloAction TimeboxedMaximinSearcher::maximinAction()
 	return action;
 }
 
-} //namespace othello
+} //namespace reversi

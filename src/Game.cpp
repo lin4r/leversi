@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -21,9 +21,9 @@
 
 using std::vector;
 
-namespace othello {
+namespace reversi {
 
-flips_t Game::commitAction(OthelloAction action)
+flips_t Game::commitAction(ReversiAction action)
 {
 	auto flips = action.execute(currentState);
 
@@ -76,9 +76,9 @@ int Game::numTurns() const noexcept
 	return history.size();
 }
 
-const OthelloState* Game::getNotifyData() const
+const ReversiState* Game::getNotifyData() const
 {
 	return &currentState;
 }
 
-} //namespace othello
+} //namespace reversi

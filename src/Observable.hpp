@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -16,7 +16,7 @@
  * the state a set of objects, according to the change.
  *
  * A good example is in grafical user interfaces when the state of a model
- * object e.g. the state of the othello game, is reflected in a set of view
+ * object e.g. the state of the reversi game, is reflected in a set of view
  * of the graphical user interface.
  *
  * Linus Narva.
@@ -28,7 +28,7 @@
 #include <set>
 #include <memory>
 
-namespace othello {
+namespace reversi {
 
 template<typename T>
 class Observable
@@ -132,6 +132,6 @@ std::set<std::shared_ptr<Observer<T>>> Observable<T>::getObservers()
 	return observers;
 }
 
-} //namespace othello
+} //namespace reversi
 
 #endif //OBSERVABLE_HPP_

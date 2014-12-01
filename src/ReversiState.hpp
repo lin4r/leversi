@@ -2,20 +2,20 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /**
- * A state of the othello game.
+ * A state of the reversi game.
  *
  * Linus Narva.
  */
-#ifndef OTHELLO_STATE_HPP_
-#define OTHELLO_STATE_HPP_
+#ifndef REVERSI_STATE_HPP_
+#define REVERSI_STATE_HPP_
 
 #include "Tile.hpp"
 #include "Player.hpp"
@@ -26,14 +26,14 @@
 #include <iostream>
 #include <stdexcept>
 
-namespace othello {
+namespace reversi {
 
 // XXX Make generic iterator classes.
-class OthelloBoardIterator
+class ReversiBoardIterator
 {
 public:
 
-	OthelloBoardIterator(std::vector<Tile>* board) noexcept : board{board} {}
+	ReversiBoardIterator(std::vector<Tile>* board) noexcept : board{board} {}
 
 	typedef std::vector<Tile>::iterator iterator;
 
@@ -45,11 +45,11 @@ private:
 	std::vector<Tile>* board;
 };
 
-class ConstOthelloBoardIterator
+class ConstReversiBoardIterator
 {
 public:
 
-	ConstOthelloBoardIterator(const std::vector<Tile>* board) noexcept
+	ConstReversiBoardIterator(const std::vector<Tile>* board) noexcept
 			: board{board}
 	{}
 
@@ -63,14 +63,14 @@ private:
 	const std::vector<Tile>* board;
 };
 
-class OthelloState
+class ReversiState
 {	
 public:
 
 	/**
-	 * Creates an empty othello state. 8*8 board an black player starts.
+	 * Creates an empty reversi state. 8*8 board an black player starts.
 	 */
-	OthelloState();
+	ReversiState();
 
 	/**
 	 * params:
@@ -78,17 +78,17 @@ public:
 	 *	boardColumns - The number of columns on the board.
 	 *	starter - The palyer who starts.
 	 */
-	OthelloState(int boardRows, int boardColumns, Player starter);
+	ReversiState(int boardRows, int boardColumns, Player starter);
 
-	virtual ~OthelloState() = default;
+	virtual ~ReversiState() = default;
 
 	/**
-	 * Creates the inirtial state, according to othello rules.
+	 * Creates the inirtial state, according to reversi rules.
 	 * The central 2*2 square has white at positions (3,3) and (4,4) and black
 	 * at (3,4) and (4,3).
-	 * return:	The initial othello state.
+	 * return:	The initial reversi state.
 	 */
-	static OthelloState initialState() noexcept;
+	static ReversiState initialState() noexcept;
 
 	/**
 	 * Changes the player turn.
@@ -199,15 +199,15 @@ public:
 	 * Gets a iterator wrapper for the board.
 	 * return:	Iterator.
 	 */
-	virtual OthelloBoardIterator boardIterator() noexcept
-		{ return OthelloBoardIterator(&board); }
+	virtual ReversiBoardIterator boardIterator() noexcept
+		{ return ReversiBoardIterator(&board); }
 
 	/**
 	 * Gets a const iterator for the board.
 	 * return: const iterator.
 	 */
-	virtual ConstOthelloBoardIterator constBoardIterator() const noexcept
-		{ return ConstOthelloBoardIterator(&board); }
+	virtual ConstReversiBoardIterator constBoardIterator() const noexcept
+		{ return ConstReversiBoardIterator(&board); }
 
 private:
 
@@ -246,19 +246,19 @@ private:
 	int boardColumns;
 
 	/**
-	 * The othello board.
+	 * The reversi board.
 	 */
 	std::vector<Tile> board;
 };
 
-bool operator==(const OthelloState& state1, const OthelloState& state2);
+bool operator==(const ReversiState& state1, const ReversiState& state2);
 
-inline bool operator!=(const OthelloState& state1, const OthelloState& state2)
+inline bool operator!=(const ReversiState& state1, const ReversiState& state2)
 	{ return !(state1 == state2); }
 
-inline std::ostream& operator<<(std::ostream& os, const OthelloState& state)
+inline std::ostream& operator<<(std::ostream& os, const ReversiState& state)
 	{ return os << state.toString(); }
 
-} //namespace othello
+} //namespace reversi
 
-#endif //OTHELLO_STATE_HPP_
+#endif //REVERSI_STATE_HPP_

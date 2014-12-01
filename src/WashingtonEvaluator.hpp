@@ -1,7 +1,7 @@
 /**
  * Evaluator based on this article:
  *
- * An Analysis of Heuristics in Othello
+ * An Analysis of Heuristics in Reversi
  * Vaishnavi Sannidhanam and Muthukaruppan Annamalai
  * Department of Computer Science and Engineering
  * Seattle, WA-98195
@@ -17,7 +17,7 @@
 #include <vector>
 #include <iostream>
 
-namespace othello {
+namespace reversi {
 
 /**
  * Weights for combining the utility values. The default values where
@@ -36,14 +36,14 @@ struct WashingtonWeights
  * a utility function. Therefor a static lookup table is used, as suggested
  * by the authors of the article.
  *
- * It is rekommended to use the defaultTable() for normal othello games.
+ * It is rekommended to use the defaultTable() for normal reversi games.
  */
 class StabilityLookupTable
 {
 public:
 
 	/**
-	 * Creates a table. Must have the same size as the othello board.
+	 * Creates a table. Must have the same size as the reversi board.
 	 * params:
 	 *	rows - number of table rows.
 	 *	columns - number of table columns.
@@ -120,7 +120,7 @@ public:
 
 	/**
 	 * Creates a table with a custom stability table. It is recommended to use
-	 * the other constructor for normal othello rules (especially for a 8*8
+	 * the other constructor for normal reversi rules (especially for a 8*8
 	 * board).
 	 * param:	Stability lookup table to use.
 	 */
@@ -136,7 +136,7 @@ public:
 	 */
 	#ifdef USE_WASHINGTON_MOVE_UTILITY
 	virtual score_t moveUtility(const Outcome& outcome
-			, const OthelloState& beforeAction)
+			, const ReversiState& beforeAction)
 			const override;
 	#endif //USE_WASHINGTON_MOVE_UTILITY
 
@@ -144,7 +144,7 @@ public:
 	 * Calculates a weighted sum of the utility values compuded by the utility
 	 * functions below.
 	 */
-	virtual score_t utility(Player player, const OthelloState& state)
+	virtual score_t utility(Player player, const ReversiState& state)
 			const override;
 
 	/**
@@ -155,7 +155,7 @@ public:
 	 *	state - state to compute utility for.
 	 * return:	A utility value.
 	 */
-	virtual double coinParityUtility(Player player, const OthelloState& state)
+	virtual double coinParityUtility(Player player, const ReversiState& state)
 		const noexcept;
 
 	/**
@@ -167,7 +167,7 @@ public:
 	 *	state - state to compute utility for.
 	 * return:	A utility value.
 	 */
-	virtual double mobilityUtility(Player player, OthelloState state)
+	virtual double mobilityUtility(Player player, ReversiState state)
 		const noexcept;
 
 	/**
@@ -178,7 +178,7 @@ public:
 	 *	state - state to compute utility for.
 	 * return:	A utility value.
 	 */
-	virtual double cornerUtility(Player player, const OthelloState& state)
+	virtual double cornerUtility(Player player, const ReversiState& state)
 		const noexcept;
 
 	/*
@@ -188,10 +188,10 @@ public:
 	 *	player - the max player.
 	 *	state - state to compute utility for.
 	 * return:	A utility value.
-	 * throws:	length_error if dimensions of the lookup table and othello
+	 * throws:	length_error if dimensions of the lookup table and reversi
 	 *			board mismatch.
 	 */
-	virtual double stabilityUtility(Player player, const OthelloState& state)
+	virtual double stabilityUtility(Player player, const ReversiState& state)
 		const;
 
 	virtual std::unique_ptr<Evaluator> clone() const override;
@@ -228,6 +228,6 @@ private:
 	std::set<Position> corners;
 };
 
-} //namespace othello
+} //namespace reversi
 
 #endif //WASHINGTON_EVALUATOR_HPP_

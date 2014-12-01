@@ -4,10 +4,10 @@
  * Linus Narva.
  */
 #include "Position.hpp"
-#include "OthelloState.hpp"
+#include "ReversiState.hpp"
 #include "Player.hpp"
 #include "Tile.hpp"
-#include "OthelloAction.hpp"
+#include "ReversiAction.hpp"
 #include "Game.hpp"
 #include "MaximinSearcher.hpp"
 #include "TimeboxedMaximinSearcher.hpp"
@@ -17,7 +17,7 @@
 #include <iostream>
 #include <exception>
 
-using namespace othello;
+using namespace reversi;
 using namespace std;
 
 /**
@@ -39,10 +39,10 @@ static void usage(const char* executableName) noexcept;
 
 /**
  * Parses the state string.
- * param:	String containing the othello state.
- * return:	The parsed othello state.
+ * param:	String containing the reversi state.
+ * return:	The parsed reversi state.
  */
-static OthelloState parseStateString(string stateString);
+static ReversiState parseStateString(string stateString);
 
 /**
  * Uses timaboxed maximin search to find an action.
@@ -50,12 +50,12 @@ static OthelloState parseStateString(string stateString);
  *	state - The current state of the game.
  *	timeout_ms - The time it has to find choose the move in milliseconds.
  */
-static OthelloAction chooseAction(OthelloState state, int timeout_ms);
+static ReversiAction chooseAction(ReversiState state, int timeout_ms);
 
 /* Changes the coordinate system from [0 7] (as in my code) to [1, 8]
  * (as in the lab test code).
  */
-static OthelloAction adaptCoordinateSystem(OthelloAction action);
+static ReversiAction adaptCoordinateSystem(ReversiAction action);
 
 int main(int argc, char* args[])
 {
@@ -87,9 +87,9 @@ int main(int argc, char* args[])
 	return 0;
 }
 
-static OthelloState parseStateString(string stateString)
+static ReversiState parseStateString(string stateString)
 {
-	OthelloState state;
+	ReversiState state;
 
 	/* The first char indicates whos turn it is. */
 	Player turn;
@@ -125,7 +125,7 @@ static OthelloState parseStateString(string stateString)
 	return state;
 }
 
-static OthelloAction chooseAction(OthelloState state, int timeout_ms)
+static ReversiAction chooseAction(ReversiState state, int timeout_ms)
 {
 	WashingtonEvaluator evaluator;
 	Game game(state);
@@ -154,11 +154,11 @@ static OthelloAction chooseAction(OthelloState state, int timeout_ms)
 	return action;
 }
 
-static OthelloAction adaptCoordinateSystem(OthelloAction action)
+static ReversiAction adaptCoordinateSystem(ReversiAction action)
 {
 	auto oldCoordinates = action.getPosition();
 	Position newCoordinates(oldCoordinates.row+1, oldCoordinates.column+1);
-	return OthelloAction(newCoordinates, action.isPass());
+	return ReversiAction(newCoordinates, action.isPass());
 }
 
 void usage(const char* executableName) noexcept

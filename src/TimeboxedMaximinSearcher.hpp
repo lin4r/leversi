@@ -6,9 +6,9 @@
 #define TIMEBOXED_MAXIMIN_SEARCHER_HPP_
 
 #include "MaximinSearcher.hpp"
-#include "OthelloAction.hpp"
+#include "ReversiAction.hpp"
 
-namespace othello {
+namespace reversi {
 
 class TimeboxedMaximinSearcher : public MaximinSearcher
 {
@@ -23,7 +23,7 @@ public:
 
 	virtual ~TimeboxedMaximinSearcher() = default;
 
-	virtual OthelloAction maximinAction() override;
+	virtual ReversiAction maximinAction() override;
 
 	/**
 	 * Gets the execution time of last run.
@@ -40,6 +40,6 @@ private:
 	int lastRuntime_ms{-1};
 };
 
-} //namespace othello
+} //namespace reversi
 
 #endif //TIMEBOXED_MAXIMIN_SEARCHER_HPP_

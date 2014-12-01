@@ -2,10 +2,10 @@
 
 using std::unique_ptr;
 
-namespace othello {
+namespace reversi {
 
 score_t SimpleEvaluator::moveUtility(const Outcome& outcome
-		, const OthelloState& beforeAction) const
+		, const ReversiState& beforeAction) const
 {
 	if (outcome.action.isPass()) {
 
@@ -20,7 +20,7 @@ score_t SimpleEvaluator::moveUtility(const Outcome& outcome
 }
 
 score_t SimpleEvaluator::utility(Player player
-		, const OthelloState& state) const
+		, const ReversiState& state) const
 {
 	score_t blackScore{0};
 	for (auto tile : state.constBoardIterator()) {
@@ -41,4 +41,4 @@ unique_ptr<Evaluator> SimpleEvaluator::clone() const
 	return unique_ptr<Evaluator>(new SimpleEvaluator(*this));
 }
 
-} //namespace othello
+} //namespace reversi

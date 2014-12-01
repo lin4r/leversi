@@ -2,44 +2,44 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /**
- * A othello action i.e. putting the othello brick on some position on the
+ * A reversi action i.e. putting the reversi brick on some position on the
  * board.
  *
  * Linus Narva.
  */
-#ifndef OTHELLO_ACTION_HPP_
-#define OTHELLO_ACTION_HPP_
+#ifndef REVERSI_ACTION_HPP_
+#define REVERSI_ACTION_HPP_
 
 #include "Position.hpp"
-#include "OthelloState.hpp"
+#include "ReversiState.hpp"
 
 #include <vector>
 #include <string>
 #include <iostream>
 
-namespace othello {
+namespace reversi {
 
 typedef std::vector<Position> flips_t;
 
 struct Outcome;
 
-class OthelloAction
+class ReversiAction
 {
 public:
 
 	/**
 	 * param:	Position for placement.
 	 */
-	OthelloAction(Position position)
-		: OthelloAction(position, false)
+	ReversiAction(Position position)
+		: ReversiAction(position, false)
 	{}
 
 	/**
@@ -47,17 +47,17 @@ public:
 	 *	position - Position of placement. Doesn't matter if ispass==true.
 	 *	ispass - Flags if the action is pass.
 	 */
-	OthelloAction(Position position, bool ispass)
+	ReversiAction(Position position, bool ispass)
 		: position(position), ispass{ispass}
 	{}
 
-	virtual ~OthelloAction() = default;
+	virtual ~ReversiAction() = default;
 
 	/**
 	 * Creates a pass action.
 	 * return:	A pass action.
 	 */
-	static OthelloAction pass() noexcept;
+	static ReversiAction pass() noexcept;
 
 	/**
 	 * Parses an action string.
@@ -65,7 +65,7 @@ public:
 	 * return:	Action corresponding to the string.
 	 * throws:	actionstring_syntax_exception, if the string is ill formed.
 	 */
-	static OthelloAction parse(std::string actionstring);
+	static ReversiAction parse(std::string actionstring);
 
 	/**
 	 * Creates a string representation of the action.
@@ -76,9 +76,9 @@ public:
 	/**
 	 * Executes the action on the state.
 	 * param:	State to apply action to.
-	 * throws:	illegal_action_exception, if the action breakes othello rules.
+	 * throws:	illegal_action_exception, if the action breakes reversi rules.
 	 */
-	virtual flips_t execute(OthelloState& state) const;
+	virtual flips_t execute(ReversiState& state) const;
 
 	/**
 	 * Checks if non-pass actions are avalible for the player at the given
@@ -87,7 +87,7 @@ public:
 	 * param:	State te search for actions in.
 	 * return:	True iff a legal action exists.
 	 */
-	static bool existsLegalPlacement(const OthelloState& state) noexcept;
+	static bool existsLegalPlacement(const ReversiState& state) noexcept;
 
 	/**
 	 * Searches for legal placements.
@@ -96,14 +96,14 @@ public:
 	 *			will cause.
 	 */
 	static std::vector<Outcome> findLegalPlacements(
-		const OthelloState& state) noexcept;
+		const ReversiState& state) noexcept;
 
 	/**
 	 * Lists which bricks are fliped by the action.
 	 * param:	State to check for flips in.
 	 * return:	A vector of positions where the bricks where turned
 	 */ 
-	virtual flips_t searchFlips(const OthelloState& state) const noexcept;
+	virtual flips_t searchFlips(const ReversiState& state) const noexcept;
 
 	/**
 	 * Gets the position of placement.
@@ -125,7 +125,7 @@ private:
 	 * Updates the game over status of state (true after two passes in a row).
 	 * param:	State to update.
 	 */
-	void updateGameOverStaus(OthelloState& state) const noexcept;
+	void updateGameOverStaus(ReversiState& state) const noexcept;
 
 	/**
 	 * Position of the placement.
@@ -144,7 +144,7 @@ private:
  */
 struct Outcome
 {
-	OthelloAction action; // The action.
+	ReversiAction action; // The action.
 	flips_t flips; //Flips caused by the action in context of the state.
 };
 
@@ -153,18 +153,18 @@ struct Outcome
  * considered lower than non-passes. If pass is equal the position < determines
  * order.
  */
-bool operator<(const OthelloAction& a1, const OthelloAction& a2) noexcept;
+bool operator<(const ReversiAction& a1, const ReversiAction& a2) noexcept;
 
-bool operator==(const OthelloAction& a1, const OthelloAction& a2) noexcept;
+bool operator==(const ReversiAction& a1, const ReversiAction& a2) noexcept;
 
-inline bool operator!=(const OthelloAction& a1, const OthelloAction& a2)
+inline bool operator!=(const ReversiAction& a1, const ReversiAction& a2)
 		noexcept
 	{ return !(a1 == a2); }
 
-std::ostream& operator<<(std::ostream& os, const OthelloAction& action);
+std::ostream& operator<<(std::ostream& os, const ReversiAction& action);
 
-} //namespace othello
+} //namespace reversi
 
 
 
-#endif //OTHELLO_ACTION_HPP_
+#endif //REVERSI_ACTION_HPP_

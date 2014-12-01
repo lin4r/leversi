@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -20,7 +20,7 @@
 #include <exception>
 #include <string>
 
-namespace othello {
+namespace reversi {
 
 class actionstring_syntax_exception : public std::exception
 {
@@ -52,6 +52,6 @@ const char* actionstring_syntax_exception::what() const noexcept
 	return message.c_str();
 }
 
-} //namespace othello
+} //namespace reversi
 
 #endif //ACTIONSTRING_SYNTAX_EXCEPTION_

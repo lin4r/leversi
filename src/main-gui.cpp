@@ -2,15 +2,15 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /*
- * Main function for the othello gui.
+ * Main function for the reversi gui.
  *
  * Linus Narva.
  */
@@ -25,14 +25,14 @@
 using Gtk::Application;
 using Glib::FileError;
 using Gdk::PixbufError;
-using othello::GUI;
+using reversi::GUI;
 using std::cerr;
 using std::endl;
 
 int main(int argc, char *argv[])
 {
 	auto application = Application::create(argc, argv
-		, "se.umu.cs.c10lna.othello");
+		, "se.umu.cs.c10lna.reversi");
 
 	try {
 		GUI gui;

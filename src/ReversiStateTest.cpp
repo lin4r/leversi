@@ -2,31 +2,31 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /*
- * Unit tests for OthelloState.
+ * Unit tests for ReversiState.
  *
  * Linus Narva.
  */
 #define CATCH_CONFIG_MAIN
 #include <catch.hpp>
 
-#include "OthelloState.hpp"
+#include "ReversiState.hpp"
 
 #include <vector>
 
-using namespace othello;
+using namespace reversi;
 using std::vector;
 
-TEST_CASE("Default values", "[OthelloState, defaultValues]")
+TEST_CASE("Default values", "[ReversiState, defaultValues]")
 {
-	OthelloState state;
+	ReversiState state;
 
 	SECTION("Black player starts.")
 	{
@@ -55,7 +55,7 @@ TEST_CASE("Default values", "[OthelloState, defaultValues]")
 
 	SECTION("Verify that the initial state is according to game rules.")
 	{
-		auto initial = OthelloState::initialState();
+		auto initial = ReversiState::initialState();
 
 		REQUIRE(Tile::White == initial.inspectTile(Position(3,3)));
 		REQUIRE(Tile::Black == initial.inspectTile(Position(3,4)));
@@ -64,10 +64,10 @@ TEST_CASE("Default values", "[OthelloState, defaultValues]")
 	}
 }
 
-TEST_CASE("Verify that equality operator works.", "[OthelloState, operator]")
+TEST_CASE("Verify that equality operator works.", "[ReversiState, operator]")
 {
-	auto state1 = OthelloState::initialState();
-	auto state2 = OthelloState::initialState();
+	auto state1 = ReversiState::initialState();
+	auto state2 = ReversiState::initialState();
 
 	SECTION("Initially, they're equal")
 	{
@@ -102,8 +102,8 @@ TEST_CASE("Verify that equality operator works.", "[OthelloState, operator]")
 
 	SECTION("Not equal if size differs.")
 	{
-		OthelloState smallBoard(4,4,Player::Black);
-		OthelloState largeBoard(4,5,Player::Black);
+		ReversiState smallBoard(4,4,Player::Black);
+		ReversiState largeBoard(4,5,Player::Black);
 
 		REQUIRE(smallBoard != largeBoard);
 	}
@@ -116,9 +116,9 @@ TEST_CASE("Verify that equality operator works.", "[OthelloState, operator]")
 	}
 }
 
-TEST_CASE("Test board iterator.", "[OthelloState, iterator]")
+TEST_CASE("Test board iterator.", "[ReversiState, iterator]")
 {
-	OthelloState state(2, 2, Player::Black);
+	ReversiState state(2, 2, Player::Black);
 	state.setTile(Position(0,0), Tile::Black);
 	state.setTile(Position(1,1), Tile::White);
 

@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -19,29 +19,29 @@
 #ifndef GAME_HPP_
 #define GAME_HPP_
 
-#include "OthelloState.hpp"
-#include "OthelloAction.hpp"
+#include "ReversiState.hpp"
+#include "ReversiAction.hpp"
 #include "Observable.hpp"
 
 #include <vector>
 #include <exception>
 
-namespace othello {
+namespace reversi {
 
-class Game : public Observable<OthelloState>
+class Game : public Observable<ReversiState>
 {	
 public:
 
 	/**
 	 * Construct a standard rule game.
 	 */
-	Game() : currentState{OthelloState::initialState()} {}
+	Game() : currentState{ReversiState::initialState()} {}
 
 	/**
 	 * Specify the initial state of the game.
 	 * param:	The 'custom' initial state of the came.
 	 */
-	Game(OthelloState initial) noexcept : currentState(initial) {}
+	Game(ReversiState initial) noexcept : currentState(initial) {}
 
 	virtual ~Game() = default;
 
@@ -51,7 +51,7 @@ public:
 	 * param:	The action to commit.
 	 * return:	The flips caused by the action.
 	 */
-	virtual flips_t commitAction(OthelloAction action);
+	virtual flips_t commitAction(ReversiAction action);
 
 	/**
 	 * Undoes the last action.
@@ -69,20 +69,20 @@ public:
 	 * The ObserverObservable notify data, a pointer to the last state.
 	 * return: A pointer to the last state.
 	 */
-	virtual const OthelloState* getNotifyData() const override;
+	virtual const ReversiState* getNotifyData() const override;
 
 	/**
 	 * Gets the state (by copy).
 	 * return:	A copy of the state.
 	 */
-	virtual OthelloState getState() const noexcept
+	virtual ReversiState getState() const noexcept
 		{ return currentState; }
 
 	/**
 	 * Gets a read-only reference to the state.
 	 * return:	State reference.
 	 */
-	virtual const OthelloState& refState() const noexcept
+	virtual const ReversiState& refState() const noexcept
 		{ return currentState; }
 
 private:
@@ -90,13 +90,13 @@ private:
 	/**
 	 * The current state.
 	 */
-	OthelloState currentState;
+	ReversiState currentState;
 
 	/* The history: all outcomes so far, in order.
 	 */
 	std::vector<Outcome> history;
 };
 
-} //namespace othello
+} //namespace reversi
 
 #endif //GAME_HPP_

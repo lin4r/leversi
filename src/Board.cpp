@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -34,13 +34,13 @@ using std::pair;
 using std::vector;
 using std::size_t;
 
-namespace othello {
+namespace reversi {
 
 NotificationReceiver::NotificationReceiver(Board* updateObject)
 		: updateObject{updateObject}
 {}
 
-void NotificationReceiver::notify(const OthelloState* state)
+void NotificationReceiver::notify(const ReversiState* state)
 {
 	updateObject->update(*state);
 }
@@ -70,8 +70,8 @@ Board::Board(int sizeX, int sizeY) : gridSizeX{sizeX}, gridSizeY{sizeY}
 
 	controller->addGameObserver(notifyReceiver);
 
-	/* Initially, show othellos initial state. */
-	update(OthelloState::initialState());
+	/* Initially, show reversis initial state. */
+	update(ReversiState::initialState());
 }
 
 void Board::setGraphics(BorderSize bgImageBorderSize, BoardGraphics graphics)
@@ -140,7 +140,7 @@ void Board::placePiece(Tile colour, int gridX, int gridY)
 	grid.at(gridX).at(gridY) = colour;
 }
 
-void Board::update(OthelloState state)
+void Board::update(ReversiState state)
 {
 	const auto rows = state.numBoardRows();
 	const auto columns = state.numBoardColumns();
@@ -266,4 +266,4 @@ bool Board::on_button_press(GdkEventButton* event)
 //	return true;
 //}
 
-} //namespace othello
+} //namespace reversi

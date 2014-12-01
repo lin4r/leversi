@@ -2,32 +2,32 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /*
- * MVC View interface for othello.
+ * MVC View interface for reversi.
  *
  * Linus Narva.
  */
-#ifndef OTHELLO_VIEW_HPP_
-#define OTHELLO_VIEW_HPP_
+#ifndef REVERSI_VIEW_HPP_
+#define REVERSI_VIEW_HPP_
 
 #include "Tile.hpp"
 
-namespace othello {
+namespace reversi {
 
-class OthelloView
+class ReversiView
 {
 public:
 
 	virtual void placePiece(Tile colour, int gridX, int gridY) = 0;
 };
 
-} //namespace othello
+} //namespace reversi
 
-#endif //OTHELLO_VIEW_HPP_
+#endif //REVERSI_VIEW_HPP_

@@ -2,9 +2,9 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
@@ -52,7 +52,7 @@
 
 using Gdk::Pixbuf;
 
-namespace othello {
+namespace reversi {
 
 GUI::GUI()
 {
@@ -99,4 +99,4 @@ void GUI::initBoard()
 	board.show();
 }
 
-} //namespace othello
+} //namespace reversi

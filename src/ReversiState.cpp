@@ -2,19 +2,19 @@
  * Copyright (C) 2014-2015 Linus Narva
  * linus.narva@gmail.com
  * 
- * This file is part of othello-assignment.
+ * This file is part of reversi-assignment.
  * 
- * othello-assignment can not be copied and/or
+ * reversi-assignment can not be copied and/or
  * distributed without the express permission of Linus
  * Narva.
  *******************************************************/
 
 /*
- * Implements OthelloState.hpp
+ * Implements ReversiState.hpp
  *
  * Linus Narva.
  */
-#include "OthelloState.hpp"
+#include "ReversiState.hpp"
 
 #include <vector>
 #include <string>
@@ -26,22 +26,22 @@ using std::stringstream;
 using std::ostream;
 using std::endl;
 
-namespace othello {
+namespace reversi {
 
-OthelloState::OthelloState() : OthelloState(8,8,Player::Black)
+ReversiState::ReversiState() : ReversiState(8,8,Player::Black)
 {
 }
 
-OthelloState::OthelloState(int boardRows, int boardColumns, Player starter)
+ReversiState::ReversiState(int boardRows, int boardColumns, Player starter)
 		: playersTurn{starter}, boardRows{boardRows}
 		, boardColumns{boardColumns}
 		, board{vector<Tile>(boardRows*boardColumns,Tile::Empty)}
 {
 }
 
-OthelloState OthelloState::initialState() noexcept
+ReversiState ReversiState::initialState() noexcept
 {
-	OthelloState initial;
+	ReversiState initial;
 
 	initial.setTile(Position(3,3), Tile::White);
 	initial.setTile(Position(3,4), Tile::Black);
@@ -58,14 +58,14 @@ OthelloState OthelloState::initialState() noexcept
 		throw std::out_of_range(message.str()); \
 	}
 
-Tile OthelloState::inspectTile(Position position) const
+Tile ReversiState::inspectTile(Position position) const
 {
 	CHECK_RANGE(position);
 
 	return board.at(position2GridIndex(position));
 }
 
-void OthelloState::setTile(Position position, Tile value)
+void ReversiState::setTile(Position position, Tile value)
 {
 	CHECK_RANGE(position)
 
@@ -74,13 +74,13 @@ void OthelloState::setTile(Position position, Tile value)
 
 #undef CHECK_RANGE
 
-bool OthelloState::isInsideGrid(Position position) const noexcept
+bool ReversiState::isInsideGrid(Position position) const noexcept
 {
 	return (0 <= position.row) && (position.row < boardRows)
 		&& (0 <= position.column) && (position.column < boardColumns);
 }
 
-void OthelloState::flipBrick(Position position)
+void ReversiState::flipBrick(Position position)
 {
 	switch (inspectTile(position)) {
 	case Tile::Black: setTile(position, Tile::White); break;
@@ -89,7 +89,7 @@ void OthelloState::flipBrick(Position position)
 	}
 }
 
-string OthelloState::boardString() const noexcept
+string ReversiState::boardString() const noexcept
 {
 	stringstream ss;
 
@@ -120,13 +120,13 @@ string OthelloState::boardString() const noexcept
 	return ss.str();
 }
 
-string OthelloState::toString() const noexcept
+string ReversiState::toString() const noexcept
 {
 	#define PVAR(var) #var << "{" << var << "}"
 
 	stringstream ss;
 
-	ss << "othello::OthelloState[" << PVAR(gameIsOver) << ", "
+	ss << "reversi::ReversiState[" << PVAR(gameIsOver) << ", "
 		<< PVAR(actionWasPass) << ", " << PVAR(playersTurn) << ", "
 		<< PVAR(boardRows) << ", " << PVAR(boardColumns) << ", board{ ..."
 		<< endl << boardString() << "}]";
@@ -136,7 +136,7 @@ string OthelloState::toString() const noexcept
 	return ss.str();
 }
 
-bool operator==(const OthelloState& state1, const OthelloState& state2)
+bool operator==(const ReversiState& state1, const ReversiState& state2)
 {
 	const auto rows = state1.numBoardRows();
 	const auto columns = state1.numBoardColumns();
@@ -166,4 +166,4 @@ bool operator==(const OthelloState& state1, const OthelloState& state2)
 	return boardEqual;
 }
 
-} //namespace othello
+} //namespace reversi

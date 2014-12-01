@@ -7,7 +7,7 @@
 
 #include "Cloneable.hpp"
 
-using namespace othello;
+using namespace reversi;
 using std::unique_ptr;
 
 class MyInteger : public Cloneable<MyInteger>
