@@ -23,7 +23,7 @@
 \footnotemark[\value{#1}]
 }
 
-\title{Lothello}
+\title{Leversi}
 \author{Linus Närvä (c10lna)}
 
 \begin{document}
@@ -36,7 +36,7 @@ Institution: & Computer Science \\
 \end{tabular}
 
 \section{Introduction}
-This report describes the implementation of Lothello. A Othello game implementation with a graphical user interface. The focus of this report lies on the implementation of the AI player.
+This report describes the implementation of Leversi. A Reversi game implementation with a graphical user interface. The focus of this report lies on the implementation of the AI player.
 
 \subsection{Work in progress}
 At the time of writing, the GUI part of the program is not yet finished.
@@ -47,20 +47,20 @@ Everything was implemented in c++11 using the Gtkmm package to implement the GUI
 \section{Getting started}
 The first thing to do is of course to download the file. It can be found in the Umeå University CS department computer system at:
 \begin{quotation}
-\url{~c10lna/edu/5DV122/lab1/lothello}
+\url{~c10lna/edu/5DV122/lab1/leversi}
 \end{quotation}
 
 \subsection{Requirements}
 g++4.8 or later and gtkmm 3.0 or later.
 
 \subsection{Compilation}
-Just enter the directory 'src' and run \textit{make}. Then run \textit{make purge} to remove object files and unit test files (optional). This should create two executables. \textit{lothello} and \textit{lothello-bot}. The former runs the program with the GUI. The second is a command line interface for reading in a state representation and return a move.
+Just enter the directory 'src' and run \textit{make}. Then run \textit{make purge} to remove object files and unit test files (optional). This should create two executables. \textit{leversi} and \textit{leversi-bot}. The former runs the program with the GUI. The second is a command line interface for reading in a state representation and return a move.
 
 \subsection{Execution}
-\subsubsection{lothello}
+\subsubsection{leversi}
 Make sure that the the directory you run it from includes the \textit{res} directory (containing the graphical objects used). Then just run the executable.
 
-\subsubsection{lothello-bot}
+\subsubsection{leversi-bot}
 Run the executable with no arguments and it will print usage information to standard error.
 
 \section{Game representation}
@@ -73,9 +73,9 @@ The class representation of the game model are described in table \ref{tab:model
 \hline
 \textbf{class} & \textbf{description}
 \\ \hline
-OthelloState & State representation with getters and setters for all values. It is not responsible for keeping itself legal, and does not implement any portion of the transition model.
+ReversiState & State representation with getters and setters for all values. It is not responsible for keeping itself legal, and does not implement any portion of the transition model.
 \\ \hline
-OthelloAction & Defines the transition model i.e. moving from one state to another, by applying an action and without breaking any rules.
+ReversiAction & Defines the transition model i.e. moving from one state to another, by applying an action and without breaking any rules.
 \\ \hline
 Outcome & Trivial but important class specifying the outcome of an action after it has been applied (sufficient information to undo the action to restore the state). It is implemented as a struct containing the action and the flips it caused.
 \\ \hline
@@ -83,11 +83,11 @@ Game & The full game is all events that happened during the play. It is implemen
 \\ \hline
 \end{tabular}
 
-\caption{Describes the most significant class components of the Othello game model.} \label{tab:model}
+\caption{Describes the most significant class components of the Reversi game model.} \label{tab:model}
 
 \end{table}
 
-The most significant part of of this model implementation is the class \textit{Game}. It stores only one copy of OthelloState in memory, but allows actions executed on this state to be undone. Intuitively this should yield better performance during maximin search, because the state doesn't need to be copied in recursive calls. Only one state representation is ever stored in memory.
+The most significant part of of this model implementation is the class \textit{Game}. It stores only one copy of ReversiState in memory, but allows actions executed on this state to be undone. Intuitively this should yield better performance during maximin search, because the state doesn't need to be copied in recursive calls. Only one state representation is ever stored in memory.
 
 \section{Decision procedure}
 The desicion procedure for choosing the move is divided over three logical components. The \textit{move searcher} (MaximinSearcher) searches for a move that is in some sense optimal. The \textit{evaluator} (WashingtonEvaluator.hpp) evaluates a states and moves, thus defining what is considered optimal by the move searcher. Finally the \textit{time manager} ensures that maximum performance is obtained, given a tolerated \textit{latency}.
@@ -159,7 +159,7 @@ The WashingtonEvaluator inherits this utility from SimpleEvaluator.
 %	outcomes := findLegalPlacements(state)
 %
 %	IF outcomes.isEmpy() THEN
-%		passAction = OthelloAction::pass()
+%		passAction = ReversiAction::pass()
 %		passScore := evaluator.evaluate(passAction)
 %		outcomes.insert(<passAction, passScore>)
 %	ENDIF
@@ -207,7 +207,7 @@ The con of this method is of course that the prediction may be wrong. The pro is
 %\end{quotation}
 %The dominating exponent is still $b^d$, which shows that iterative deepening will not impact time complexity, it is still $O(b^d)$.
 %
-%For this result to hold in practice, one assumption must be made: ``Deepening the Max-Min search does not affect the branching factor.''. This is not entirely true, since the branching factor tends to be initially low in othello and to reach a peak somewhere in the middle of the game. This will be further discussed in the analysis section below.
+%For this result to hold in practice, one assumption must be made: ``Deepening the Max-Min search does not affect the branching factor.''. This is not entirely true, since the branching factor tends to be initially low in Reversi and to reach a peak somewhere in the middle of the game. This will be further discussed in the analysis section below.
 
 %\subsubsection{Practical adaptations}
 %The algorithm uses a predictor to predict the time it will take to perform the next iterative call. It then executes the next step if it completion ocurrs before an secific end time point in the future. For this the algorithm needs to keep track of the following values.
@@ -238,7 +238,7 @@ The prediction function assumes that each node will use the same amount of time 
 Below is the algorithm description of the member function maximinAction() of class TimeboxedMaximinSearcher.
 
 \begin{lstlisting}
-FUNCTION timeBoxedMoveFinder(maxTime, minDepth) -> OTHELLOACTION
+FUNCTION timeBoxedMoveFinder(maxTime, minDepth) -> ReversiAction
 BEGIN
 	t0 := currentTime();
 	tEnd := t0 + maxTime;
@@ -266,7 +266,7 @@ END
 \end{lstlisting}
 
 \section{Results}
-Unless otherwise mentioned values below where obtained by letting Lothello go two rounds against the reference implementation provided by the institution\footnote{Instutution of Computer Science: Umeå University}. In one Lothello starts, and in the other the the reference implementation starts.
+Unless otherwise mentioned values below where obtained by letting Leversi go two rounds against the reference implementation provided by the institution\footnote{Instutution of Computer Science: Umeå University}. In one Leversi starts, and in the other the the reference implementation starts.
 
 Data was benchmarked on a DELL XPS L322 computer using a 3'd gen i7 processor. The system was build using O4 optimization and the NODEBUG macro enabled. The full list of CFLAGS in the Makefile was:
 
@@ -275,7 +275,7 @@ Data was benchmarked on a DELL XPS L322 computer using a 3'd gen i7 processor. T
 The think time was set to 5 seconds.
 
 \subsection{Score}
-Results are show in table \ref{tab:score}. Clearly Lothello was superior. Score was calculated using:
+Results are show in table \ref{tab:score}. Clearly Leversi was superior. Score was calculated using:
 \begin{quotation}
 $score :=  numWinnerCoins - numLooserCoins$.
 \end{quotation}
@@ -287,13 +287,13 @@ $score :=  numWinnerCoins - numLooserCoins$.
 \hline
 \textbf{starter} & \textbf{winner} & \textbf{score}
 \\ \hline
-reference & Lothello & 20
+reference & Leversi & 20
 \\ \hline
-Lothello & Lothello & 59
+Leversi & Leversi & 59
 \\ \hline
 \end{tabular}
 
-\caption{Scores for Lothello versus the reference implementation, taking turns to start. In both cases, the reference implementation was pwnt.} \label{tab:score}
+\caption{Scores for Leversi versus the reference implementation, taking turns to start. In both cases, the reference implementation was pwnt.} \label{tab:score}
 
 \end{table}
 
@@ -328,7 +328,7 @@ time (ms) & $1847.6$ & $1922$ & $<1$ & $6212$
 \centering
 \includegraphics[scale=0.78]{branchingLegend.png}
 
-\caption{Branching factor for each of Lothellos turns. It peaks in the middle of the game.} \label{fig:branching}
+\caption{Branching factor for each of Leversis turns. It peaks in the middle of the game.} \label{fig:branching}
 
 \end{figure}
 
@@ -352,7 +352,7 @@ trimmed time (ms) & $2266$ & $2083$ & $952$ & $6212$ & $3.9\%$ & $2.0\%$
 
 There is one outlier taking more than 5 seconds. But otherwise every action is inside the time limit (the second longest taking $4346$ milliseconds). Otherwise the the time used is about usually about two seconds. Considering that the branching factor is about $3.6$, the value seems sound.
 
-If outliers taking more than 5 seconds are totally unacceptable (e.g. due to a special rule), then the approach used in Lothello is insufficient. It should be combined with a time-out, terminating the current recursive call if it has not completed in time and returning the action from the previous iteration. For playing against humans however it is ideal, because the exceptions to the time limit are very few, and it does not waste the players time, by continuing, even though it will not finish in time.
+If outliers taking more than 5 seconds are totally unacceptable (e.g. due to a special rule), then the approach used in Leversi is insufficient. It should be combined with a time-out, terminating the current recursive call if it has not completed in time and returning the action from the previous iteration. For playing against humans however it is ideal, because the exceptions to the time limit are very few, and it does not waste the players time, by continuing, even though it will not finish in time.
 
 \clearpage
 
