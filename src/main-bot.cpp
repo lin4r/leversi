@@ -59,8 +59,10 @@ static OthelloAction adaptCoordinateSystem(OthelloAction action);
 
 int main(int argc, char* args[])
 {
-	if (argc < 2) {
-		cerr << "To few arguments!" << endl;
+	if (argc < 3) {
+		if (argc != 1) {
+			cerr << "To few arguments!" << endl;
+		}
 		usage(args[0]);
 		return -1;
 	}
@@ -162,9 +164,21 @@ static OthelloAction adaptCoordinateSystem(OthelloAction action)
 void usage(const char* executableName) noexcept
 {
 	cerr << executableName << " state time" << endl
+		<< endl
 		<< "State is the chould be 65 chars. The first is the player turn "
 		<< "(B or W)." << endl
+		<< endl
 		<< "The remaining chars are the tiles in row major order. E - empty"
+		<< endl
 		<< ", O - White, X - Black." << endl
-		<< "time is the time limit" << endl;
+		<< "Time is the time limit" << endl
+		<< endl
+		<< "The output will be either a position of the form\"(r,c)\", where"
+		<< endl
+		<< "r is the row and c is the column of the placement (starting from"
+		<< endl
+		<< "index 1). If no move is available the string \"pass\" is returned."
+		<< endl
+		<< "The output is delimited by a newline at the end."
+		<< endl;
 }
