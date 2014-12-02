@@ -54,7 +54,7 @@ The first thing to do is of course to download the file. It can be found in the 
 g++4.8 or later and gtkmm 3.0 or later.
 
 \subsection{Compilation}
-Just enter the directory 'src' and run \textit{make}. Then run \textit{make purge} to remove object files and unit test files (optional). This should create two executables. \textit{leversi} and \textit{leversi-bot}. The former runs the program with the GUI. The second is a command line interface for reading in a state representation and return a move.
+Just enter the directory 'src' and run \textit{make build}\footnote{Just running \textit{make} will also attempt to compile the unit tests which adds the unit test framework 'Catch 1.0' to the dependencies.}. Then run \textit{make purge} to remove object files and unit test files (optional). This should create two executables. \textit{leversi} and \textit{leversi-bot}. The former runs the program with the GUI. The second is a command line interface for reading in a state representation and return a move.
 
 \subsection{Execution}
 \subsubsection{leversi}
