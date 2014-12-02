@@ -16,11 +16,11 @@ TARGET=leversi
 
 LAB=leversi-bot
 
-.PHONY: all build clean test purge
+.PHONY: all build clean test test-build clean purge
 
-all: $(TARGET) $(MODEL) $(GUI) $(LAB) test 
+all: build $(MODEL) $(GUI) test 
 
-test: $(TEST)
+test: test-build
 	./Position.test
 	./ReversiState.test
 	./ReversiAction.test
@@ -29,6 +29,10 @@ test: $(TEST)
 	./SimpleEvaluator.test
 	./Cloneable.test
 	./WashingtonEvaluator.test
+
+test-build: $(TEST)
+
+build: $(TARGET) $(LAB)
 
 #Compile lab code.
 $(LAB): main-bot.o $(MODELEX) $(MODEL) $(AI)
